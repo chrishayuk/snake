@@ -1,4 +1,3 @@
-# File: test_agent.py
 import random
 from .agent_action import MinesweeperAction
 
@@ -10,6 +9,7 @@ class TestAgent:
     def reset(self):
         self.unrevealed = set((i, j) for i in range(self.size) for j in range(self.size))
         self.flagged = set()
+        self.visited = set()  # Track visited actions
 
     def get_action(self, state):
         revealed = state[:,:,0]
@@ -30,20 +30,23 @@ class TestAgent:
                     if len(unrevealed) + adjacent_flags == board[i, j]:
                         # All unrevealed adjacent cells are mines, flag them
                         for pos in unrevealed:
-                            if pos not in self.flagged:
+                            if pos not in self.flagged and pos not in self.visited:
+                                self.visited.add(pos)
                                 print(f"Debug: Flagging cell {pos}")
                                 return MinesweeperAction(MinesweeperAction.ActionType.FLAG, pos[0], pos[1])
                     elif len(unrevealed) > board[i, j] - adjacent_flags:
                         # There are safe cells to reveal
-                        safe = [pos for pos in unrevealed if pos not in self.flagged]
+                        safe = [pos for pos in unrevealed if pos not in self.flagged and pos not in self.visited]
                         if safe:
+                            self.visited.add(safe[0])
                             print(f"Debug: Revealing safe cell {safe[0]}")
                             return MinesweeperAction(MinesweeperAction.ActionType.REVEAL, safe[0][0], safe[0][1])
 
         # If no safe move found, choose a random unrevealed cell
-        unrevealed_unflagged = list(self.unrevealed - self.flagged)
+        unrevealed_unflagged = list(self.unrevealed - self.flagged - self.visited)
         if unrevealed_unflagged:
             i, j = random.choice(unrevealed_unflagged)
+            self.visited.add((i, j))
             print(f"Debug: Revealing random cell ({i}, {j})")
             return MinesweeperAction(MinesweeperAction.ActionType.REVEAL, i, j)
 

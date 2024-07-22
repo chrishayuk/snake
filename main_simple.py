@@ -52,8 +52,8 @@ def play(selected_env_id, selected_agent_id):
             # render the environment
             env.render()
 
-            # 150 millisecond delay
-            time.sleep(0.5)
+            # 2 second delay
+            time.sleep(2)
 
             # reset the environment
             env.reset()

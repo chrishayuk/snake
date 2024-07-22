@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import random
+from agents.minesweeper.agent_action import MinesweeperAction
 from environments.environment_base import Environment
 
 class MinesweeperEnv(Environment):
@@ -16,7 +17,7 @@ class MinesweeperEnv(Environment):
         self.game_over = False
         self.win = False
         self.steps = 0
-        self.action_history = [] 
+        self.action_history = []
         self.place_mines()
         self.calculate_numbers()
         return self.get_state()
@@ -48,8 +49,12 @@ class MinesweeperEnv(Environment):
         state[:,:,2] = np.where(self.revealed, self.board, -2)
         return state
 
-    def step(self, action):
-        row, col, is_flag = action
+    def step(self, action: MinesweeperAction):
+        if action is None:
+            self.game_over = True
+            return self.get_state(), 0, True
+        
+        row, col, is_flag = action.row, action.col, action.action_type == MinesweeperAction.ActionType.FLAG
         
         if self.game_over:
             return self.get_state(), 0, True
@@ -108,7 +113,7 @@ class MinesweeperEnv(Environment):
         safe_cells_revealed = np.sum(self.revealed[self.board != -1])
         total_safe_cells = self.size * self.size - self.num_mines
         
-        if safe_cells_revealed >= total_safe_cells:  # Changed from total_safe_cells - 1
+        if safe_cells_revealed >= total_safe_cells:
             self.win = True
             self.game_over = True
             print(f"Debug: All safe cells revealed. Win! ({safe_cells_revealed}/{total_safe_cells})")
@@ -161,3 +166,4 @@ class MinesweeperEnv(Environment):
         os.system('cls' if os.name == 'nt' else 'clear')
 
         print(self.get_render())
+
