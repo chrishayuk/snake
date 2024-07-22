@@ -98,5 +98,41 @@
             "model_name": "mistral" 
         },
         "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_phi3_3b_v1",
+        "name": "Phi3:3B Snake Agent",
+        "type": "Snake Agent",
+        "description": "Phi3:3B playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "phi3" 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_gpt4o_mini_v1",
+        "name": "gpt-4o-mini Snake Agent",
+        "type": "Snake Agent",
+        "description": "gpt-4o-mini playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "openai",
+            "model_name": "gpt-4o-mini" 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_gpt4o_v1",
+        "name": "gpt-4o Snake Agent",
+        "type": "Snake Agent",
+        "description": "gpt-4o playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "openai",
+            "model_name": "gpt-4o" 
+        },
+        "compatible_environments": ["snake_env_v1"]
     }
 ]

@@ -10,7 +10,7 @@ def get_app_root():
 
 # select the environment and agent
 selected_env_id = "snake_env_v1"
-selected_agent_id = "snake_mistral_7b_v1"
+selected_agent_id = "smart_seeker_v1"
 
 # Create environment using the loader
 env, env_config = get_environment(selected_env_id)
