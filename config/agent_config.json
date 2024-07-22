@@ -145,5 +145,70 @@
             "size": 10
         },
         "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_gemma2_9b",
+        "name": "Gemma2:9B Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "Gemma2:9B playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "ollama",
+            "model_name": "gemma2:9b" 
+        },
+        "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_gemma2_27b",
+        "name": "Gemma2:27B Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "Gemma2:27B playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "ollama",
+            "model_name": "gemma2:27b" 
+        },
+        "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_gpt4o_mini",
+        "name": "GPT-4o-mini Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "GPT-4o-mini playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "openai",
+            "model_name": "gpt-4o-mini" 
+        },
+        "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_gpt4o",
+        "name": "GPT-4o Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "GPT-4o playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "openai",
+            "model_name": "gpt-4o" 
+        },
+        "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_llama3_70b",
+        "name": "Llama3:70b Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "Llama3:70b playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "ollama",
+            "model_name": "llama3:70b" 
+        },
+        "compatible_environments": ["minesweeper"]
     }
 ]

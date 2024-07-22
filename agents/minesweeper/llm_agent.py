@@ -1,9 +1,7 @@
-# File: llm_agent.py
-import dotenv
 from typing import Literal
+import dotenv
 from langchain_community.llms import Ollama
-from langchain_community.chat_models import ChatOpenAI
-from langchain_community.chat_models import ChatAnthropic
+from langchain_community.chat_models import ChatOpenAI, ChatAnthropic
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from agents.minesweeper.agent_action import MinesweeperAction as AgentAction
@@ -12,15 +10,18 @@ from agents.minesweeper.agent_action import MinesweeperAction as AgentAction
 dotenv.load_dotenv()
 
 class LLMAgent:
-    def __init__(self, provider: Literal["openai", "ollama", "anthropic"], model_name: str):
+    def __init__(self, provider: Literal["openai", "ollama", "anthropic"], model_name: str, size: int):
+        self.size = size  # Add size attribute to match the environment
+        self.visited = set()  # Track visited actions
+
         # get the llm
         self.llm = self._get_llm(provider, model_name)
 
         # setup the prompt
         self.prompt = PromptTemplate(
-            input_variables=["state"],
+            input_variables=["state", "visited", "size"],
             template="""
-            You are an AI playing a game of Minesweeper. The game is played on a grid.
+            You are an AI playing a game of Minesweeper. The game is played on a grid of size {size}x{size}.
             Grid symbols:
             . : unrevealed cell
             F : flagged cell
@@ -30,6 +31,9 @@ class LLMAgent:
 
             Current game state:
             {state}
+
+            Previously taken actions (do not repeat these):
+            {visited}
 
             Minesweeper strategy:
             1. Always start with corners or edges, as they have fewer adjacent cells.
@@ -65,14 +69,32 @@ class LLMAgent:
             raise ValueError(f"Unsupported provider: {provider}")
 
     def get_action(self, state):
+        # Prepare the visited actions list as a string
+        visited_str = "\n".join([f"{'FLAG' if flag else 'REVEAL'} {row} {col}" for (row, col, flag) in self.visited])
+
         # Use the LLM to generate an action based on the state
-        response = self.chain.run(state=state)
+        response = self.chain.run(state=state, visited=visited_str, size=self.size)
         
         # Parse the LLM's response into a MinesweeperAction
         try:
             action = AgentAction.from_string(response.strip())
-            return action
+            if (action.row, action.col, action.action_type == AgentAction.ActionType.FLAG) in self.visited:
+                print(f"Action {action} has already been visited.")
+                return None
+            elif 0 <= action.row < self.size and 0 <= action.col < self.size:
+                self.visited.add((action.row, action.col, action.action_type == AgentAction.ActionType.FLAG))
+                return action
+            else:
+                print(f"Invalid action out of bounds: {action}.")
+                return None
         except ValueError as e:
             print(f"Invalid action from LLM: {response}. Error: {e}")
             # If the LLM's response is invalid, return a default action
-            return AgentAction(AgentAction.ActionType.REVEAL, 0, 0)
+            for i in range(self.size):
+                for j in range(self.size):
+                    if (i, j, False) not in self.visited and (i, j, True) not in self.visited:
+                        self.visited.add((i, j, False))
+                        return AgentAction(AgentAction.ActionType.REVEAL, i, j)
+
+    def reset(self):
+        self.visited.clear()
