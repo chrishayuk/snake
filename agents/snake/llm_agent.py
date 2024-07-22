@@ -5,7 +5,7 @@ from agents.base_llm_agent import BaseLLMAgent
 from agents.snake.agent_action import AgentAction
 
 class LLMAgent(BaseLLMAgent):
-    def __init__(self, provider: ProviderType, model_name: str):
+    def __init__(self, agent_id: str, name: str, description: str, provider: ProviderType, model_name: str):
         prompt_template = """
         You are an AI controlling a snake in a classic Snake game. The game is played on a grid.
 
@@ -36,7 +36,7 @@ class LLMAgent(BaseLLMAgent):
 
         Provide your answer as a single word (UP, DOWN, LEFT, or RIGHT) with no additional explanation.
         """
-        super().__init__(provider, model_name, prompt_template)
+        super().__init__(agent_id, name, description, provider, model_name, prompt_template)
 
     def get_action(self, state: str):
         # call the llm
@@ -61,10 +61,3 @@ class LLMAgent(BaseLLMAgent):
 
         # return the action
         return action_map.get(response_stripped, AgentAction.RIGHT)
-    
-    def extract_tag_content(self, text: str, tag: str) -> str:
-        start_tag = f"<{tag}>"
-        end_tag = f"</{tag}>"
-        start_index = text.find(start_tag) + len(start_tag)
-        end_index = text.find(end_tag)
-        return text[start_index:end_index].strip() if start_index != -1 and end_index != -1 else ""

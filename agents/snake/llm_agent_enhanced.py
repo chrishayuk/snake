@@ -5,12 +5,7 @@ from agents.base_llm_agent import BaseLLMAgent
 from agents.snake.agent_action import AgentAction
 
 class LLMAgent(BaseLLMAgent):
-    def __init__(self, provider: ProviderType, model_name: str):
-        self.game_id = "12345"
-        self.agent_id = "chuk"
-        self.model_name = model_name
-        self.log_filename = f"{self.game_id}.jsonl"
-        self.time_initiated = time.strftime('%Y-%m-%d %H:%M:%S')
+    def __init__(self, agent_id, name: str, description: str, provider: ProviderType, model_name: str):
         prompt_template = """
         You are an AI controlling a snake in a classic Snake game. The game is played on a grid.
 
@@ -63,7 +58,7 @@ class LLMAgent(BaseLLMAgent):
         </agentThinking>
         <finalOutput>DOWN</finalOutput>
         """
-        super().__init__(provider, model_name, prompt_template)
+        super().__init__(agent_id, name, description, provider, model_name, prompt_template)
 
     def get_action(self, state: str):
         # call the llm

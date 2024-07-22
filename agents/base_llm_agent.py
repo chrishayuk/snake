@@ -1,4 +1,5 @@
 # File: base_llm_agent.py
+import time
 from abc import ABC, abstractmethod
 import dotenv
 from langchain_community.llms import Ollama
@@ -12,13 +13,23 @@ from agents.provider_type import ProviderType
 dotenv.load_dotenv()
 
 class BaseLLMAgent(ABC):
-    def __init__(self, provider: ProviderType, model_name: str, prompt_template: str, size: int = None):
-        # set size and visited
-        self.size = size
-        self.visited = set()
+    def __init__(self, agent_id: str, name: str, description: str, provider: ProviderType, model_name: str, prompt_template: str, size: int = None):
+        # set the agent details
+        self.agent_id = agent_id
+        self.name = name
+        self.description = description
+        self.llm_provider = provider
+        self.model_name = model_name
+
+        # set the default game id
+        self.game_id = "default_game"
+
+        # setup the logging
+        self.log_filename = f"{self.game_id}.jsonl"
+        self.time_initiated = time.strftime('%Y-%m-%d %H:%M:%S')
 
         # Initialize logger with default values
-        self.logger = Logger(game_id="default_game", agent_id="default_agent")
+        self.logger = Logger(game_id="default_game", agent_id=self.agent_id)
 
         # get the llm
         self.llm = self._get_llm(provider, model_name)
@@ -50,3 +61,11 @@ class BaseLLMAgent(ABC):
 
     def reset(self):
         self.visited.clear()
+
+    def extract_tag_content(self, text: str, tag: str) -> str:
+        start_tag = f"<{tag}>"
+        end_tag = f"</{tag}>"
+        start_index = text.find(start_tag) + len(start_tag)
+        end_index = text.find(end_tag)
+        return text[start_index:end_index].strip() if start_index != -1 and end_index != -1 else ""
+
