@@ -1,9 +1,8 @@
-# File: main_simple_cli.py
 import os
 import time
 import argparse
-from agents.agent_loader import get_agent
-from environments.environment_loader import get_environment
+from agents.agent_loader import get_agent, list_agents
+from environments.environment_loader import get_environment, list_environments
 
 # Function to get the application root
 def get_app_root():
@@ -16,24 +15,27 @@ def play(selected_env_id, selected_agent_id):
     # Create agent using the loader
     agent, agent_config = get_agent(selected_agent_id)
 
-    # get the initial state
-    state = env.get_state()
+    # Ensure that the environment is compatible with the agent
+    if env_config.id not in agent_config.compatible_environments:
+        raise ValueError(f"Agent {agent_config.name} is not compatible with environment {env_config.name}")
 
-    # Check compatibility
-    if env_config['id'] not in agent_config['compatible_environments']:
-        raise ValueError(f"The agent '{agent_config['name']}' is not compatible with the environment '{env_config['name']}'")
+    print(f"Playing with environment: {env_config.name}")
+    print(f"Using agent: {agent_config.name}")
 
-    # Display configuration details
-    print(f"Environment ID: {env_config['id']}")
-    print(f"Environment Name: {env_config['name']}")
-    print(f"Environment Description: {env_config['description']}")
-
-    print(f"Agent ID: {agent_config['id']}")
-    print(f"Agent Name: {agent_config['name']}")
-    print(f"Agent Description: {agent_config['description']}")
+    # Debug print statements to verify attributes
+    print(f"Environment ID: {env_config.id}")
+    print(f"Environment Name: {env_config.name}")
+    print(f"Environment Description: {env_config.description}")
+    print(f"Agent ID: {agent_config.id}")
+    print(f"Agent Name: {agent_config.name}")
+    print(f"Agent Description: {agent_config.description}")
+    print(f"Compatible Environments: {agent_config.compatible_environments}")
 
     # 1 second delay
     time.sleep(1)
+
+    # Initialize state
+    state = env.reset()
 
     # loop for 1000 episodes
     for episode in range(1000):
@@ -56,22 +58,22 @@ def play(selected_env_id, selected_agent_id):
             time.sleep(2)
 
             # reset the environment
-            env.reset()
+            state = env.reset()
 
             # 150 millisecond delay
             time.sleep(0.15)
 
 def list_available_environments():
-    #environments = list_environments()
+    environments = list_environments()
     print("Available Environments:")
-    #for env in environments:
-    #    print(f"ID: {env['id']}, Name: {env['name']}, Description: {env['description']}")
+    for env in environments:
+        print(f"ID: {env.id}, Name: {env.name}, Description: {env.description}")
 
 def list_available_agents():
-    #agents = list_agents()
+    agents = list_agents()
     print("Available Agents:")
-    #for agent in agents:
-    #    print(f"ID: {agent['id']}, Name: {agent['name']}, Description: {agent['description']}")
+    for agent in agents:
+       print(f"ID: {agent.id}, Name: {agent.name}, Description: {agent.description}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the environment-agent simulation.")

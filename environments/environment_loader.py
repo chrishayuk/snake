@@ -2,6 +2,9 @@
 import os
 import json
 import importlib
+from typing import Any, List, Tuple
+
+from environments.environment_type import EnvironmentType
 
 class EnvironmentLoader:
     def __init__(self, config_path):
@@ -20,7 +23,7 @@ class EnvironmentLoader:
             # check the environment id matches
             if env_config['id'] == env_id:
                 # return the config
-                return env_config
+                return EnvironmentType(**env_config)
         raise ValueError(f"Environment with id '{env_id}' not found")
 
     def load_class(self, full_class_string):
@@ -33,18 +36,22 @@ class EnvironmentLoader:
         # return
         return getattr(module, class_name)
 
-    def get_environment(self, env_id):
+    def get_environment(self, env_id) -> Tuple[Any, EnvironmentType]:
         # get the environment config
         env_config = self.get_environment_config(env_id)
 
         # get the environment class
-        EnvClass = self.load_class(env_config['environment'])
+        EnvClass = self.load_class(env_config.environment)
 
         # instantiate an instance of the environment
-        env_instance = EnvClass(**env_config.get('env_params', {}))
+        env_instance = EnvClass(**env_config.env_params)
 
-        # return the instances
+        # return the instance and the config
         return env_instance, env_config
+    
+    def list_environments(self) -> List[EnvironmentType]:
+        return [self.get_environment_config(env_config['id']) for env_config in self.env_configs]
+
 
 # Function to get the application root
 def get_app_root():
@@ -54,6 +61,10 @@ def get_app_root():
 app_root = get_app_root()
 environment_loader = EnvironmentLoader(os.path.join(app_root, 'config', 'environment_config.json'))
 
-def get_environment(env_id):
+def get_environment(env_id) -> Tuple[Any, EnvironmentType]:
     # get the environment by id
     return environment_loader.get_environment(env_id)
+
+def list_environments() -> List[EnvironmentType]:
+    # list all available environments
+    return environment_loader.list_environments()
