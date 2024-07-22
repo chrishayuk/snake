@@ -5,6 +5,7 @@ from langchain_community.llms import Ollama
 from langchain_community.chat_models import ChatOpenAI, ChatAnthropic
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+from agents.agent_logging import Logger
 from agents.provider_type import ProviderType
 
 # load environment variables .env file
@@ -15,6 +16,9 @@ class BaseLLMAgent(ABC):
         # set size and visited
         self.size = size
         self.visited = set()
+
+        # Initialize logger with default values
+        self.logger = Logger(game_id="default_game", agent_id="default_agent")
 
         # get the llm
         self.llm = self._get_llm(provider, model_name)

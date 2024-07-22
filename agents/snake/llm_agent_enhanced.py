@@ -1,4 +1,4 @@
-# File: snake_agent.py
+import json
 import time
 from agents.provider_type import ProviderType
 from agents.base_llm_agent import BaseLLMAgent
@@ -6,6 +6,11 @@ from agents.snake.agent_action import AgentAction
 
 class LLMAgent(BaseLLMAgent):
     def __init__(self, provider: ProviderType, model_name: str):
+        self.game_id = "12345"
+        self.agent_id = "chuk"
+        self.model_name = model_name
+        self.log_filename = f"{self.game_id}.jsonl"
+        self.time_initiated = time.strftime('%Y-%m-%d %H:%M:%S')
         prompt_template = """
         You are an AI controlling a snake in a classic Snake game. The game is played on a grid.
 
@@ -34,13 +39,43 @@ class LLMAgent(BaseLLMAgent):
         2. Moving towards food
         3. Long-term survival (maintaining open paths)
 
-        Provide your answer as a single word (UP, DOWN, LEFT, or RIGHT) with no additional explanation.
+        <agentThinking>
+        Explain your thought process and how you arrived at the decision. Include considerations of immediate survival, food location, and long-term survival.
+        </agentThinking>
+
+        Ensure your response includes a <finalOutput> tag with your final decision as a single word (UP, DOWN, LEFT, or RIGHT).
+
+        Example responses:
+
+        Example 1:
+ 
+        <agentThinking>
+        The snake's head is close to the food located on its right. Moving right is safe and directly leads to the food.
+        Immediate survival is ensured as there are no obstacles on the right.
+        </agentThinking>
+        <finalOutput>RIGHT</finalOutput>
+
+        Example 2:
+
+        <agentThinking>
+        The snake's head is close to the food located below. Moving down is safe and directly leads to the food.
+        Immediate survival is ensured as there are no obstacles below.
+        </agentThinking>
+        <finalOutput>DOWN</finalOutput>
         """
         super().__init__(provider, model_name, prompt_template)
 
     def get_action(self, state: str):
         # call the llm
         response = self.chain.run(state=state, visited="N/A", size="N/A")
+
+        # extract the thought process and final output
+        thought_process = self.extract_tag_content(response, "agentThinking")
+        final_output = self.extract_tag_content(response, "finalOutput")
+        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        # log the state, thought process, and decision
+        self.logger.log_decision(state, thought_process, final_output, response, time_completed)
 
         # map the action
         action_map = {
@@ -50,21 +85,5 @@ class LLMAgent(BaseLLMAgent):
             "RIGHT": AgentAction.RIGHT
         }
 
-        # set the time completed
-        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
-        
-        # response stripped
-        response_stripped = response.strip().upper(),
-
-        # log the state, thought process, and decision
-        self.logger.log_decision(state, "", response_stripped, response, time_completed)
-
         # return the action
-        return action_map.get(response_stripped, AgentAction.RIGHT)
-    
-    def extract_tag_content(self, text: str, tag: str) -> str:
-        start_tag = f"<{tag}>"
-        end_tag = f"</{tag}>"
-        start_index = text.find(start_tag) + len(start_tag)
-        end_index = text.find(end_tag)
-        return text[start_index:end_index].strip() if start_index != -1 and end_index != -1 else ""
+        return action_map.get(final_output.strip().upper(), AgentAction.RIGHT)

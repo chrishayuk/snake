@@ -210,5 +210,16 @@
             "model_name": "llama3:70b" 
         },
         "compatible_environments": ["minesweeper"]
+    },{
+        "id": "snake_enhanced",
+        "name": "snake_enhanced",
+        "type": "Snake Agent",
+        "description": "chain of thought agent",
+        "agent": "agents.snake.llm_agent_enhanced.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "gemma2:9b" 
+        },
+        "compatible_environments": ["snake"]
     }
 ]

@@ -46,7 +46,7 @@ def play(selected_env_id, selected_agent_id):
         time.sleep(0.15)
 
         # perform an action
-        action = agent.get_action(state)
+        action = agent.get_action(env.get_render())
         state, reward, game_over = env.step(action)
 
         # break, if game over

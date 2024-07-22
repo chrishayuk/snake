@@ -67,6 +67,18 @@ class SnakeEnv(Environment):
                 self.snake[-1][1] + self.direction[1])
 
     
+    def is_valid_direction_change(self, action):
+        """
+        Check if the direction change is valid (not a 180-degree turn).
+        """
+        current_direction = next(key for key, value in self.direction_dict.items() if value == self.direction)
+        if (current_direction == AgentAction.UP and action == AgentAction.DOWN) or \
+           (current_direction == AgentAction.DOWN and action == AgentAction.UP) or \
+           (current_direction == AgentAction.LEFT and action == AgentAction.RIGHT) or \
+           (current_direction == AgentAction.RIGHT and action == AgentAction.LEFT):
+            return False
+        return True
+    
     def is_valid_position(self, position):
         # get x,y from position
         x, y = position
@@ -99,7 +111,7 @@ class SnakeEnv(Environment):
     
     def step(self, action: AgentAction = AgentAction.NONE):
         # Update direction only if a new direction is specified
-        if action != AgentAction.NONE:
+        if action != AgentAction.NONE and self.is_valid_direction_change(action):
             self.direction = self.direction_dict[action]
 
         # get the next position
@@ -184,7 +196,7 @@ class SnakeEnv(Environment):
             f"",
             f"Game State:",
             f" Score: {len(self.snake) - 1}",
-            f" Direction: {direction_str}",
+            f" Current Direction: {direction_str}",
             f" Steps since last food: {self.steps_since_last_food}",
             f" Total steps: {self.steps}",
             f" Game over: {self.game_over}",
@@ -200,7 +212,7 @@ class SnakeEnv(Environment):
 
     def render(self):
         # Clear the console
-        os.system('cls' if os.name == 'nt' else 'clear')
+        #os.system('cls' if os.name == 'nt' else 'clear')
 
         # Get and print the render string
         print(self.get_render())
