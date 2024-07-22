@@ -1,4 +1,4 @@
-# File: base_agent.py
+# File: app/agents/base_agent.py
 from abc import ABC, abstractmethod
 
 class BaseAgent(ABC):

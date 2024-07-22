@@ -1,0 +1,102 @@
+[
+    {
+        "id": "smart_seeker_v1",
+        "name": "Smart Seeker Agent",
+        "type": "Snake Agent",
+        "description": "An agent that uses a smart strategy to seek food in the snake environment.",
+        "agent": "agents.snake.smart_seeker_agent.SmartSeekerAgent",
+        "agent_params": {},
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "food_seeker_v1",
+        "name": "Food Seeker Agent",
+        "type": "Snake Agent",
+        "description": "An agent that uses a basic food seeking strategy in the snake environment.",
+        "agent": "agents.snake.food_seeker_agent.FoodSeekerAgent",
+        "agent_params": {},
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "hamiltonian_v1",
+        "name": "Hamiltonian Agent",
+        "type": "Snake Agent",
+        "description": "An agent that uses a hamiltonian strategy in the snake environment.",
+        "agent": "agents.snake.hamiltonian_agent.HamiltonianAgent",
+        "agent_params": {
+            "grid_size": 10 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "adaptive_hamiltonian_v1",
+        "name": "Adaptive Hamiltonian Agent",
+        "type": "Snake Agent",
+        "description": "An agent that uses an adaptive hamiltonian strategy in the snake environment.",
+        "agent": "agents.snake.adapative_hamiltonian_agent.AdaptiveHamiltonianAgent",
+        "agent_params": {
+            "grid_size": 10 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_llama3_8b_v1",
+        "name": "Llama3:8B Snake Agent",
+        "type": "Snake Agent",
+        "description": "Llama3 8B playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "llama3" 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_llama3_70b_v1",
+        "name": "Llama3:70B Snake Agent",
+        "type": "Snake Agent",
+        "description": "Llama3 70B playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "llama3:70b" 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_gemma2_9b_v1",
+        "name": "Gemma2:9B Snake Agent",
+        "type": "Snake Agent",
+        "description": "Gemma2:9B playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "gemma2:9b" 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_gemma2_27b_v1",
+        "name": "Gemma2:27B Snake Agent",
+        "type": "Snake Agent",
+        "description": "Gemma2:27B playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "gemma2:27b" 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    },
+    {
+        "id": "snake_mistral_7b_v1",
+        "name": "Mistral:7B Snake Agent",
+        "type": "Snake Agent",
+        "description": "Mistral:7B playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "mistral" 
+        },
+        "compatible_environments": ["snake_env_v1"]
+    }
+]
