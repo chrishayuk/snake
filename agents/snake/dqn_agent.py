@@ -1,4 +1,5 @@
-from agents.agent_action import AgentAction
+# File: dqn_agent.py
+from agents.snake.agent_action import AgentAction
 import torch
 import torch.nn as nn
 import torch.optim as optim

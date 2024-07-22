@@ -2,7 +2,7 @@
 import numpy as np
 import os
 import random
-from agents.agent_action import AgentAction
+from agents.snake.agent_action import AgentAction
 from reward_functions import simple_reward as reward_function
 
 class SnakeEnv:

@@ -1,4 +1,4 @@
-# File: minesweeper_agent_action.py
+# File: agent_action.py
 from enum import Enum
 
 class MinesweeperAction:

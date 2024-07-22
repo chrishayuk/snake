@@ -1,6 +1,6 @@
 # File: main_simple.py
 import time
-from agents.simple_agent import SimpleAgent
+from agents.snake.food_seeker_agent import FoodSeekerAgent
 from snake_environment import SnakeEnv
 
 # setup the environment
@@ -10,7 +10,7 @@ env = SnakeEnv(size=10)
 state = env.get_state()
 
 # create our agent
-agent = SimpleAgent()
+agent = FoodSeekerAgent()
 
 # loop for 1000 episodes
 for episode in range(1000):

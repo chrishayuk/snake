@@ -1,11 +1,22 @@
-# File: simple_agent.py
+# File: food_seeker_agent.py
 import numpy as np
 from typing import Tuple
-from agents.agent_action import AgentAction
+from agents.base_agent import BaseAgent
+from agents.snake.agent_action import AgentAction
 
-class SimpleAgent:
+class FoodSeekerAgent(BaseAgent):
     def __init__(self):
         pass
+
+    @property
+    def name(self) -> str:
+        """Return the name of the agent."""
+        return "FoodSeekerAgent"
+
+    @property
+    def agent_type(self) -> str:
+        """Return the type of the agent."""
+        return "Snake Agent"
 
     def get_snake_head_position(self, state: np.ndarray) -> Tuple[int, int]:
         """Extract the position of the snake's head from the state."""

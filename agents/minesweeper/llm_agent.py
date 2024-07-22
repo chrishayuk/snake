@@ -7,7 +7,7 @@ from langchain_community.chat_models import ChatAnthropic
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
-from agents.minesweeper_agent_action import MinesweeperAction as AgentAction
+from agent_action import MinesweeperAction as AgentAction
 
 # load environment variables .env file
 dotenv.load_dotenv()

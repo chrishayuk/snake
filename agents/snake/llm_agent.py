@@ -1,14 +1,12 @@
 # File: llm_agent.py
 import dotenv
 from typing import Literal
-from agents.agent_action import AgentAction
+from agents.snake.agent_action import AgentAction
 from langchain_community.llms import Ollama
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.chat_models import ChatAnthropic
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-
-#from agents.minesweeper_agent_action import MinesweeperAction as AgentAction
 
 # load environment variables .env file
 dotenv.load_dotenv()
@@ -56,6 +54,16 @@ class LLMAgent:
         # set up the chain
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
 
+    @property
+    def name(self) -> str:
+        """Return the name of the agent."""
+        return "LLM Agent"
+
+    @property
+    def agent_type(self) -> str:
+        """Return the type of the agent."""
+        return "Snake Agent"
+    
     def _get_llm(self, provider: str, model_name: str):
         if provider == "openai":
             # openai
@@ -83,15 +91,3 @@ class LLMAgent:
         
         # Default to RIGHT if invalid response
         return action_map.get(response.strip().upper(), AgentAction.RIGHT)
-
-    # def get_action(self, state):
-    #     # Use the LLM to generate an action based on the state
-    #     response = self.chain.run(state=state)
-        
-    #     # Parse the LLM's response into a MinesweeperAction
-    #     try:
-    #         action = MinesweeperAction.from_string(response)
-    #         return action
-    #     except ValueError:
-    #         # If the LLM's response is invalid, return a default action
-    #         return MinesweeperAction(MinesweeperAction.ActionType.REVEAL, 0, 0)

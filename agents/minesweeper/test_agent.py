@@ -1,7 +1,6 @@
-# File: minesweeper_test_agent.py
-
+# File: test_agent.py
 import random
-from agents.minesweeper_agent_action import MinesweeperAction
+from .agent_action import MinesweeperAction
 
 class TestAgent:
     def __init__(self, size):

@@ -1,9 +1,9 @@
 # File: main_llm_minesweeper.py
 import numpy as np
 import time
-from agents.minesweeper_llm_agent import LLMAgent
+from agents.minesweeper.llm_agent import LLMAgent
 from minesweeper_environment import MinesweeperEnv
-from agents.minesweeper_agent_action import MinesweeperAction
+from agents.minesweeper.agent_action import MinesweeperAction
 
 def parse_action(agent_action):
     print(f"Agent action: {agent_action}")

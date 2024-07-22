@@ -1,6 +1,6 @@
 # File: main_llm.py
 import time
-from agents.llm_agent import LLMAgent
+from agents.snake.llm_agent import LLMAgent
 from snake_environment import SnakeEnv
 
 # setup the environment

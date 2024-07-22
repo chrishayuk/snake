@@ -3,8 +3,8 @@
 import time
 import numpy as np
 from minesweeper_environment import MinesweeperEnv
-from agents.minesweeper_test_agent import TestAgent
-from agents.minesweeper_agent_action import MinesweeperAction
+from agents.minesweeper.test_agent import TestAgent
+from agents.minesweeper.agent_action import MinesweeperAction
 
 def run_test_episode(env, agent, render=True, delay=0.1):
     state = env.reset()

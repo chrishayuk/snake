@@ -1,8 +1,8 @@
 import time
 import numpy as np
-from agents.dqn_agent import DQNAgent
+from agents.snake.dqn_agent import DQNAgent
 from snake_environment import SnakeEnv
-from agents.agent_action import AgentAction
+from agents.snake.agent_action import AgentAction
 
 def train_dqn(episodes=10000, batch_size=32, render=False):
     # setup the snake environment
