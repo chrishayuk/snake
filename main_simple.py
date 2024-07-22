@@ -1,3 +1,4 @@
+# File: main_simple.py
 import time
 from agents.simple_agent import SimpleAgent
 from snake_environment import SnakeEnv

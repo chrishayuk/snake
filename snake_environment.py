@@ -1,4 +1,4 @@
-# File: simple_agent.py
+# File: snake_environment.py
 import numpy as np
 import os
 import random
@@ -143,8 +143,10 @@ class SnakeEnv:
             # set the reward
             reward = self.reward_function(eaten=False, dead=False, steps=self.steps_since_last_food)
 
-        # increase steps since last have food
-        self.steps_since_last_food += 1
+            # increase steps since last have food
+            self.steps_since_last_food += 1
+       
+        # increase steps
         self.steps += 1
 
         # return the state, reward and game over
