@@ -67,13 +67,13 @@ def list_available_environments():
     environments = list_environments()
     print("Available Environments:")
     for env in environments:
-        print(f"ID: {env.id}, Name: {env.name}, Description: {env.description}")
+        print(f"{env.id} - {env.description}")
 
 def list_available_agents():
     agents = list_agents()
     print("Available Agents:")
     for agent in agents:
-       print(f"ID: {agent.id}, Name: {agent.name}, Description: {agent.description}")
+       print(f"{agent.id} - {agent.description}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the environment-agent simulation.")
