@@ -1,6 +1,6 @@
 [
     {
-        "id": "snake_env_v1",
+        "id": "snake",
         "name": "Snake Environment",
         "description": "A simple snake environment for testing agents.",
         "environment": "environments.snake.snake_environment.SnakeEnv",
@@ -9,7 +9,7 @@
         }
     },
     {
-        "id": "minesweeper_env_v1",
+        "id": "minesweeper",
         "name": "Minesweeper Environment",
         "description": "A simple minesweeper environment for testing agents.",
         "environment": "environments.minesweeper.minesweeper_environment.MinesweeperEnv",

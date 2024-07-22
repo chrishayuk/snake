@@ -1,24 +1,24 @@
 [
     {
-        "id": "smart_seeker_v1",
+        "id": "snake_smart_seeker",
         "name": "Smart Seeker Agent",
         "type": "Snake Agent",
         "description": "An agent that uses a smart strategy to seek food in the snake environment.",
         "agent": "agents.snake.smart_seeker_agent.SmartSeekerAgent",
         "agent_params": {},
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "food_seeker_v1",
+        "id": "snake_food_seeker",
         "name": "Food Seeker Agent",
         "type": "Snake Agent",
         "description": "An agent that uses a basic food seeking strategy in the snake environment.",
         "agent": "agents.snake.food_seeker_agent.FoodSeekerAgent",
         "agent_params": {},
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "hamiltonian_v1",
+        "id": "snake_hamiltonian",
         "name": "Hamiltonian Agent",
         "type": "Snake Agent",
         "description": "An agent that uses a hamiltonian strategy in the snake environment.",
@@ -26,10 +26,10 @@
         "agent_params": {
             "grid_size": 10 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "adaptive_hamiltonian_v1",
+        "id": "snake_adaptive_hamiltonian",
         "name": "Adaptive Hamiltonian Agent",
         "type": "Snake Agent",
         "description": "An agent that uses an adaptive hamiltonian strategy in the snake environment.",
@@ -37,10 +37,10 @@
         "agent_params": {
             "grid_size": 10 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_llama3_8b_v1",
+        "id": "snake_llama3_8b",
         "name": "Llama3:8B Snake Agent",
         "type": "Snake Agent",
         "description": "Llama3 8B playing Snake",
@@ -49,10 +49,10 @@
             "provider": "ollama",
             "model_name": "llama3" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_llama3_70b_v1",
+        "id": "snake_llama3_70b",
         "name": "Llama3:70B Snake Agent",
         "type": "Snake Agent",
         "description": "Llama3 70B playing Snake",
@@ -61,10 +61,10 @@
             "provider": "ollama",
             "model_name": "llama3:70b" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_gemma2_9b_v1",
+        "id": "snake_gemma2_9b",
         "name": "Gemma2:9B Snake Agent",
         "type": "Snake Agent",
         "description": "Gemma2:9B playing Snake",
@@ -73,10 +73,10 @@
             "provider": "ollama",
             "model_name": "gemma2:9b" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_gemma2_27b_v1",
+        "id": "snake_gemma2_27b",
         "name": "Gemma2:27B Snake Agent",
         "type": "Snake Agent",
         "description": "Gemma2:27B playing Snake",
@@ -85,10 +85,10 @@
             "provider": "ollama",
             "model_name": "gemma2:27b" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_mistral_7b_v1",
+        "id": "snake_mistral_7b",
         "name": "Mistral:7B Snake Agent",
         "type": "Snake Agent",
         "description": "Mistral:7B playing Snake",
@@ -97,10 +97,10 @@
             "provider": "ollama",
             "model_name": "mistral" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_phi3_3b_v1",
+        "id": "snake_phi3_3b",
         "name": "Phi3:3B Snake Agent",
         "type": "Snake Agent",
         "description": "Phi3:3B playing Snake",
@@ -109,11 +109,11 @@
             "provider": "ollama",
             "model_name": "phi3" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_gpt4o_mini_v1",
-        "name": "gpt-4o-mini Snake Agent",
+        "id": "snake_gpt4o_mini",
+        "name": "GPT-4o-mini Snake Agent",
         "type": "Snake Agent",
         "description": "gpt-4o-mini playing Snake",
         "agent": "agents.snake.llm_agent.LLMAgent",
@@ -121,11 +121,11 @@
             "provider": "openai",
             "model_name": "gpt-4o-mini" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_gpt4o_v1",
-        "name": "gpt-4o Snake Agent",
+        "id": "snake_gpt4o",
+        "name": "GPT-4o Snake Agent",
         "type": "Snake Agent",
         "description": "gpt-4o playing Snake",
         "agent": "agents.snake.llm_agent.LLMAgent",
@@ -133,6 +133,17 @@
             "provider": "openai",
             "model_name": "gpt-4o" 
         },
-        "compatible_environments": ["snake_env_v1"]
+        "compatible_environments": ["snake"]
+    },
+    {
+        "id": "minesweeper_test",
+        "name": "Minesweeper Test Agent",
+        "type": "Minesweeper Agent",
+        "description": "a basic test agen for playing minesweeper",
+        "agent": "agents.minesweeper.test_agent.TestAgent",
+        "agent_params": {
+            "size": 10
+        },
+        "compatible_environments": ["minesweeper"]
     }
 ]

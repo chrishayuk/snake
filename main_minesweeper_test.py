@@ -47,7 +47,7 @@ def main():
     num_episodes = 100
 
     # Example: Select Minesweeper Environment
-    selected_env_id = "minesweeper_env_v1"
+    selected_env_id = "minesweeper_env"
 
     # Create environment using the loader
     env, env_config = get_environment(selected_env_id)
