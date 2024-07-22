@@ -3,9 +3,10 @@ import numpy as np
 import os
 import random
 from agents.snake.agent_action import AgentAction
-from reward_functions import simple_reward as reward_function
+from environments.environment_base import Environment
+from environments.snake.reward_functions import simple_reward as reward_function
 
-class SnakeEnv:
+class SnakeEnv(Environment):
     def __init__(self, size=10):
         # set the size
         self.size = size
@@ -113,7 +114,7 @@ class SnakeEnv:
             return self.get_state(), self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food), self.game_over
         
         # Check if we took too many steps
-        if self.steps_since_last_food > 50:
+        if self.steps_since_last_food > 100:
             # game over
             self.game_over = True
 
@@ -175,11 +176,21 @@ class SnakeEnv:
 
         # Prepare additional information
         info = [
-            f"Score: {len(self.snake) - 1}",
-            f"Direction: {direction_str}",
-            f"Steps since last food: {self.steps_since_last_food}",
-            f"Total steps: {self.steps}",
-            f"Game over: {self.game_over}"
+            f"Legend:",
+            f" H - Head of the snake",
+            f" O - Body of the snake",
+            f" F - Food",
+            f" . - Empty space",
+            f"",
+            f"Game State:",
+            f" Score: {len(self.snake) - 1}",
+            f" Direction: {direction_str}",
+            f" Steps since last food: {self.steps_since_last_food}",
+            f" Total steps: {self.steps}",
+            f" Game over: {self.game_over}",
+            f" Snake Length: {len(self.snake)}",
+            f" Snake Positions: {self.snake}",
+            f" Food Position: {self.food}"
         ]
 
         # Combine grid and info

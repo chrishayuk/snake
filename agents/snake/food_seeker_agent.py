@@ -11,7 +11,7 @@ class FoodSeekerAgent(BaseAgent):
     @property
     def name(self) -> str:
         """Return the name of the agent."""
-        return "FoodSeekerAgent"
+        return "Food Seeker Agent"
 
     @property
     def agent_type(self) -> str:

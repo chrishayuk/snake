@@ -1,12 +1,14 @@
 import time
 import numpy as np
 from agents.snake.dqn_agent import DQNAgent
-from snake_environment import SnakeEnv
-from agents.snake.agent_action import AgentAction
+from environments.environment_loader import get_environment
 
 def train_dqn(episodes=10000, batch_size=32, render=False):
-    # setup the snake environment
-    env = SnakeEnv(size=10)
+    # Example: Select Snake Environment
+    selected_env_id = "snake_env_v1"
+
+    # Create environment using the loader
+    env, env_config = get_environment(selected_env_id)
 
     # get the state space
     state_dim = np.prod(env.get_state().shape)
@@ -23,7 +25,7 @@ def train_dqn(episodes=10000, batch_size=32, render=False):
         steps = 0
 
         # we'll watch how it does every 300 steps
-        if episode%1000 == 0:
+        if episode%5000 == 0:
             render = True
         else:
             render = False
@@ -57,5 +59,5 @@ def train_dqn(episodes=10000, batch_size=32, render=False):
 
 if __name__ == "__main__":
     print("Starting training...")
-    trained_agent = train_dqn(episodes=10000, render=False)
+    trained_agent = train_dqn(episodes=50000, render=False)
     print("Training completed!")

@@ -1,16 +1,27 @@
 # File: main_simple.py
+import os
 import time
-from agents.snake.food_seeker_agent import FoodSeekerAgent
-from snake_environment import SnakeEnv
+from agents.snake.smart_seeker_agent import SmartSeekerAgent
+from environments.environment_loader import get_environment
 
-# setup the environment
-env = SnakeEnv(size=10)
+# Function to get the application root
+def get_app_root():
+    return os.path.dirname(os.path.abspath(__file__))
+
+# Example: Select Snake Environment
+selected_env_id = "snake_env_v1"
+
+# Create environment using the loader
+env, env_config = get_environment(selected_env_id)
 
 # get the initial state
 state = env.get_state()
 
 # create our agent
-agent = FoodSeekerAgent()
+#agent = FoodSeekerAgent()
+agent = SmartSeekerAgent()
+#agent = HamiltonianAgent(10)
+#agent = AdaptiveHamiltonianAgent([10,10])
 
 # loop for 1000 episodes
 for episode in range(1000):

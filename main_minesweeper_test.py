@@ -1,10 +1,9 @@
 # File: main_test_minesweeper.py
-
 import time
 import numpy as np
-from minesweeper_environment import MinesweeperEnv
 from agents.minesweeper.test_agent import TestAgent
 from agents.minesweeper.agent_action import MinesweeperAction
+from environments.environment_loader import get_environment
 
 def run_test_episode(env, agent, render=True, delay=0.1):
     state = env.reset()
@@ -47,7 +46,12 @@ def main():
     num_mines = 10
     num_episodes = 100
 
-    env = MinesweeperEnv(size=size, num_mines=num_mines)
+    # Example: Select Minesweeper Environment
+    selected_env_id = "minesweeper_env_v1"
+
+    # Create environment using the loader
+    env, env_config = get_environment(selected_env_id)
+
     agent = TestAgent(size)
 
     wins = 0

@@ -1,15 +1,18 @@
 # File: main_llm.py
 import time
 from agents.snake.llm_agent import LLMAgent
-from snake_environment import SnakeEnv
+from environments.environment_loader import get_environment
 
-# setup the environment
-env = SnakeEnv(size=10)
+# Example: Select Snake Environment
+selected_env_id = "snake_env_v1"
+
+# Create environment using the loader
+env, env_config = get_environment(selected_env_id)
 
 # create our LLM agent
 #agent = LLMAgent("openai", "gpt-4o")
 #agent = LLMAgent("openai", "gpt-4o-mini")
-agent = LLMAgent("ollama", "llama3:70b")
+agent = LLMAgent("ollama", "llama3")
 #agent = LLMAgent("anthropic", "claude-3-5-sonnet")
 
 # loop for 1000 episodes

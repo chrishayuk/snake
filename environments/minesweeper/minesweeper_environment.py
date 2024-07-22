@@ -1,8 +1,9 @@
 import os
 import numpy as np
 import random
+from environments.environment_base import Environment
 
-class MinesweeperEnv:
+class MinesweeperEnv(Environment):
     def __init__(self, size=10, num_mines=10):
         self.size = size
         self.num_mines = num_mines

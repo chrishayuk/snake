@@ -2,7 +2,7 @@
 import numpy as np
 import time
 from agents.minesweeper.llm_agent import LLMAgent
-from minesweeper_environment import MinesweeperEnv
+from environments.environment_loader import get_environment
 from agents.minesweeper.agent_action import MinesweeperAction
 
 def parse_action(agent_action):
@@ -56,8 +56,11 @@ def run_episode(env, agent, render=True, delay=0.15):
     return total_reward, steps, env.win
 
 def main():
-    # setup the environment
-    env = MinesweeperEnv(size=10, num_mines=10)
+    # Example: Select Minesweeper Environment
+    selected_env_id = "minesweeper_env_v1"
+
+    # Create environment using the loader
+    env, env_config = get_environment(selected_env_id)
 
     # create our LLM agent
     #agent = LLMAgent("openai", "gpt-4o")
