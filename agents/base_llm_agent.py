@@ -21,15 +21,8 @@ class BaseLLMAgent(ABC):
         self.llm_provider = provider
         self.model_name = model_name
 
-        # set the default game id
-        self.game_id = "default_game"
-
-        # setup the logging
-        self.log_filename = f"{self.game_id}.jsonl"
-        self.time_initiated = time.strftime('%Y-%m-%d %H:%M:%S')
-
         # Initialize logger with default values
-        self.logger = Logger(game_id="default_game", agent_id=self.agent_id)
+        self.logger = Logger(agent_id=self.agent_id)
 
         # get the llm
         self.llm = self._get_llm(provider, model_name)

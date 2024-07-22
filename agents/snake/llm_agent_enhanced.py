@@ -65,12 +65,13 @@ class LLMAgent(BaseLLMAgent):
         response = self.chain.run(state=state, visited="N/A", size="N/A")
 
         # extract the thought process and final output
+        game_id = "12345"
         thought_process = self.extract_tag_content(response, "agentThinking")
         final_output = self.extract_tag_content(response, "finalOutput")
         time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
         # log the state, thought process, and decision
-        self.logger.log_decision(state, thought_process, final_output, response, time_completed)
+        self.logger.log_decision(game_id, state, thought_process, final_output, response, time_completed)
 
         # map the action
         action_map = {

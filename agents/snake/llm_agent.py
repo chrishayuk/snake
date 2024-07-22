@@ -56,8 +56,11 @@ class LLMAgent(BaseLLMAgent):
         # response stripped
         response_stripped = response.strip().upper(),
 
+        # set the game id
+        game_id = "12345"
+
         # log the state, thought process, and decision
-        self.logger.log_decision(state, "", response_stripped, response, time_completed)
+        self.logger.log_decision(game_id, state, "", response_stripped, response, time_completed)
 
         # return the action
         return action_map.get(response_stripped, AgentAction.RIGHT)
