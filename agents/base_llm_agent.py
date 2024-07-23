@@ -1,5 +1,6 @@
 # File: agents/base_llm_agent.py
 from abc import ABC, abstractmethod
+import time
 import dotenv
 from langchain_community.llms import Ollama
 from langchain_community.chat_models import ChatOpenAI, ChatAnthropic
@@ -60,10 +61,16 @@ class BaseLLMAgent(ABC):
         end_tag = f"</{tag}>"
         start_index = text.find(start_tag) + len(start_tag)
         end_index = text.find(end_tag)
-        return text[start_index:end_index].strip() if start_index != -1 and end_index != -1 else ""
+        return text[start_index:end_index].strip() if start_index != -1 and end_index != -1 else text
     
     @property
     def agent_type(self) -> AgentType:
         """Return the type of the agent."""
         return AgentType.LLM
 
+    def game_over(self, step:int, state: str):
+        # set the time completed
+        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        # log the state, thought process, and decision
+        self.logger.log_decision(self.game_id, step, state, "", "", "", time_completed)

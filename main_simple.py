@@ -56,6 +56,14 @@ def play(selected_env_id, selected_agent_id):
             # 2 second delay
             time.sleep(2)
 
+            # perform an action
+            if agent.agent_type == AgentType.LLM:
+                # call game over on the agent
+                agent.game_over(env.steps+1, env.get_render())
+            else:
+                # call game over on the agent
+                agent.game_over(env.steps+1, state)
+
             # reset the environment
             state = env.reset()
 

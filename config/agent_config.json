@@ -90,6 +90,18 @@
         "compatible_environments": ["snake"]
     },
     {
+        "id": "snake_llama3.1_8b",
+        "name": "llama3.1:8B Snake Agent",
+        "type": "Snake Agent",
+        "description": "llama3.1:8b playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "llama3.1" 
+        },
+        "compatible_environments": ["snake"]
+    },
+    {
         "id": "snake_gpt4o_mini",
         "name": "GPT-4o-mini Snake Agent",
         "type": "Snake Agent",
@@ -193,7 +205,7 @@
         "name": "snake_enhanced",
         "type": "Snake Agent",
         "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_enhanced.LLMAgent",
+        "agent": "agents.snake.llm_agent_cot.LLMAgent",
         "agent_params": {
             "provider": "ollama",
             "model_name": "llama3" 
@@ -204,7 +216,7 @@
         "name": "snake_enhanced_gpt4o",
         "type": "Snake Agent",
         "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_enhanced.LLMAgent",
+        "agent": "agents.snake.llm_agent_cot.LLMAgent",
         "agent_params": {
             "provider": "openai",
             "model_name": "gpt-4o" 
@@ -215,10 +227,21 @@
         "name": "snake_enhanced_gpt4o_mini",
         "type": "Snake Agent",
         "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_enhanced.LLMAgent",
+        "agent": "agents.snake.llm_agent_cot.LLMAgent",
         "agent_params": {
             "provider": "openai",
             "model_name": "gpt-4o-mini" 
+        },
+        "compatible_environments": ["snake"]
+    },{
+        "id": "snake_enhanced_llama3.1_8b",
+        "name": "snake_enhanced_llama3.1_8b",
+        "type": "Snake Agent",
+        "description": "chain of thought agent",
+        "agent": "agents.snake.llm_agent_cot.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "llama3.1" 
         },
         "compatible_environments": ["snake"]
     }

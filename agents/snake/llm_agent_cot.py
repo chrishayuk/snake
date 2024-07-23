@@ -1,8 +1,7 @@
 # File: agents/snake/llm_agent_enhanced.py
 import time
 from agents.provider_type import ProviderType
-from agents.base_llm_agent import BaseLLMAgent
-from agents.snake.agent_action import AgentAction
+from agents.snake.llm_agent import LLMAgent as BaseLLMAgent
 
 class LLMAgent(BaseLLMAgent):
     def __init__(self, id, name: str, description: str, provider: ProviderType, model_name: str):
@@ -90,27 +89,5 @@ DOWN
 </finalOutput>
 Now analyze the current game state provided above and make a decision based on the same process.
 """
-        super().__init__(id, name, description, provider, model_name, prompt_template)
+        super().__init__(id, name, description, provider, model_name)
     
-    def get_action(self, step:int, state: str):
-        # call the llm
-        response = self.chain.run(state=state, visited="N/A", size="N/A")
-
-        # extract the thought process and final output
-        thought_process = self.extract_tag_content(response, "agentThinking")
-        final_output = self.extract_tag_content(response, "finalOutput")
-        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
-
-        # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed)
-
-        # map the action
-        action_map = {
-            "UP": AgentAction.UP,
-            "DOWN": AgentAction.DOWN,
-            "LEFT": AgentAction.LEFT,
-            "RIGHT": AgentAction.RIGHT
-        }
-
-        # return the action
-        return action_map.get(final_output.strip().upper(), AgentAction.RIGHT)

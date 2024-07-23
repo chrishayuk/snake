@@ -1,4 +1,5 @@
 # File: agents/snake/classic_agent.py
+import time
 import numpy as np
 from typing import Tuple
 from agents.agent_logging import AgentLogger
@@ -59,4 +60,3 @@ class ClassicAgent(BaseAgent):
                     state[i, j, 3] = 1  # Assuming empty spaces are represented in channel 3
 
         return state
-    

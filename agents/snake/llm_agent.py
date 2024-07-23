@@ -1,6 +1,5 @@
 # File: agents/snake/llm_agent.py
 import time
-from agents.agent_type import AgentType
 from agents.provider_type import ProviderType
 from agents.base_llm_agent import BaseLLMAgent
 from agents.snake.agent_action import AgentAction
@@ -39,9 +38,18 @@ class LLMAgent(BaseLLMAgent):
         """
         super().__init__(id, name, description, provider, model_name, prompt_template)
 
+    
     def get_action(self, step:int, state: str):
         # call the llm
         response = self.chain.run(state=state)
+
+        # extract the thought process and final output
+        thought_process = self.extract_tag_content(response, "agentThinking")
+        final_output = self.extract_tag_content(response, "finalOutput")
+        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        # log the state, thought process, and decision
+        self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed)
 
         # map the action
         action_map = {
@@ -51,14 +59,5 @@ class LLMAgent(BaseLLMAgent):
             "RIGHT": AgentAction.RIGHT
         }
 
-        # set the time completed
-        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
-        
-        # response stripped
-        response_stripped = response.strip().upper(),
-
-        # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, step, state, "", response_stripped, response, time_completed)
-
         # return the action
-        return action_map.get(response_stripped, AgentAction.RIGHT)
+        return action_map.get(final_output.strip().upper(), AgentAction.RIGHT)
