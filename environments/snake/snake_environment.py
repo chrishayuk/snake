@@ -2,12 +2,16 @@
 import numpy as np
 import os
 import random
+import uuid
 from agents.snake.agent_action import AgentAction
 from environments.environment_base import Environment
 from environments.snake.reward_functions import simple_reward as reward_function
 
 class SnakeEnv(Environment):
     def __init__(self, size=10):
+        # set the game_id
+        self.game_id = str(uuid.uuid4())
+        
         # set the size
         self.size = size
 
@@ -40,6 +44,9 @@ class SnakeEnv(Environment):
                 break
 
     def reset(self):
+        # set the game_id
+        self.game_id = str(uuid.uuid4())
+
         # no game over
         self.game_over = False
 

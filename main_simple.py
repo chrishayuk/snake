@@ -37,6 +37,9 @@ def play(selected_env_id, selected_agent_id):
     # Initialize state
     state = env.reset()
 
+    # set the game id
+    agent.game_id = env.game_id
+
     # loop for 1000 episodes
     for episode in range(1000):
         # render the environment
@@ -59,6 +62,9 @@ def play(selected_env_id, selected_agent_id):
 
             # reset the environment
             state = env.reset()
+
+            # set the game id
+            agent.game_id = env.game_id
 
             # 150 millisecond delay
             time.sleep(0.15)

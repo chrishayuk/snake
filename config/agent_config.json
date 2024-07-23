@@ -218,7 +218,29 @@
         "agent": "agents.snake.llm_agent_enhanced.LLMAgent",
         "agent_params": {
             "provider": "ollama",
-            "model_name": "gemma2:9b" 
+            "model_name": "llama3" 
+        },
+        "compatible_environments": ["snake"]
+    },{
+        "id": "snake_enhanced_gpt4o",
+        "name": "snake_enhanced_gpt4o",
+        "type": "Snake Agent",
+        "description": "chain of thought agent",
+        "agent": "agents.snake.llm_agent_enhanced.LLMAgent",
+        "agent_params": {
+            "provider": "openai",
+            "model_name": "gpt-4o" 
+        },
+        "compatible_environments": ["snake"]
+    },{
+        "id": "snake_enhanced_gpt4o_mini",
+        "name": "snake_enhanced_gpt4o_mini",
+        "type": "Snake Agent",
+        "description": "chain of thought agent",
+        "agent": "agents.snake.llm_agent_enhanced.LLMAgent",
+        "agent_params": {
+            "provider": "openai",
+            "model_name": "gpt-4o-mini" 
         },
         "compatible_environments": ["snake"]
     }
