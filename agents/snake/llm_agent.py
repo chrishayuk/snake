@@ -39,7 +39,7 @@ class LLMAgent(BaseLLMAgent):
         """
         super().__init__(id, name, description, provider, model_name, prompt_template)
 
-    def get_action(self, state: str):
+    def get_action(self, step:int, state: str):
         # call the llm
         response = self.chain.run(state=state)
 
@@ -58,7 +58,7 @@ class LLMAgent(BaseLLMAgent):
         response_stripped = response.strip().upper(),
 
         # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, state, "", response_stripped, response, time_completed)
+        self.logger.log_decision(self.game_id, step, state, "", response_stripped, response, time_completed)
 
         # return the action
         return action_map.get(response_stripped, AgentAction.RIGHT)

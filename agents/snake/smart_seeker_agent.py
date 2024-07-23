@@ -4,7 +4,7 @@ from agents.snake.agent_action import AgentAction
 from agents.snake.classic_agent import ClassicAgent
 
 class SmartSeekerAgent(ClassicAgent):
-    def get_action(self, state) -> AgentAction:
+    def get_action(self, step:int, state) -> AgentAction:
         # Check if the state is a string or numpy array
         if isinstance(state, str):
             state = self.parse_state_string(state)
@@ -61,7 +61,7 @@ class SmartSeekerAgent(ClassicAgent):
         self.current_direction = best_move
 
         # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, state, "", best_move, best_move, time_completed)
+        self.logger.log_decision(self.game_id, step, state, "", best_move, best_move, time_completed)
 
         return best_move
     

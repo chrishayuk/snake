@@ -26,7 +26,7 @@ class TestAgent(BaseAgent):
         self.flagged = set()
         self.visited = set()
 
-    def get_action(self, state):
+    def get_action(self, step, state):
         """ Determine the next action for the agent based on the current game state. """
         revealed = state[:, :, 0]
         flagged = state[:, :, 1]
@@ -76,7 +76,7 @@ class TestAgent(BaseAgent):
         # Log the state, thought process, and decision
         thought_process = "Determined best move based on current board state."
         time_completed = time.time() - start_time  # Measure the time taken to decide
-        self.logger.log_decision(self.game_id, state, thought_process, str(best_move), str(best_move), time_completed)
+        self.logger.log_decision(self.game_id, step, state, thought_process, str(best_move), str(best_move), time_completed)
 
         return best_move
 

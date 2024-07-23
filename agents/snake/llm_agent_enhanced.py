@@ -92,7 +92,7 @@ Now analyze the current game state provided above and make a decision based on t
 """
         super().__init__(id, name, description, provider, model_name, prompt_template)
     
-    def get_action(self, state: str):
+    def get_action(self, step:int, state: str):
         # call the llm
         response = self.chain.run(state=state, visited="N/A", size="N/A")
 
@@ -102,7 +102,7 @@ Now analyze the current game state provided above and make a decision based on t
         time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
         # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, state, thought_process, final_output, response, time_completed)
+        self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed)
 
         # map the action
         action_map = {

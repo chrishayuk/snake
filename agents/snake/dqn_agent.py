@@ -42,7 +42,7 @@ class DQNAgent:
         }
         self.reverse_action_map = {v: k for k, v in self.action_map.items()}
 
-    def get_action(self, state):
+    def get_action(self, step:int, state):
         if np.random.rand() <= self.epsilon:
             return random.choice([AgentAction.UP, AgentAction.RIGHT, AgentAction.DOWN, AgentAction.LEFT])
         state = torch.FloatTensor(state).unsqueeze(0).to(self.device)

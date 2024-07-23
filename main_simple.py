@@ -40,10 +40,10 @@ def play(selected_env_id, selected_agent_id):
         # perform an action
         if agent.agent_type == AgentType.LLM:
             # we're dealing with an LLM, so use the render
-            action = agent.get_action(env.get_render())
+            action = agent.get_action(env.steps+1, env.get_render())
         else:
             # classic agent, so use the state
-            action = agent.get_action(state)
+            action = agent.get_action(env.steps+1, state)
         
         # now perform a step
         state, reward, game_over = env.step(action)

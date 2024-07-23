@@ -45,7 +45,7 @@ class LLMAgent(BaseLLMAgent):
         self.size = size
         self.visited = set()
 
-    def get_action(self, state: str):
+    def get_action(self, step, state: str):
         # get the action history
         visited_str = "\n".join([f"{'FLAG' if flag else 'REVEAL'} {row} {col}" for (row, col, flag) in self.visited])
         
@@ -70,6 +70,7 @@ class LLMAgent(BaseLLMAgent):
                 time_completed = time.time() - start_time  # Measure the time taken to decide
                 self.logger.log_decision(
                     self.game_id,
+                    step,
                     state,
                     thought_process,
                     str(action),  # Use the string representation of the action for logging
@@ -94,6 +95,7 @@ class LLMAgent(BaseLLMAgent):
                         fallback_action = AgentAction(AgentAction.ActionType.REVEAL, i, j)
                         self.logger.log_decision(
                             self.game_id,
+                            step,
                             state,
                             thought_process,
                             str(fallback_action),  # Use the string representation of the fallback action for logging
