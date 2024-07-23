@@ -1,6 +1,5 @@
 # TODO
 
-0) Set and pass game id
 1) Need to fix prompt for snake so it understands coordinates better
 2) Need to implement logging for minesweeper
 3) Need to look at how we can use judge models to dynamically improve strategy prompt

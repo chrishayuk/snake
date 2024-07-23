@@ -12,9 +12,6 @@ class ClassicAgent(BaseAgent):
         # call the parent
         super().__init__(id, name, description)
 
-        # Initialize logger with default values
-        self.logger = AgentLogger(agent_id=self.id)
-
         # set the default direction
         self.current_direction = AgentAction.RIGHT
     

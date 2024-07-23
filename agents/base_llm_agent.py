@@ -13,7 +13,7 @@ from agents.provider_type import ProviderType
 dotenv.load_dotenv()
 
 class BaseLLMAgent(ABC):
-    def __init__(self, id: str, name: str, description: str, provider: ProviderType, model_name: str, prompt_template: str, size: int = None):
+    def __init__(self, id: str, name: str, description: str, provider: ProviderType, model_name: str, prompt_template: str):
         # set the agent details
         self.id = id
         self.name = name
@@ -29,7 +29,7 @@ class BaseLLMAgent(ABC):
 
         # set the prompt template
         self.prompt = PromptTemplate(input_variables=["state"], template=prompt_template)
-
+        
         # setup the chain with the prompt and llm
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
 
