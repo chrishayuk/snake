@@ -1,4 +1,4 @@
-# File: dqn_agent.py
+# File: agents/snake/dqn_agent.py
 from agents.snake.agent_action import AgentAction
 import torch
 import torch.nn as nn

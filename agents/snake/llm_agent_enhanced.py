@@ -1,11 +1,11 @@
-import json
+# File: agents/snake/llm_agent_enhanced.py
 import time
 from agents.provider_type import ProviderType
 from agents.base_llm_agent import BaseLLMAgent
 from agents.snake.agent_action import AgentAction
 
 class LLMAgent(BaseLLMAgent):
-    def __init__(self, agent_id, name: str, description: str, provider: ProviderType, model_name: str):
+    def __init__(self, id, name: str, description: str, provider: ProviderType, model_name: str):
         prompt_template = """
 You are an AI controlling a snake in a classic Snake game. The game is played on a rectangular grid.
 
@@ -90,8 +90,8 @@ DOWN
 </finalOutput>
 Now analyze the current game state provided above and make a decision based on the same process.
 """
-        super().__init__(agent_id, name, description, provider, model_name, prompt_template)
-
+        super().__init__(id, name, description, provider, model_name, prompt_template)
+    
     def get_action(self, state: str):
         # call the llm
         response = self.chain.run(state=state, visited="N/A", size="N/A")

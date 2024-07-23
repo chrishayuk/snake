@@ -18,28 +18,6 @@
         "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_hamiltonian",
-        "name": "Hamiltonian Agent",
-        "type": "Snake Agent",
-        "description": "An agent that uses a hamiltonian strategy in the snake environment.",
-        "agent": "agents.snake.hamiltonian_agent.HamiltonianAgent",
-        "agent_params": {
-            "grid_size": 10 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_adaptive_hamiltonian",
-        "name": "Adaptive Hamiltonian Agent",
-        "type": "Snake Agent",
-        "description": "An agent that uses an adaptive hamiltonian strategy in the snake environment.",
-        "agent": "agents.snake.adapative_hamiltonian_agent.AdaptiveHamiltonianAgent",
-        "agent_params": {
-            "grid_size": 10 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
         "id": "snake_llama3_8b",
         "name": "Llama3:8B Snake Agent",
         "type": "Snake Agent",

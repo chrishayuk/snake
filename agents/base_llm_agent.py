@@ -1,28 +1,28 @@
-# File: base_llm_agent.py
-import time
+# File: agents/base_llm_agent.py
 from abc import ABC, abstractmethod
 import dotenv
 from langchain_community.llms import Ollama
 from langchain_community.chat_models import ChatOpenAI, ChatAnthropic
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from agents.agent_logging import Logger
+from agents.agent_logging import AgentLogger
+from agents.agent_type import AgentType
 from agents.provider_type import ProviderType
 
 # load environment variables .env file
 dotenv.load_dotenv()
 
 class BaseLLMAgent(ABC):
-    def __init__(self, agent_id: str, name: str, description: str, provider: ProviderType, model_name: str, prompt_template: str, size: int = None):
+    def __init__(self, id: str, name: str, description: str, provider: ProviderType, model_name: str, prompt_template: str, size: int = None):
         # set the agent details
-        self.agent_id = agent_id
+        self.id = id
         self.name = name
         self.description = description
         self.llm_provider = provider
         self.model_name = model_name
 
         # Initialize logger with default values
-        self.logger = Logger(agent_id=self.agent_id)
+        self.logger = AgentLogger(agent_id=self.id)
 
         # get the llm
         self.llm = self._get_llm(provider, model_name)
@@ -61,4 +61,9 @@ class BaseLLMAgent(ABC):
         start_index = text.find(start_tag) + len(start_tag)
         end_index = text.find(end_tag)
         return text[start_index:end_index].strip() if start_index != -1 and end_index != -1 else ""
+    
+    @property
+    def agent_type(self) -> AgentType:
+        """Return the type of the agent."""
+        return AgentType.LLM
 

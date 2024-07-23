@@ -5,7 +5,7 @@ from environments.environment_loader import get_environment
 
 def train_dqn(episodes=10000, batch_size=32, render=False):
     # Example: Select Snake Environment
-    selected_env_id = "snake_env_v1"
+    selected_env_id = "snake"
 
     # Create environment using the loader
     env, env_config = get_environment(selected_env_id)

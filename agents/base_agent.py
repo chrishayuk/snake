@@ -1,15 +1,14 @@
-# File: app/agents/base_agent.py
+# File: agents/base_agent.py
 from abc import ABC, abstractmethod
 
 class BaseAgent(ABC):
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """Return the name of the agent."""
-        pass
+    def __init__(self, id: str, name: str, description: str):
+        # set the agent details
+        self.id = id
+        self.name = name
+        self.description = description
 
     @property
-    @abstractmethod
     def agent_type(self) -> str:
         """Return the type of the agent."""
         pass

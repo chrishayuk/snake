@@ -2,6 +2,7 @@ import os
 import time
 import argparse
 from agents.agent_loader import get_agent, list_agents
+from agents.agent_type import AgentType
 from environments.environment_loader import get_environment, list_environments
 
 # Function to get the application root
@@ -18,18 +19,6 @@ def play(selected_env_id, selected_agent_id):
     # Ensure that the environment is compatible with the agent
     if env_config.id not in agent_config.compatible_environments:
         raise ValueError(f"Agent {agent_config.name} is not compatible with environment {env_config.name}")
-
-    print(f"Playing with environment: {env_config.name}")
-    print(f"Using agent: {agent_config.name}")
-
-    # Debug print statements to verify attributes
-    print(f"Environment ID: {env_config.id}")
-    print(f"Environment Name: {env_config.name}")
-    print(f"Environment Description: {env_config.description}")
-    print(f"Agent ID: {agent_config.id}")
-    print(f"Agent Name: {agent_config.name}")
-    print(f"Agent Description: {agent_config.description}")
-    print(f"Compatible Environments: {agent_config.compatible_environments}")
 
     # 1 second delay
     time.sleep(1)
@@ -49,7 +38,14 @@ def play(selected_env_id, selected_agent_id):
         time.sleep(0.15)
 
         # perform an action
-        action = agent.get_action(env.get_render())
+        if agent.agent_type == AgentType.LLM:
+            # we're dealing with an LLM, so use the render
+            action = agent.get_action(env.get_render())
+        else:
+            # classic agent, so use the state
+            action = agent.get_action(state)
+        
+        # now perform a step
         state, reward, game_over = env.step(action)
 
         # break, if game over

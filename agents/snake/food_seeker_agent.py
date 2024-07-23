@@ -1,32 +1,13 @@
-# File: food_seeker_agent.py
-import numpy as np
-from typing import Tuple
-from agents.base_agent import BaseAgent
+# File: agents/snake/food_seeker_agent.py
 from agents.snake.agent_action import AgentAction
+from agents.snake.classic_agent import ClassicAgent
 
-class FoodSeekerAgent(BaseAgent):
-    def __init__(self):
-        pass
+class FoodSeekerAgent(ClassicAgent):
+    def get_action(self, state) -> AgentAction:
+        # Check if the state is a string or numpy array
+        if isinstance(state, str):
+            state = self.parse_state_string(state)
 
-    @property
-    def name(self) -> str:
-        """Return the name of the agent."""
-        return "Food Seeker Agent"
-
-    @property
-    def agent_type(self) -> str:
-        """Return the type of the agent."""
-        return "Snake Agent"
-
-    def get_snake_head_position(self, state: np.ndarray) -> Tuple[int, int]:
-        """Extract the position of the snake's head from the state."""
-        return tuple(np.argwhere(state[:,:,1] == 1)[0])
-
-    def get_food_position(self, state: np.ndarray) -> Tuple[int, int]:
-        """Extract the position of the food from the state."""
-        return tuple(np.argwhere(state[:,:,2] == 1)[0])
-
-    def get_action(self, state: np.ndarray) -> AgentAction:
         # get the position of the snake head
         snake_head = self.get_snake_head_position(state)
 

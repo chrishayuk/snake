@@ -1,15 +1,35 @@
-# File: app/utils/logging_utility.py
+# File: agents/agent_logging.py
 import json
 import time
+import numpy as np
 
-class Logger:
+from agents.snake.agent_action import AgentAction
+
+class AgentLogger:
     def __init__(self, agent_id: str):
         # set some standard attributes
         self.agent_id = agent_id
         self.log_filename = f"logs/{self.agent_id}.jsonl"
         self.time_initiated = time.strftime('%Y-%m-%d %H:%M:%S')
 
-    def log_decision(self, game_id:str, state: str, thought_process: str, final_output: str, response: str, time_completed: str):
+    def serialize_state(self, state: np.ndarray) -> list:
+        """Convert numpy array state to a serializable list."""
+        return state.tolist()
+
+    def log_decision(self, game_id: str, state, thought_process: str, final_output: str, response: str, time_completed: str):
+        # Check if the state needs serialization
+        if isinstance(state, np.ndarray):
+            state = self.serialize_state(state)
+
+        # Convert AgentAction to string for JSON serialization
+        if isinstance(final_output, AgentAction):
+            final_output = final_output.name
+        
+        # check the response to see if it's agent action
+        if isinstance(response, AgentAction):
+            response = response.name
+        
+        # log the entry
         log_entry = {
             "agent_id": self.agent_id,
             "game_id": game_id,
@@ -21,7 +41,7 @@ class Logger:
             "time_completed": time_completed
         }
 
-        # append to the log gile
+        # Append to the log file
         with open(self.log_filename, 'a') as log_file:
-            # add the row
+            # Add the row
             log_file.write(json.dumps(log_entry) + '\n')

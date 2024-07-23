@@ -1,4 +1,4 @@
-# File: agent_action.py
+# File: agents/snake/agent_action.py
 from enum import Enum
 
 class AgentAction(Enum):

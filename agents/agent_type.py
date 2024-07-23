@@ -1,11 +1,13 @@
-# File: app/agents/agent_type.py
-from pydantic import BaseModel
-from typing import Dict, Any, List
+# File: agents/agent_type.py
+from enum import Enum
 
-class AgentType(BaseModel):
-    id: str
-    name: str
-    description: str
-    agent: str
-    agent_params: Dict[str, Any] = {}
-    compatible_environments: List[str]
+class AgentType(Enum):
+    LLM = "LLM Agent"
+    CLASSIC = "Classic Agent"
+
+    @property
+    def description(self) -> str:
+        if self == AgentType.LLM:
+            return "Agent that uses large language models for decision-making based on textual game state representations."
+        elif self == AgentType.CLASSIC:
+            return "Agent that uses traditional algorithmic or rule-based approaches for decision-making based on numerical game state representations."

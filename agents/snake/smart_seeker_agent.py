@@ -1,37 +1,14 @@
-# File: smart_seeker_agent.py
-import numpy as np
-from typing import Tuple
-from agents.base_agent import BaseAgent
+# File: agents/snake/smart_seeker_agent.py
+import time
 from agents.snake.agent_action import AgentAction
+from agents.snake.classic_agent import ClassicAgent
 
+class SmartSeekerAgent(ClassicAgent):
+    def get_action(self, state) -> AgentAction:
+        # Check if the state is a string or numpy array
+        if isinstance(state, str):
+            state = self.parse_state_string(state)
 
-class SmartSeekerAgent(BaseAgent):
-    def __init__(self):
-        self.current_direction = AgentAction.RIGHT  # Default initial direction
-
-    @property
-    def name(self) -> str:
-        """Return the name of the agent."""
-        return "Smart Seeker Agent"
-
-    @property
-    def agent_type(self) -> str:
-        """Return the type of the agent."""
-        return "Snake Agent"
-
-    def get_snake_head_position(self, state: np.ndarray) -> Tuple[int, int]:
-        """Extract the position of the snake's head from the state."""
-        return tuple(np.argwhere(state[:,:,1] == 1)[0])
-
-    def get_food_position(self, state: np.ndarray) -> Tuple[int, int]:
-        """Extract the position of the food from the state."""
-        return tuple(np.argwhere(state[:,:,2] == 1)[0])
-
-    def get_snake_body_positions(self, state: np.ndarray) -> np.ndarray:
-        """Extract the positions of the snake's body from the state."""
-        return np.argwhere(state[:,:,1] == 1)
-
-    def get_action(self, state: np.ndarray) -> AgentAction:
         # get the position of the snake head
         snake_head = self.get_snake_head_position(state)
 
@@ -77,8 +54,14 @@ class SmartSeekerAgent(BaseAgent):
         if best_move is None:
             best_move = next(iter(safe_moves.keys()), AgentAction.UP)
 
+        # set the time completed
+        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
+
         # Update the current direction
         self.current_direction = best_move
+
+        # log the state, thought process, and decision
+        self.logger.log_decision(self.game_id, state, "", best_move, best_move, time_completed)
 
         return best_move
     
