@@ -178,14 +178,16 @@ class SnakeEnv(Environment):
         grid = [['.' for _ in range(self.size)] for _ in range(self.size)]
 
         # Set the snake body position in the grid
-        for i, j in self.snake:
+        for i, j in self.snake[:-1]:  # All but the last segment (head)
             grid[i][j] = 'O'
 
         # Set the head of the snake (H) in the grid
-        grid[self.snake[-1][0]][self.snake[-1][1]] = 'H'
+        head_x, head_y = self.snake[-1]
+        grid[head_x][head_y] = 'H'
 
         # Set the food position in the grid
-        grid[self.food[0]][self.food[1]] = 'F'
+        food_x, food_y = self.food
+        grid[food_x][food_y] = 'F'
 
         # Convert grid to a string
         grid_str = '\n'.join([' '.join(row) for row in grid])
@@ -194,28 +196,33 @@ class SnakeEnv(Environment):
         direction_str = next(key for key, value in self.direction_dict.items() if value == self.direction)
 
         # Prepare additional information
-        info = [
-            f"Legend:",
-            f" H - Head of the snake",
-            f" O - Body of the snake",
-            f" F - Food",
-            f" . - Empty space",
-            f"",
-            f"Game State:",
+        legend = [
+            "Legend:",
+            " H - Head of the snake",
+            " O - Body of the snake",
+            " F - Food",
+            " . - Empty space",
+            ""
+        ]
+        
+        game_state = [
+            "Game State:",
             f" Score: {len(self.snake) - 1}",
             f" Current Direction: {direction_str}",
             f" Steps since last food: {self.steps_since_last_food}",
             f" Total steps: {self.steps}",
             f" Game over: {self.game_over}",
             f" Snake Length: {len(self.snake)}",
-            f" Snake Positions: {self.snake}",
+            f" Snake Head Position: {self.snake[-1]}",
+            f" Snake Body Positions: {self.snake[:-1]}",
             f" Food Position: {self.food}"
         ]
 
-        # Combine grid and info
-        render_str = f"{grid_str}\n\n" + "\n".join(info)
+        # Combine grid, legend, and game state information
+        render_str = "\n".join(legend) + "\n" + grid_str + "\n\n" + "\n".join(game_state)
 
         return render_str
+
 
     def render(self):
         # Clear the console

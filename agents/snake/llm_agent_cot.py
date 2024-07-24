@@ -9,22 +9,18 @@ class LLMAgent(BaseLLMAgent):
         prompt_template = """
 You are an AI controlling a snake in a classic Snake game. The game is played on a rectangular grid.
 
-Game Rules and Objectives:
-
-The snake starts with a length of 1 (just the head).
-The snake grows by 1 unit each time it eats food.
-The game ends if the snake collides with the wall or its own body.
-The primary objective is to achieve a high score by eating as much food as possible to grow the snake to the maximum length.
 Grid Information:
 
 Size: 10 x 10
+Grid System: [x, y]
+Zero-based coordinate system
 Top-left coordinate: [0, 0]
 Bottom-right coordinate: [9, 9]
 Coordinates format: [column_number, row_number] (zero-based, x, y format where x is the column and y is the row)
-Moving UP decreases the row number by 1.
-Moving DOWN increases the row number by 1.
-Moving LEFT decreases the column number by 1.
-Moving RIGHT increases the column number by 1.
+Moving UP decreases Y by 1.
+Moving DOWN increases Y by 1.
+Moving LEFT decreases X by 1.
+Moving RIGHT increases X by 1.
 Grid Symbols:
 
 H: Head of the snake (current position)
@@ -34,63 +30,58 @@ F: Food that the snake should eat
 Current Game State:
 {state}
 
-Snake Game Strategy (in order of priority):
+Snake Game Strategy:
 
-Food Acquisition: Move towards the food to grow the snake and achieve a high score.
-Survival: Avoid immediate collisions with walls or the snake's body.
-Path Planning: Consider the snake's length and maintain open paths.
-Space Utilization: Move in a way that maximizes empty space around the head.
-Tail Following: In tight spaces, follow the snake's tail to survive.
+Primary Goal: Move towards the food (F) to grow the snake.
+Avoid Collisions: Ensure the snake does not move into walls or its own body (O).
+Plan Ahead: Consider the snake's length and future positions when moving towards food.
+Use Space Efficiently: Move in a way that maximizes open paths and avoids tight spaces.
+Follow the Tail: In tight spaces, follow the snake's tail to maximize survival.
+Maximize Empty Space: If no clear path to food exists, move to maximize empty space around the head.
 Decision-Making Process:
 
-Analyze the current state to identify the snake's head, body, and food location.
-Determine safe moves that avoid immediate collisions.
-Among safe moves, prioritize those that bring the snake closer to the food.
-Evaluate long-term consequences of each move (e.g., getting trapped).
-Choose the move that best balances immediate goals with long-term survival.
-Your task is to decide the snake's next move: UP, DOWN, LEFT, or RIGHT.
+Immediate Survival:
 
-You should prioritize heading towards food and increasing score.
+Check if the next move will lead to a collision with the wall or the snake's body.
+Colliding with the wall will kill the snake and end the game.
+Prioritize moves that avoid immediate danger.
+Moving Towards Food:
+
+Calculate the Manhattan distance to the food for all valid moves.
+Prefer moves that reduce the distance to the food.
+Long-term Survival:
+
+Evaluate the available space around the snake's head after each potential move.
+Choose moves that leave the snake with more open paths to navigate.
+Avoiding Backtracking:
+
+Avoid moves that would reverse the snake's direction unless there is no other safe option.
+Steps to Improve:
+
+Check for all valid moves (UP, DOWN, LEFT, RIGHT):
+A move is valid if it does not lead to a collision with the wall or the snake's body.
+If only one move is valid, choose that move:
+This ensures immediate survival.
+If multiple moves are valid, prioritize by:
+Manhattan distance to food: Moves that reduce the distance to the food.
+Open space evaluation: Moves that leave more open paths for future navigation.
+Avoid backtracking: Avoid reversing direction unless it's the only safe option.
+
+Provide your thinking in the agentThinking tags e.g.
 
 <agentThinking>
-Explain your thought process, considering:
+**Explain your thought process, considering:**
 1. **Current position of the snake's head** (in [column, row] format)
 2. **Location of the food** (in [column, row] format)
 3. **Safe moves available** (list all safe moves with coordinates they lead to)
 4. **Potential future moves and their consequences** (evaluate each move with coordinates they lead to)
 5. **How your chosen move aligns with the game strategy** (justify your choice, especially how it brings the snake closer to the food to achieve a high score)
 </agentThinking>
+
 Provide your final decision in a <finalOutput> tag with a single word: UP, DOWN, LEFT, or RIGHT. e.g.,
 <finalOutput>
-UP
+final decision goes here
 </finalOutput>
-
-Example Analysis:
-
-State:
-
-Snake's head: (6, 6) [column, row]
-Food: (6, 8) [column, row]
-Safe Moves:
-
-UP: From (6, 6) to (6, 5) - This move is safe but does not move towards the food.
-DOWN: From (6, 6) to (6, 7) - This move is safe and brings the snake closer to the food.
-LEFT: From (6, 6) to (5, 6) - This move is safe but does not move towards the food.
-RIGHT: From (6, 6) to (7, 6) - This move is safe but does not move towards the food.
-Evaluating Moves:
-
-UP: Moves to (6, 5), does not bring the snake closer to the food.
-DOWN: Moves to (6, 7), brings the snake one step closer to the food.
-LEFT: Moves to (5, 6), does not bring the snake closer to the food.
-RIGHT: Moves to (7, 6), does not bring the snake closer to the food.
-Conclusion:
-
-The best move is DOWN to (6, 7), as it brings the snake one step closer to the food, which is the primary goal to achieve a high score.
-Final Decision:
-<finalOutput>
-DOWN
-</finalOutput>
-Now analyze the current game state provided above and make a decision based on the same process.
 """
         # call the parent constructor with the CoT prompt template
         super().__init__(id, name, description, provider, model_name)

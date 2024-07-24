@@ -1,6 +1,5 @@
 # TODO
 0) Tidy up implementation of LLM's
-1) Need to fix prompt for snake so it understands coordinates better
 3) Need to look at how we can use judge models to dynamically improve strategy prompt
 4) Need to look at how to build STaR type fine tune data
 5) Is it possible to have an in-memory context STaR for snake since it's markov state
