@@ -7,128 +7,65 @@ from environments.environment_base import Environment
 
 class MinesweeperEnv(Environment):
     def __init__(self, size=10, num_mines=10):
-        # set the game_id
-        self.game_id = str(uuid.uuid4())
-        
-        # set the size and number of mines
         self.size = size
         self.num_mines = num_mines
-
-        # reset the environment
         self.reset()
 
     def reset(self):
-        # empty the board, revealed and flagged
+        self.game_id = str(uuid.uuid4())
         self.board = np.zeros((self.size, self.size), dtype=int)
         self.revealed = np.zeros((self.size, self.size), dtype=bool)
         self.flagged = np.zeros((self.size, self.size), dtype=bool)
-
-        # game over cleared
         self.game_over = False
         self.win = False
         self.steps = 0
         self.action_history = []
         
-        # set the game_id
-        self.game_id = str(uuid.uuid4())
-
-        # place the mines and calculate the numbers
         self.place_mines()
         self.calculate_numbers()
 
-        # return the state
         return self.get_state()
 
+    def update_game_state(self):
+        if self.game_over:
+            return
+
+        safe_cells_revealed = np.sum(self.revealed[self.board != -1])
+        total_safe_cells = self.size * self.size - self.num_mines
+        
+        if safe_cells_revealed == total_safe_cells:
+            self.win = True
+            self.game_over = True
+        elif np.sum(self.flagged) == self.num_mines and np.all(self.flagged == (self.board == -1)):
+            self.win = True
+            self.game_over = True
+
+    def get_state(self):
+        state = np.zeros((self.size, self.size, 3), dtype=int)
+        state[:,:,0] = self.revealed
+        state[:,:,1] = self.flagged
+        state[:,:,2] = np.where(self.revealed, self.board, -2)
+        return state
+
     def place_mines(self):
-        # calculate all the positions on the board
         positions = [(r, c) for r in range(self.size) for c in range(self.size)]
-
-        # calculate random positions for the mines
         mine_positions = random.sample(positions, self.num_mines)
-
-        # place the mines
         for row, col in mine_positions:
             self.board[row, col] = -1
 
     def calculate_numbers(self):
-        # loop through the board
         for i in range(self.size):
             for j in range(self.size):
                 if self.board[i, j] != -1:
                     self.board[i, j] = self.count_adjacent_mines(i, j)
 
     def count_adjacent_mines(self, row, col):
-        # initialize the count
         count = 0
-
-        # loop through the board
         for i in range(max(0, row-1), min(self.size, row+2)):
             for j in range(max(0, col-1), min(self.size, col+2)):
                 if self.board[i, j] == -1:
                     count += 1
-
-        # return the count
         return count
-
-    def get_state(self):
-        # initial state of the board
-        state = np.zeros((self.size, self.size, 3), dtype=int)
-
-        # channel 0: revealed square
-        state[:,:,0] = self.revealed
-
-        # channel 1: flagged squares
-        state[:,:,1] = self.flagged
-
-        # channel 2: revealed squares with their board values
-        state[:,:,2] = np.where(self.revealed, self.board, -2)
-
-        # return the state
-        return state
-
-    def step(self, action: MinesweeperAction):
-        # check we have an action
-        if action is None:
-            # no action, set the game as over
-            self.game_over = True
-            return self.get_state(), 0, True
-        
-        # get the action
-        row, col, is_flag = action.row, action.col, action.action_type == MinesweeperAction.ActionType.FLAG
-        
-        # check if the game is over
-        if self.game_over:
-            # return the state
-            return self.get_state(), 0, True
-        
-        # increase steps
-        self.steps += 1
-
-        # New: Add action to history
-        action_type = "FLAG" if is_flag else "REVEAL"
-        self.action_history.append(f"Step {self.steps}: {action_type} ({row}, {col})")
-
-        # set the reward
-        reward = 0
-        if is_flag:
-            if not self.revealed[row, col]:
-                self.flagged[row, col] = not self.flagged[row, col]
-        elif self.flagged[row, col]:
-            pass
-        elif self.revealed[row, col]:
-            pass
-        elif self.board[row, col] == -1:
-            self.revealed[row, col] = True
-            self.game_over = True
-            reward = -10
-        else:
-            cells_revealed = self.reveal(row, col)
-            reward = cells_revealed
-
-        # Update game state
-        self.update_game_state()
-        
-        return self.get_state(), reward, self.game_over
 
     def reveal(self, row, col):
         if self.revealed[row, col] or self.flagged[row, col]:
@@ -144,17 +81,38 @@ class MinesweeperEnv(Environment):
                         cells_revealed += self.reveal(i, j)
         
         return cells_revealed
+    
+    def step(self, action: MinesweeperAction):
+        if self.game_over:
+            return self.get_state(), 0, True
 
-    def update_game_state(self):
-        safe_cells_revealed = np.sum(self.revealed[self.board != -1])
-        total_safe_cells = self.size * self.size - self.num_mines
+        if action is None:
+            self.action_history.append(f"Invalid action: None")
+            return self.get_state(), 0, False
+
+        self.steps += 1
+        row, col, is_flag = action.row, action.col, action.action_type == MinesweeperAction.ActionType.FLAG
         
-        if safe_cells_revealed >= total_safe_cells:
-            self.win = True
-            self.game_over = True
-        elif np.sum(self.flagged) == self.num_mines and np.all(self.flagged == (self.board == -1)):
-            self.win = True
-            self.game_over = True
+        action_type = "FLAG" if is_flag else "REVEAL"
+        self.action_history.append(f"Step {self.steps}: {action_type} ({row}, {col})")
+        
+        reward = 0
+        if is_flag:
+            if not self.revealed[row, col]:
+                self.flagged[row, col] = not self.flagged[row, col]
+                reward = 0.5 if self.flagged[row, col] else -0.5
+        elif not self.flagged[row, col] and not self.revealed[row, col]:
+            if self.board[row, col] == -1:
+                self.revealed[row, col] = True
+                self.game_over = True
+                reward = -10
+            else:
+                cells_revealed = self.reveal(row, col)
+                reward = cells_revealed
+
+        self.update_game_state()
+        
+        return self.get_state(), reward, self.game_over
 
     def get_render(self):
         grid = []
@@ -176,6 +134,7 @@ class MinesweeperEnv(Environment):
         grid_str = '\n'.join(grid)
 
         info = [
+            f"Game ID: {self.game_id}",
             f"Mines: {self.num_mines}",
             f"Revealed: {np.sum(self.revealed)}",
             f"Flagged: {np.sum(self.flagged)}",
@@ -187,16 +146,10 @@ class MinesweeperEnv(Environment):
         ]
 
         info_str = "\n".join(info)
-
-        # Show all actions in the history
         history_str = "\nAction History:\n" + "\n".join(self.action_history)
-
         render_str = f"{grid_str}\n\n{info_str}\n{history_str}"
-
         return render_str
-
+    
     def render(self):
-        # Clear the console
         os.system('cls' if os.name == 'nt' else 'clear')
-
         print(self.get_render())

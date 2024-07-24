@@ -3,8 +3,8 @@ from enum import Enum
 
 class MinesweeperAction:
     class ActionType(Enum):
-        REVEAL = 'reveal'
-        FLAG = 'flag'
+        REVEAL = 'REVEAL'
+        FLAG = 'FLAG'
 
     def __init__(self, action_type, row, col):
         self.action_type = action_type
@@ -20,10 +20,10 @@ class MinesweeperAction:
         if len(parts) != 3:
             raise ValueError("Invalid action string format")
         
-        action_type = parts[0].lower()
-        if action_type == 'reveal':
+        action_type = parts[0].upper()
+        if action_type == 'REVEAL':
             action_type = cls.ActionType.REVEAL
-        elif action_type == 'flag':
+        elif action_type == 'FLAG':
             action_type = cls.ActionType.FLAG
         else:
             raise ValueError(f"Invalid action type: {action_type}")

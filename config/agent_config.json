@@ -201,8 +201,8 @@
         },
         "compatible_environments": ["minesweeper"]
     },{
-        "id": "snake_enhanced",
-        "name": "snake_enhanced",
+        "id": "snake_cot",
+        "name": "snake_cot",
         "type": "Snake Agent",
         "description": "chain of thought agent",
         "agent": "agents.snake.llm_agent_cot.LLMAgent",
@@ -212,8 +212,8 @@
         },
         "compatible_environments": ["snake"]
     },{
-        "id": "snake_enhanced_gpt4o",
-        "name": "snake_enhanced_gpt4o",
+        "id": "snake_cot_gpt4o",
+        "name": "snake_cot_gpt4o",
         "type": "Snake Agent",
         "description": "chain of thought agent",
         "agent": "agents.snake.llm_agent_cot.LLMAgent",
@@ -223,8 +223,8 @@
         },
         "compatible_environments": ["snake"]
     },{
-        "id": "snake_enhanced_gpt4o_mini",
-        "name": "snake_enhanced_gpt4o_mini",
+        "id": "snake_cot_gpt4o_mini",
+        "name": "snake_cot_gpt4o_mini",
         "type": "Snake Agent",
         "description": "chain of thought agent",
         "agent": "agents.snake.llm_agent_cot.LLMAgent",
@@ -234,8 +234,8 @@
         },
         "compatible_environments": ["snake"]
     },{
-        "id": "snake_enhanced_llama3.1_8b",
-        "name": "snake_enhanced_llama3.1_8b",
+        "id": "snake_cot_llama3.1_8b",
+        "name": "snake_cot_llama3.1_8b",
         "type": "Snake Agent",
         "description": "chain of thought agent",
         "agent": "agents.snake.llm_agent_cot.LLMAgent",
@@ -244,5 +244,44 @@
             "model_name": "llama3.1" 
         },
         "compatible_environments": ["snake"]
+    },
+    {
+        "id": "minesweeper_cot_gemma2_27b",
+        "name": "Gemma2:27b Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "Gemma2:27B chain of thought playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent_cot.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "ollama",
+            "model_name": "gemma2:27b" 
+        },
+        "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_cot_gpt4o_mini",
+        "name": "GPT-4o-mini Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "GPT-4o-mini chain of thought playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent_cot.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "openai",
+            "model_name": "gpt-4o-mini" 
+        },
+        "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_cot_gpt4o",
+        "name": "GPT-4o Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "GPT-4o chain of thought playing MineSweeper",
+        "agent": "agents.minesweeper.llm_agent_cot.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "openai",
+            "model_name": "gpt-4o" 
+        },
+        "compatible_environments": ["minesweeper"]
     }
 ]

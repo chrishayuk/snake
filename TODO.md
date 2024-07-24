@@ -1,5 +1,5 @@
 # TODO
-0) add a chain of thought agent for minesweeper
+0) Tidy up implementation of LLM's
 1) Need to fix prompt for snake so it understands coordinates better
 3) Need to look at how we can use judge models to dynamically improve strategy prompt
 4) Need to look at how to build STaR type fine tune data

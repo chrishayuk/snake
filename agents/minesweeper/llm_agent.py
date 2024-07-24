@@ -1,5 +1,7 @@
 # File: minesweeper_agent.py
 import time
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 from agents.provider_type import ProviderType
 from agents.base_llm_agent import BaseLLMAgent
 from agents.minesweeper.agent_action import MinesweeperAction as AgentAction
@@ -39,11 +41,22 @@ class LLMAgent(BaseLLMAgent):
 
         Provide only the action in the specified format, without any explanation.
         """
-        super().__init__(id, name, description, provider, model_name, prompt_template)
-
+        
         # set size and visited
         self.size = size
         self.visited = set()
+
+        # call the parent constructor
+        super().__init__(id, name, description, provider, model_name, prompt_template)
+
+        # update the prompt template to CoT version
+        self.prompt_template = prompt_template
+
+        # set the prompt template
+        self.prompt = PromptTemplate(input_variables=["state","size","visited"], template=prompt_template)
+        
+        # setup the chain with the prompt and llm
+        self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
 
     def get_action(self, step, state: str):
         # get the action history
@@ -54,10 +67,15 @@ class LLMAgent(BaseLLMAgent):
 
         # call the chain
         response = self.chain.run(state=state, visited=visited_str, size=self.size)
+        
+        # extract the thought process and final output
+        thought_process = self.extract_tag_content(response, "agentThinking")
+        final_output = self.extract_tag_content(response, "finalOutput")
+        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
         try:
             # get the action
-            action = AgentAction.from_string(response.strip())
+            action = AgentAction.from_string(final_output.strip())
 
             # check if the action has already been performed
             if (action.row, action.col, action.action_type == AgentAction.ActionType.FLAG) in self.visited:
@@ -65,16 +83,14 @@ class LLMAgent(BaseLLMAgent):
             elif 0 <= action.row < self.size and 0 <= action.col < self.size:
                 self.visited.add((action.row, action.col, action.action_type == AgentAction.ActionType.FLAG))
 
-                # log the state, thought process, and decision
-                thought_process = response
-                time_completed = time.time() - start_time  # Measure the time taken to decide
+                # log decision
                 self.logger.log_decision(
                     self.game_id,
                     step,
                     state,
                     thought_process,
                     str(action),  # Use the string representation of the action for logging
-                    str(action),  # Use the string representation of the action for logging
+                    response,
                     time_completed
                 )
                 

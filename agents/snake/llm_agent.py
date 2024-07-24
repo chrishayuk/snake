@@ -3,6 +3,8 @@ import time
 from agents.provider_type import ProviderType
 from agents.base_llm_agent import BaseLLMAgent
 from agents.snake.agent_action import AgentAction
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 
 class LLMAgent(BaseLLMAgent):
     def __init__(self, id: str, name: str, description: str, provider: ProviderType, model_name: str):
@@ -36,8 +38,18 @@ class LLMAgent(BaseLLMAgent):
 
         Provide your answer as a single word (UP, DOWN, LEFT, or RIGHT) with no additional explanation.
         """
+            
+        # call the parent
         super().__init__(id, name, description, provider, model_name, prompt_template)
 
+        # update the prompt template to CoT version
+        self.prompt_template = prompt_template
+
+        # set the prompt template
+        self.prompt = PromptTemplate(input_variables=["state","size","visited"], template=prompt_template)
+        
+        # setup the chain with the prompt and llm
+        self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
     
     def get_action(self, step:int, state: str):
         # call the llm

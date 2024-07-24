@@ -1,5 +1,6 @@
 # File: agents/snake/llm_agent_enhanced.py
-import time
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 from agents.provider_type import ProviderType
 from agents.snake.llm_agent import LLMAgent as BaseLLMAgent
 
@@ -49,6 +50,8 @@ Evaluate long-term consequences of each move (e.g., getting trapped).
 Choose the move that best balances immediate goals with long-term survival.
 Your task is to decide the snake's next move: UP, DOWN, LEFT, or RIGHT.
 
+You should prioritize heading towards food and increasing score.
+
 <agentThinking>
 Explain your thought process, considering:
 1. **Current position of the snake's head** (in [column, row] format)
@@ -89,5 +92,15 @@ DOWN
 </finalOutput>
 Now analyze the current game state provided above and make a decision based on the same process.
 """
+        # call the parent constructor with the CoT prompt template
         super().__init__(id, name, description, provider, model_name)
+        
+        # update the prompt template to CoT version
+        self.prompt_template = prompt_template
+
+        # set the prompt template
+        self.prompt = PromptTemplate(input_variables=["state"], template=prompt_template)
+        
+        # setup the chain with the prompt and llm
+        self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
     
