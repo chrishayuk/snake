@@ -5,6 +5,7 @@ import random
 import uuid
 from agents.snake.agent_action import AgentAction
 from environments.environment_base import Environment
+from environments.snake.action_history import ActionHistory
 from environments.snake.reward_functions import simple_reward as reward_function
 
 class SnakeEnv(Environment):
@@ -29,6 +30,9 @@ class SnakeEnv(Environment):
         # set the steps, and steps since last food
         self.steps = 0
         self.steps_since_last_food = 0
+
+        # reset action history
+        self.action_history = ActionHistory()
         
         # reset the environment
         self.reset()
@@ -64,6 +68,9 @@ class SnakeEnv(Environment):
         # set steps since last food
         self.steps = 0
         self.steps_since_last_food = 0
+
+        # reset action history
+        self.action_history = ActionHistory()
 
         # return the state
         return self.get_state()
@@ -117,6 +124,18 @@ class SnakeEnv(Environment):
         return state
     
     def step(self, action: AgentAction = AgentAction.NONE):
+        # Determine the previous direction before applying the new action
+        prev_direction = next(key for key, value in self.direction_dict.items() if value == self.direction)
+        
+        # Log the current state before updating
+        self.action_history.add_record(
+            step=self.steps,
+            snake_head_position=self.snake[-1],
+            snake_direction=prev_direction,
+            snake_length=len(self.snake),
+            action=action
+        )
+
         # Update direction only if a new direction is specified
         if action != AgentAction.NONE and self.is_valid_direction_change(action):
             self.direction = self.direction_dict[action]
@@ -140,11 +159,10 @@ class SnakeEnv(Environment):
             # return game state, reward, and game over
             return self.get_state(), self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food), self.game_over
 
-
         # add the new head to the snake
         self.snake.append(new_head)
         
-        # check if the snake ate the food
+        # check if the snake ate the food
         eaten = new_head == self.food
 
         if eaten:
@@ -163,15 +181,15 @@ class SnakeEnv(Environment):
             # set the reward
             reward = self.reward_function(eaten=False, dead=False, steps=self.steps_since_last_food)
 
-            # increase steps since last have food
+            # increase steps since last food
             self.steps_since_last_food += 1
-       
+        
         # increase steps
         self.steps += 1
 
         # return the state, reward and game over
         return self.get_state(), reward, self.game_over
-    
+
 
     def get_render(self):
         # Set the grid as .'s
@@ -218,8 +236,17 @@ class SnakeEnv(Environment):
             f" Food Position: {self.food}"
         ]
 
-        # Combine grid, legend, and game state information
-        render_str = "\n".join(legend) + "\n" + grid_str + "\n\n" + "\n".join(game_state)
+        # Prepare action history
+        action_history_str = ["\nAction History:"]
+        for record in self.action_history.get_history():
+            action_history_str.append(
+                f" Step: {record['step']}, Current Position: {record['snake_head_position']}, "
+                f"Current Direction: {record['snake_direction']}, Snake Length: {record['snake_length']}, "
+                f"Agent Chosen Action: {record['action']}"
+            )
+
+        # Combine grid, legend, game state information, and action history
+        render_str = "\n".join(legend) + "\n" + grid_str + "\n\n" + "\n".join(game_state) + "\n".join(action_history_str)
 
         return render_str
 
@@ -230,3 +257,6 @@ class SnakeEnv(Environment):
 
         # Get and print the render string
         print(self.get_render())
+
+    def get_action_history(self):
+        return self.action_history.get_history()

@@ -46,3 +46,18 @@ class AgentLogger:
         with open(self.log_filename, 'a') as log_file:
             # Add the row
             log_file.write(json.dumps(log_entry) + '\n')
+
+    def log_self_improvement_notes(self, game_id: str, step: int, self_improvement_notes: str):
+        # log the self-improvement notes
+        log_entry = {
+            "agent_id": self.agent_id,
+            "game_id": game_id,
+            "step": step,
+            "self_improvement_notes": self_improvement_notes,
+            "time_logged": time.strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        # Append to the log file
+        with open(self.log_filename, 'a') as log_file:
+            # Add the row
+            log_file.write(json.dumps(log_entry) + '\n')
