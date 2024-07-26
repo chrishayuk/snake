@@ -7,40 +7,20 @@ from agents.minesweeper.llm_agent import LLMAgent as BaseLLMAgent
 class LLMAgent(BaseLLMAgent):
     def __init__(self, id: str, name: str, description: str, provider: ProviderType, model_name: str, size: int):
         self.strategy = """
-Primary Goal: Move towards the food (F) to grow the snake.
-Avoid Collisions: Ensure the snake does not move into walls or its own body (O).
-Plan Ahead: Consider the snake's length and future positions when moving towards food.
-Use Space Efficiently: Move in a way that maximizes open paths and avoids tight spaces.
-Follow the Tail: In tight spaces, follow the snake's tail to maximize survival.
-Maximize Empty Space: If no clear path to food exists, move to maximize empty space around the head.
+Initial Move: Start with corners or edges, as they have fewer adjacent cells.
+Flagging Mines: When a revealed number matches the count of adjacent unrevealed cells, flag those cells as mines.
+Revealing Safe Cells: When a revealed number matches the count of adjacent flagged cells, reveal the other adjacent unrevealed cells.
+Pattern Recognition: Look for patterns (e.g., two 1s diagonally adjacent often indicate a safe cell between them).
+Probability: If unsure, choose the cell with the highest probability of being safe based on surrounding numbers.
+Avoid Guessing: Only guess if no other logical moves are available.
 Decision-Making Process:
 
-Immediate Survival:
-
-Check if the next move will lead to a collision with the wall or the snake's body.
-Colliding with the wall will kill the snake and end the game.
-Prioritize moves that avoid immediate danger.
-Moving Towards Food:
-
-Calculate the Manhattan distance to the food for all valid moves.
-Prefer moves that reduce the distance to the food.
-Long-term Survival:
-
-Evaluate the available space around the snake's head after each potential move.
-Choose moves that leave the snake with more open paths to navigate.
-Avoiding Backtracking:
-
-Avoid moves that would reverse the snake's direction unless there is no other safe option.
-Steps to Improve:
-
-Check for all valid moves (UP, DOWN, LEFT, RIGHT):
-A move is valid if it does not lead to a collision with the wall or the snake's body.
-If only one move is valid, choose that move:
-This ensures immediate survival.
-If multiple moves are valid, prioritize by:
-Manhattan distance to food: Moves that reduce the distance to the food.
-Open space evaluation: Moves that leave more open paths for future navigation.
-Avoid backtracking: Avoid reversing direction unless it's the only safe option.
+Analyze the current state to identify revealed cells, flagged cells, and unrevealed cells.
+Identify cells to flag: For any revealed number that matches the count of adjacent unrevealed cells, flag those cells.
+Identify cells to reveal: For any revealed number that matches the count of adjacent flagged cells, reveal the other adjacent unrevealed cells.
+Evaluate patterns to find additional safe cells to reveal or flag.
+Consider probabilities to decide the safest cell to reveal if no definite safe moves are identified.
+Make a decision that aligns with the strategy to minimize risk and progress the game.
 
 """
 
