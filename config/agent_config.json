@@ -88,6 +88,17 @@
             "model_name": "phi3" 
         },
         "compatible_environments": ["snake"]
+    },{
+        "id": "snake_mistral_nemo",
+        "name": "Mistral Nemo Snake Agent",
+        "type": "Snake Agent",
+        "description": "Mistral Nemo playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "mistral-nemo" 
+        },
+        "compatible_environments": ["snake"]
     },
     {
         "id": "snake_llama3.1_8b",
@@ -256,6 +267,17 @@
         },
         "compatible_environments": ["snake"]
     },{
+        "id": "snake_cot_si_gpt4o_mini",
+        "name": "snake_cot_si_gpt4o_mini",
+        "type": "Snake Agent",
+        "description": "chain of thought agent with self improvement",
+        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
+        "agent_params": {
+            "provider": "openai",
+            "model_name": "gpt-4o-mini" 
+        },
+        "compatible_environments": ["snake"]
+    },{
         "id": "snake_cot_si_gemma2_9b",
         "name": "snake_cot_si_gemma2_9b",
         "type": "Snake Agent",
@@ -264,6 +286,28 @@
         "agent_params": {
             "provider": "ollama",
             "model_name": "gemma2:9b" 
+        },
+        "compatible_environments": ["snake"]
+    },{
+        "id": "snake_cot_si_gemma2_27b",
+        "name": "snake_cot_si_gemma2_27b",
+        "type": "Snake Agent",
+        "description": "chain of thought agent with self improvement",
+        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "gemma2:27b" 
+        },
+        "compatible_environments": ["snake"]
+    },{
+        "id": "snake_cot_si_mistral_nemo",
+        "name": "snake_cot_si_mistral_nemo",
+        "type": "Snake Agent",
+        "description": "chain of thought agent with self improvement",
+        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "mistral-nemo" 
         },
         "compatible_environments": ["snake"]
     },
@@ -303,6 +347,19 @@
             "size": 10,
             "provider": "openai",
             "model_name": "gpt-4o" 
+        },
+        "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "minesweeper_cot_si_gemma2_27b",
+        "name": "gemma2 Minesweeper Agent",
+        "type": "Minesweeper Agent",
+        "description": "gemma 2 chain of thought playing MineSweeper with self improvement",
+        "agent": "agents.minesweeper.llm_agent_cot_si.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "ollama",
+            "model_name": "gemma2:27b" 
         },
         "compatible_environments": ["minesweeper"]
     }

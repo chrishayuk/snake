@@ -45,54 +45,63 @@ Open space evaluation: Moves that leave more open paths for future navigation.
 Avoid backtracking: Avoid reversing direction unless it's the only safe option.
 
 """
+
         prompt_template = """
-You are an AI controlling a snake in a classic Snake game. The game is played on a rectangular grid.
+        You are an AI controlling a snake in a classic Snake game. The game is played on a rectangular grid.
 
-Grid Information:
+        **Grid Information:**
 
-Size: 10 x 10
-Grid System: [x, y]
-Zero-based coordinate system
-Top-left coordinate: [0, 0]
-Bottom-right coordinate: [9, 9]
-Coordinates format: [column_number, row_number] (zero-based, x, y format where x is the column and y is the row)
-Moving UP decreases Y by 1.
-Moving DOWN increases Y by 1.
-Moving LEFT decreases X by 1.
-Moving RIGHT increases X by 1.
-Grid Symbols:
+        Size: 10 x 10
+        Grid System: [x, y]
+        Zero-based coordinate system
+        Top-left coordinate: [0, 0]
+        Bottom-right coordinate: [9, 9]
+        Coordinates format: [column_number, row_number] (zero-based, x, y format where x is the column and y is the row)
+        Moving UP decreases Y by 1.
+        Moving DOWN increases Y by 1.
+        Moving LEFT decreases X by 1.
+        Moving RIGHT increases X by 1.
 
-H: Head of the snake (current position)
-O: Body of the snake
-F: Food that the snake should eat
-.: Empty square
-Current Game State:
-{state}
+        **Grid Symbols:**
 
-Snake Game Strategy:
-{strategy}
+        H: Head of the snake (current position)
+        O: Body of the snake
+        F: Food that the snake should eat
+        .: Empty square
 
-The following are self-improvement notes based on previous game-play, that you should use to guide your decisions:
+        **Current Game State:**
+        {state}
 
-Strategy Improvement Notes:
-{strategyImprovementNotes}
+        **Snake Game Strategy:**
+        {strategy}
 
-Provide your thinking in the agentThinking tags e.g.
+        **The following is strategy improvement notes, this is notes you have made from previous games to improve the strategy.**
+        These are the most IMPORTANT NOTES, and should be used to override/improve any strategy thinking.
+        These notes are where things have gone wrong in the past with the strategy, and you should use them to improve your decision-making.
+        Revise these notes before every decision.
 
-<agentThinking>
-**Explain your thought process, considering:**
-1. **Current position of the snake's head** (in [column, row] format)
-2. **Location of the food** (in [column, row] format)
-3. **Safe moves available** (list all safe moves with coordinates they lead to)
-4. **Potential future moves and their consequences** (evaluate each move with coordinates they lead to)
-5. **How your chosen move aligns with the game strategy** (justify your choice, especially how it brings the snake closer to the food to achieve a high score)
-</agentThinking>
+        **Strategy Improvement Notes:**
+        {strategyImprovementNotes}
 
-Provide your final decision in a <finalOutput> tag with a single word: UP, DOWN, LEFT, or RIGHT. e.g.,
-<finalOutput>
-final decision goes here
-</finalOutput>
-"""
+        And REMEMEBER you are a hungry snake and your primary goal is to eat FOOD.
+        
+        Provide your thinking in the `agentThinking` tags e.g.
+
+        <agentThinking>
+        **Explain your thought process, considering:**
+        1. **Current position of the snake's head** (in [column, row] format)
+        2. **Location of the food** (in [column, row] format)
+        3. **Safe moves available** (list all safe moves with coordinates they lead to)
+        4. **Potential future moves and their consequences** (evaluate each move with coordinates they lead to)
+        5. **How your chosen move aligns with the game strategy** (justify your choice, especially how it brings the snake closer to the food to achieve a high score)
+        </agentThinking>
+
+        Provide your final decision in a `finalOutput` tag with a single word: UP, DOWN, LEFT, or RIGHT. e.g.,
+        <finalOutput>
+        final decision goes here
+        </finalOutput>
+        """
+
         # call the parent constructor with the CoT prompt template
         super().__init__(id, name, description, provider, model_name)
         
@@ -100,7 +109,7 @@ final decision goes here
         self.prompt_template = prompt_template
 
         # set the prompt template
-        self.prompt = PromptTemplate(input_variables=["state", "strategy", "selfImprovementNotes"], template=prompt_template)
+        self.prompt = PromptTemplate(input_variables=["state", "strategy", "strategyImprovementNotes"], template=prompt_template)
         
         # setup the chain with the prompt and llm
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
@@ -161,12 +170,14 @@ Strategy Improvement Notes:
 
 Reflect on your performance and suggest improvements for future games.
 This must be in the form of prompts and could include examples of good or bad moves.
-These should be additions to the strategy to improve the decisioning
-These will be placed with the strategy for future games, so make them super sharp improvements to the strategy to fix errors in this game play.
+These should be additions to the strategy to improve the decision-making.
+These will be placed with the strategy for future games, so make them super sharp improvements to the strategy to fix errors in this gameplay.
 Place the notes to improve the strategy in the strategyImprovementNotes tags.
-You should consider these notes as standalone and additive to complement the existing strategy.  The agent won't have access to the previous game, so pure strategy notes.
+You should consider these notes as standalone and additive to complement the existing strategy. The agent won't have access to the previous game history, actions or steps, so pure strategy notes.
 Keep existing notes that are useful and improve, do not overwrite, blend and improve.
-If there is a wall collision, maybe give the coordinates and the action, to guide yourself in the future to not make the same mistake.
+Be specific, give examples of why a move was wrong, using positions and actions to clarify the improvement.  DO NOT refer to steps as agent won't have access to previous history.  Only give standalone examples with coordinates.
+Do not lose notes, but can consolidate previous notes into improved strategy improvement notes.
+
 <strategyImprovementNotes>
 place notes here
 </strategyImprovementNotes>
