@@ -2,7 +2,7 @@
 import time
 from agents.provider_type import ProviderType
 from agents.snake.base_llm_snake_agent import BaseSnakeLLMAgent
-from agents.snake.prompt_templates import reflection_prompt_template
+from agents.snake.prompt_templates.reflection_prompt_template import reflection_prompt_template
 from agents.snake.snake_action import SnakeAction
 from agents.snake.prompt_templates.cot_si_prompt_template import cot_si_prompt_template
 from langchain.prompts import PromptTemplate
