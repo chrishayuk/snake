@@ -9,12 +9,16 @@ from environments.environment_loader import get_environment, list_environments
 def get_app_root():
     return os.path.dirname(os.path.abspath(__file__))
 
-def play(selected_env_id, selected_agent_id):
+def play(selected_env_id, selected_agent_id, provider=None, model=None):
     # Create environment using the loader
     env, env_config = get_environment(selected_env_id)
 
-    # Create agent using the loader
-    agent, agent_config = get_agent(selected_agent_id)
+    # Create agent using the loader, passing provider and model_name if applicable
+    agent_params = {}
+    if provider and model:
+        agent_params = {"provider": provider, "model_name": model}
+
+    agent, agent_config = get_agent(selected_agent_id, **agent_params)
 
     # Ensure that the environment is compatible with the agent
     if env_config.id not in agent_config.compatible_environments:
@@ -93,6 +97,8 @@ if __name__ == "__main__":
     play_parser = subparsers.add_parser("play", help="Run the simulation with specified environment and agent")
     play_parser.add_argument('--env', type=str, required=True, help="ID of the environment to use")
     play_parser.add_argument('--agent', type=str, required=True, help="ID of the agent to use")
+    play_parser.add_argument('--provider', type=str, help="Provider for LLM agents")
+    play_parser.add_argument('--model', type=str, help="Model name for LLM agents")
 
     # Subparser for listing environments
     list_env_parser = subparsers.add_parser("list-environments", help="List available environments")
@@ -103,7 +109,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.command == "play":
-        play(args.env, args.agent)
+        play(args.env, args.agent, args.provider, args.model)
     elif args.command == "list-environments":
         list_available_environments()
     elif args.command == "list-agents":

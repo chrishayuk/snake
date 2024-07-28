@@ -24,9 +24,12 @@ class AgentLoader:
         module = importlib.import_module(module_path)
         return getattr(module, class_name)
 
-    def get_agent(self, id: str) -> Tuple[Any, AgentConfig]:
+    def get_agent(self, id: str, **kwargs) -> Tuple[Any, AgentConfig]:
         # get the agent config
         agent_config = self.get_agent_config(id)
+
+        # merge dynamic parameters with predefined agent_params
+        agent_params = {**agent_config.agent_params, **kwargs}
 
         # load the agent class
         AgentClass = self.load_class(agent_config.agent)
@@ -36,7 +39,7 @@ class AgentLoader:
             id=agent_config.id,
             name=agent_config.name,
             description=agent_config.description,
-            **agent_config.agent_params
+            **agent_params
         )
 
         # return the instance and config
@@ -53,9 +56,9 @@ def get_app_root():
 app_root = get_app_root()
 agent_loader = AgentLoader(os.path.join(app_root, 'config', 'agent_config.json'))
 
-def get_agent(id: str) -> Tuple[Any, AgentConfig]:
-    # get the agent by id
-    return agent_loader.get_agent(id)
+def get_agent(id: str, **kwargs) -> Tuple[Any, AgentConfig]:
+    # get the agent by id with dynamic parameters
+    return agent_loader.get_agent(id, **kwargs)
 
 def list_agents() -> List[AgentConfig]:
     # list the agents

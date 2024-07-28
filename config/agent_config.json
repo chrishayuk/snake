@@ -18,140 +18,36 @@
         "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_llama3_8b",
-        "name": "Llama3:8B Snake Agent",
+        "id": "snake_llm",
+        "name": "Generic LLM Snake Agent",
         "type": "Snake Agent",
-        "description": "Llama3 8B playing Snake",
+        "description": "A generic LLM agent for playing Snake",
         "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "llama3" 
-        },
+        "agent_params": {},
         "compatible_environments": ["snake"]
     },
     {
-        "id": "snake_llama3_70b",
-        "name": "Llama3:70B Snake Agent",
+        "id": "snake_cot",
+        "name": "CoT Snake Agent",
         "type": "Snake Agent",
-        "description": "Llama3 70B playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "llama3:70b" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_gemma2_9b",
-        "name": "Gemma2:9B Snake Agent",
-        "type": "Snake Agent",
-        "description": "Gemma2:9B playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "gemma2:9b" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_gemma2_27b",
-        "name": "Gemma2:27B Snake Agent",
-        "type": "Snake Agent",
-        "description": "Gemma2:27B playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "gemma2:27b" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_mistral_7b",
-        "name": "Mistral:7B Snake Agent",
-        "type": "Snake Agent",
-        "description": "Mistral:7B playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "mistral" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_phi3_3b",
-        "name": "Phi3:3B Snake Agent",
-        "type": "Snake Agent",
-        "description": "Phi3:3B playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "phi3" 
-        },
+        "description": "A Chain of Thought LLM agent for playing Snake",
+        "agent": "agents.snake.llm_agent_cot.LLMAgent",
+        "agent_params": {},
         "compatible_environments": ["snake"]
     },{
-        "id": "snake_mistral_nemo",
-        "name": "Mistral Nemo Snake Agent",
+        "id": "snake_cot_si",
+        "name": "CoT SI Snake Agent",
         "type": "Snake Agent",
-        "description": "Mistral Nemo playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "mistral-nemo" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_mistral_large",
-        "name": "Mistral Nemo Large Snake Agent",
-        "type": "Snake Agent",
-        "description": "Mistral Large playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "mistral-large" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_llama3.1_8b",
-        "name": "llama3.1:8B Snake Agent",
-        "type": "Snake Agent",
-        "description": "llama3.1:8b playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "llama3.1" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_gpt4o_mini",
-        "name": "GPT-4o-mini Snake Agent",
-        "type": "Snake Agent",
-        "description": "gpt-4o-mini playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "openai",
-            "model_name": "gpt-4o-mini" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "snake_gpt4o",
-        "name": "GPT-4o Snake Agent",
-        "type": "Snake Agent",
-        "description": "gpt-4o playing Snake",
-        "agent": "agents.snake.llm_agent.LLMAgent",
-        "agent_params": {
-            "provider": "openai",
-            "model_name": "gpt-4o" 
-        },
+        "description": "A Chain of Thought LLM agent for playing Snake that self improves",
+        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
+        "agent_params": {},
         "compatible_environments": ["snake"]
     },
     {
         "id": "minesweeper_test",
         "name": "Minesweeper Test Agent",
         "type": "Minesweeper Agent",
-        "description": "a basic test agen for playing minesweeper",
+        "description": "a basic test agent for playing minesweeper",
         "agent": "agents.minesweeper.test_agent.TestAgent",
         "agent_params": {
             "size": 10
@@ -159,330 +55,57 @@
         "compatible_environments": ["minesweeper"]
     },
     {
-        "id": "minesweeper_gemma2_9b",
-        "name": "Gemma2:9B Minesweeper Agent",
+        "id": "minesweeper_llm",
+        "name": "Generic LLM Minesweeper Agent",
         "type": "Minesweeper Agent",
-        "description": "Gemma2:9B playing MineSweeper",
+        "description": "A generic LLM agent for playing Minesweeper",
         "agent": "agents.minesweeper.llm_agent.LLMAgent",
         "agent_params": {
-            "size": 10,
-            "provider": "ollama",
-            "model_name": "gemma2:9b" 
+            "size": 10
         },
         "compatible_environments": ["minesweeper"]
     },
     {
-        "id": "minesweeper_gemma2_27b",
-        "name": "Gemma2:27B Minesweeper Agent",
+        "id": "minesweeper_cot",
+        "name": "CoT Minesweeper Agent",
         "type": "Minesweeper Agent",
-        "description": "Gemma2:27B playing MineSweeper",
-        "agent": "agents.minesweeper.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 10,
-            "provider": "ollama",
-            "model_name": "gemma2:27b" 
-        },
-        "compatible_environments": ["minesweeper"]
-    },
-    {
-        "id": "minesweeper_gpt4o_mini",
-        "name": "GPT-4o-mini Minesweeper Agent",
-        "type": "Minesweeper Agent",
-        "description": "GPT-4o-mini playing MineSweeper",
-        "agent": "agents.minesweeper.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 10,
-            "provider": "openai",
-            "model_name": "gpt-4o-mini" 
-        },
-        "compatible_environments": ["minesweeper"]
-    },
-    {
-        "id": "minesweeper_gpt4o",
-        "name": "GPT-4o Minesweeper Agent",
-        "type": "Minesweeper Agent",
-        "description": "GPT-4o playing MineSweeper",
-        "agent": "agents.minesweeper.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 10,
-            "provider": "openai",
-            "model_name": "gpt-4o" 
-        },
-        "compatible_environments": ["minesweeper"]
-    },
-    {
-        "id": "minesweeper_llama3_70b",
-        "name": "Llama3:70b Minesweeper Agent",
-        "type": "Minesweeper Agent",
-        "description": "Llama3:70b playing MineSweeper",
-        "agent": "agents.minesweeper.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 10,
-            "provider": "ollama",
-            "model_name": "llama3:70b" 
-        },
-        "compatible_environments": ["minesweeper"]
-    },{
-        "id": "snake_cot",
-        "name": "snake_cot",
-        "type": "Snake Agent",
-        "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "llama3" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_gpt4o",
-        "name": "snake_cot_gpt4o",
-        "type": "Snake Agent",
-        "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "provider": "openai",
-            "model_name": "gpt-4o" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_gpt4o_mini",
-        "name": "snake_cot_gpt4o_mini",
-        "type": "Snake Agent",
-        "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "provider": "openai",
-            "model_name": "gpt-4o-mini" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_llama3.1_8b",
-        "name": "snake_cot_llama3.1_8b",
-        "type": "Snake Agent",
-        "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "llama3.1" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_mistral_nemo",
-        "name": "snake_cot_mistral_nemo",
-        "type": "Snake Agent",
-        "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "mistral-nemo" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_mistral_large",
-        "name": "snake_cot_mistral_large",
-        "type": "Snake Agent",
-        "description": "chain of thought agent",
-        "agent": "agents.snake.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "mistral-large" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_si_gpt4o",
-        "name": "snake_cot_si_gpt4o",
-        "type": "Snake Agent",
-        "description": "chain of thought agent with self improvement",
-        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
-        "agent_params": {
-            "provider": "openai",
-            "model_name": "gpt-4o" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_si_gpt4o_mini",
-        "name": "snake_cot_si_gpt4o_mini",
-        "type": "Snake Agent",
-        "description": "chain of thought agent with self improvement",
-        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
-        "agent_params": {
-            "provider": "openai",
-            "model_name": "gpt-4o-mini" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_si_gemma2_9b",
-        "name": "snake_cot_si_gemma2_9b",
-        "type": "Snake Agent",
-        "description": "chain of thought agent with self improvement",
-        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "gemma2:9b" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_si_gemma2_27b",
-        "name": "snake_cot_si_gemma2_27b",
-        "type": "Snake Agent",
-        "description": "chain of thought agent with self improvement",
-        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "gemma2:27b" 
-        },
-        "compatible_environments": ["snake"]
-    },{
-        "id": "snake_cot_si_mistral_nemo",
-        "name": "snake_cot_si_mistral_nemo",
-        "type": "Snake Agent",
-        "description": "chain of thought agent with self improvement",
-        "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
-        "agent_params": {
-            "provider": "ollama",
-            "model_name": "mistral-nemo" 
-        },
-        "compatible_environments": ["snake"]
-    },
-    {
-        "id": "minesweeper_cot_gemma2_27b",
-        "name": "Gemma2:27b Minesweeper Agent",
-        "type": "Minesweeper Agent",
-        "description": "Gemma2:27B chain of thought playing MineSweeper",
+        "description": "A Chain of Thought LLM agent for playing Minesweeper",
         "agent": "agents.minesweeper.llm_agent_cot.LLMAgent",
         "agent_params": {
-            "size": 10,
-            "provider": "ollama",
-            "model_name": "gemma2:27b" 
+            "size": 10
         },
         "compatible_environments": ["minesweeper"]
     },
     {
-        "id": "minesweeper_cot_gpt4o_mini",
-        "name": "GPT-4o-mini Minesweeper Agent",
+        "id": "minesweeper_cot_si",
+        "name": "CoT SI Minesweeper Agent",
         "type": "Minesweeper Agent",
-        "description": "GPT-4o-mini chain of thought playing MineSweeper",
-        "agent": "agents.minesweeper.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "size": 10,
-            "provider": "openai",
-            "model_name": "gpt-4o-mini" 
-        },
-        "compatible_environments": ["minesweeper"]
-    },
-    {
-        "id": "minesweeper_cot_gpt4o",
-        "name": "GPT-4o Minesweeper Agent",
-        "type": "Minesweeper Agent",
-        "description": "GPT-4o chain of thought playing MineSweeper",
-        "agent": "agents.minesweeper.llm_agent_cot.LLMAgent",
-        "agent_params": {
-            "size": 10,
-            "provider": "openai",
-            "model_name": "gpt-4o" 
-        },
-        "compatible_environments": ["minesweeper"]
-    },
-    {
-        "id": "minesweeper_cot_si_gemma2_27b",
-        "name": "gemma2 Minesweeper Agent",
-        "type": "Minesweeper Agent",
-        "description": "gemma 2 chain of thought playing MineSweeper with self improvement",
+        "description": "A Chain of Thought LLM agent for playing Minesweeper that self improves",
         "agent": "agents.minesweeper.llm_agent_cot_si.LLMAgent",
         "agent_params": {
-            "size": 10,
-            "provider": "ollama",
-            "model_name": "gemma2:27b" 
+            "size": 10
         },
         "compatible_environments": ["minesweeper"]
     },
     {
-        "id": "treasure_hunt_mistral_nemo",
-        "name": "Mistral Nemo Treasure Hunt Agent",
-        "type": "Treasure Hunt Nemo Agent",
-        "description": "Mistral Nemo playing Treasure Hunt",
-        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 10,
-            "provider": "ollama",
-            "model_name": "mistral-nemo" 
-        },
-        "compatible_environments": ["treasure_hunt"]
-    },
-    {
-        "id": "treasure_hunt_mistral_large",
-        "name": "Mistral Large Treasure Hunt Agent",
-        "type": "Treasure Hunt Large Agent",
-        "description": "Mistral Large playing Treasure Hunt",
-        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 5,
-            "provider": "ollama",
-            "model_name": "mistral-large" 
-        },
-        "compatible_environments": ["treasure_hunt"]
-    },
-    {
-        "id": "treasure_hunt_gpt_4o",
-        "name": "GPT-4o Treasure Hunt Agent",
+        "id": "treasure_hunt_llm",
+        "name": "Generic LLM Treasure Hunt Agent",
         "type": "Treasure Hunt Agent",
-        "description": "GPT-4o playing Treasure Hunt",
+        "description": "A generic LLM agent for playing Treasure Hunt",
         "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
         "agent_params": {
-            "size": 5,
-            "provider": "openai",
-            "model_name": "gpt-4o" 
+            "size": 5
         },
         "compatible_environments": ["treasure_hunt"]
     },
     {
-        "id": "treasure_hunt_gpt_4o_mini",
-        "name": "GPT-4o-mini Treasure Hunt Agent",
+        "id": "treasure_hunt_cot",
+        "name": "CoT Treasure Hunt Agent",
         "type": "Treasure Hunt Agent",
-        "description": "GPT-4o-Mini playing Treasure Hunt",
-        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 5,
-            "provider": "openai",
-            "model_name": "gpt-4o-mini" 
-        },
-        "compatible_environments": ["treasure_hunt"]
-    },
-    {
-        "id": "treasure_hunt_mistral_nemo",
-        "name": "Mistral Nemo Treasure Hunt Agent",
-        "type": "Treasure Hunt Agent",
-        "description": "Mistral Nemo playing Treasure Hunt",
-        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 5,
-            "provider": "ollama",
-            "model_name": "mistral-nemo" 
-        },
-        "compatible_environments": ["treasure_hunt"]
-    },
-    {
-        "id": "treasure_hunt_gemma2_27b",
-        "name": "Gemma2 27b Treasure Hunt Agent",
-        "type": "Treasure Hunt Agent",
-        "description": "Gemma2 27b playing Treasure Hunt",
-        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
-        "agent_params": {
-            "size": 5,
-            "provider": "ollama",
-            "model_name": "gemma2:27b" 
-        },
-        "compatible_environments": ["treasure_hunt"]
-    },{
-        "id": "treasure_hunt_cot_gpt_4o_mini",
-        "name": "GPT-4o-mini Treasure Hunt CoT Agent",
-        "type": "Treasure Hunt CoT Agent",
-        "description": "GPT-4o-Mini CoT agent playing Treasure Hunt",
+        "description": "A generic LLM agent for playing Treasure Hunt",
         "agent": "agents.treasure_hunt.llm_agent_cot.LLMAgent",
         "agent_params": {
-            "size": 5,
-            "provider": "openai",
-            "model_name": "gpt-4o-mini" 
+            "size": 5
         },
         "compatible_environments": ["treasure_hunt"]
     }

@@ -25,14 +25,17 @@ This will run a game of snake, where the agent will follow a simple policy of ju
 #### LLM Agents
 Snake currently supports a whole bunch of LLM's but pretty much all of them are useless at playing snake.  The following allows you to play using ollama and gemma2 9b.
 
+##### Basic LLM Agent
+This following will run a basic llm agent 
+
 ```bash
-python main_simple.py play --env snake --agent snake_gemma2_9b
+python main_simple.py play --env snake --agent snake_llm --provider ollama --model gemma2:9b
 ```
 
 The only model any good at playing snake is gpt-4o
 
 ```bash
-python main_simple.py play --env snake --agent snake_gpt4o
+python main_simple.py play --env snake --agent snake_gpt4o --provider openai --model gpt-4o
 ```
 
 ### Minesweeper
@@ -48,6 +51,8 @@ This will run a game of snake, where the agent will follow a simple policy of ju
 #### LLM Agents
 Snake currently supports a whole bunch of LLM's but pretty much all of them are useless at playing snake.  The following allows you to play using ollama and gemma2 9b.
 
+Mistral Large is actually pretty decent at playing Minesweeper
+
 ```bash
-python main_simple.py play --env minesweeper --agent minesweeper_gemma2_9b
+python main_simple.py play --env snake --agent snake_gpt4o --provider ollama --model mistral-large
 ```
