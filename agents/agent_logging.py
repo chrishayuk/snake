@@ -2,8 +2,7 @@
 import json
 import time
 import numpy as np
-
-from agents.snake.agent_action import AgentAction
+from agents.agent_action import AgentAction
 
 class AgentLogger:
     def __init__(self, agent_id: str):

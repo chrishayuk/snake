@@ -17,5 +17,14 @@
             "size": 10,
             "num_mines": 10
         }
+    },
+    {
+        "id": "treasure_hunt",
+        "name": "Treasure Hunt Environment",
+        "description": "A simple treasure hunt environment for testing agents.",
+        "environment": "environments.treasure_hunt.treasure_hunt_environment.TreasureHuntEnv",
+        "env_params": {
+            "size": 5
+        }
     }
 ]

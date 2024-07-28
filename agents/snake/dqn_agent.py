@@ -1,5 +1,5 @@
 # File: agents/snake/dqn_agent.py
-from agents.snake.agent_action import AgentAction
+from agents.snake.snake_action import SnakeAction
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -35,16 +35,16 @@ class DQNAgent:
         self.criterion = nn.MSELoss()
 
         self.action_map = {
-            0: AgentAction.UP,
-            1: AgentAction.RIGHT,
-            2: AgentAction.DOWN,
-            3: AgentAction.LEFT
+            0: SnakeAction.UP,
+            1: SnakeAction.RIGHT,
+            2: SnakeAction.DOWN,
+            3: SnakeAction.LEFT
         }
         self.reverse_action_map = {v: k for k, v in self.action_map.items()}
 
     def get_action(self, step:int, state):
         if np.random.rand() <= self.epsilon:
-            return random.choice([AgentAction.UP, AgentAction.RIGHT, AgentAction.DOWN, AgentAction.LEFT])
+            return random.choice([SnakeAction.UP, SnakeAction.RIGHT, SnakeAction.DOWN, SnakeAction.LEFT])
         state = torch.FloatTensor(state).unsqueeze(0).to(self.device)
         q_values = self.model(state)
         return self.action_map[torch.argmax(q_values).item()]

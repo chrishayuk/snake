@@ -1,10 +1,10 @@
 # File: agents/snake/smart_seeker_agent.py
 import time
-from agents.snake.agent_action import AgentAction
+from agents.snake.snake_action import SnakeAction
 from agents.snake.classic_agent import ClassicAgent
 
 class SmartSeekerAgent(ClassicAgent):
-    def get_action(self, step:int, state) -> AgentAction:
+    def get_action(self, step:int, state) -> SnakeAction:
         # Check if the state is a string or numpy array
         if isinstance(state, str):
             state = self.parse_state_string(state)
@@ -20,18 +20,18 @@ class SmartSeekerAgent(ClassicAgent):
 
         # Define the possible moves
         possible_moves = {
-            AgentAction.UP: (snake_head[0] - 1, snake_head[1]),
-            AgentAction.DOWN: (snake_head[0] + 1, snake_head[1]),
-            AgentAction.LEFT: (snake_head[0], snake_head[1] - 1),
-            AgentAction.RIGHT: (snake_head[0], snake_head[1] + 1),
+            SnakeAction.UP: (snake_head[0] - 1, snake_head[1]),
+            SnakeAction.DOWN: (snake_head[0] + 1, snake_head[1]),
+            SnakeAction.LEFT: (snake_head[0], snake_head[1] - 1),
+            SnakeAction.RIGHT: (snake_head[0], snake_head[1] + 1),
         }
 
         # Define the opposite directions
         opposite_directions = {
-            AgentAction.UP: AgentAction.DOWN,
-            AgentAction.DOWN: AgentAction.UP,
-            AgentAction.LEFT: AgentAction.RIGHT,
-            AgentAction.RIGHT: AgentAction.LEFT,
+            SnakeAction.UP: SnakeAction.DOWN,
+            SnakeAction.DOWN: SnakeAction.UP,
+            SnakeAction.LEFT: SnakeAction.RIGHT,
+            SnakeAction.RIGHT: SnakeAction.LEFT,
         }
 
         # Filter out moves that would result in a collision with the snake's body or are opposite to current direction

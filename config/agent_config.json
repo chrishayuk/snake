@@ -99,6 +99,17 @@
             "model_name": "mistral-nemo" 
         },
         "compatible_environments": ["snake"]
+    },{
+        "id": "snake_mistral_large",
+        "name": "Mistral Nemo Large Snake Agent",
+        "type": "Snake Agent",
+        "description": "Mistral Large playing Snake",
+        "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "mistral-large" 
+        },
+        "compatible_environments": ["snake"]
     },
     {
         "id": "snake_llama3.1_8b",
@@ -256,6 +267,28 @@
         },
         "compatible_environments": ["snake"]
     },{
+        "id": "snake_cot_mistral_nemo",
+        "name": "snake_cot_mistral_nemo",
+        "type": "Snake Agent",
+        "description": "chain of thought agent",
+        "agent": "agents.snake.llm_agent_cot.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "mistral-nemo" 
+        },
+        "compatible_environments": ["snake"]
+    },{
+        "id": "snake_cot_mistral_large",
+        "name": "snake_cot_mistral_large",
+        "type": "Snake Agent",
+        "description": "chain of thought agent",
+        "agent": "agents.snake.llm_agent_cot.LLMAgent",
+        "agent_params": {
+            "provider": "ollama",
+            "model_name": "mistral-large" 
+        },
+        "compatible_environments": ["snake"]
+    },{
         "id": "snake_cot_si_gpt4o",
         "name": "snake_cot_si_gpt4o",
         "type": "Snake Agent",
@@ -362,5 +395,95 @@
             "model_name": "gemma2:27b" 
         },
         "compatible_environments": ["minesweeper"]
+    },
+    {
+        "id": "treasure_hunt_mistral_nemo",
+        "name": "Mistral Nemo Treasure Hunt Agent",
+        "type": "Treasure Hunt Nemo Agent",
+        "description": "Mistral Nemo playing Treasure Hunt",
+        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 10,
+            "provider": "ollama",
+            "model_name": "mistral-nemo" 
+        },
+        "compatible_environments": ["treasure_hunt"]
+    },
+    {
+        "id": "treasure_hunt_mistral_large",
+        "name": "Mistral Large Treasure Hunt Agent",
+        "type": "Treasure Hunt Large Agent",
+        "description": "Mistral Large playing Treasure Hunt",
+        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 5,
+            "provider": "ollama",
+            "model_name": "mistral-large" 
+        },
+        "compatible_environments": ["treasure_hunt"]
+    },
+    {
+        "id": "treasure_hunt_gpt_4o",
+        "name": "GPT-4o Treasure Hunt Agent",
+        "type": "Treasure Hunt Agent",
+        "description": "GPT-4o playing Treasure Hunt",
+        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 5,
+            "provider": "openai",
+            "model_name": "gpt-4o" 
+        },
+        "compatible_environments": ["treasure_hunt"]
+    },
+    {
+        "id": "treasure_hunt_gpt_4o_mini",
+        "name": "GPT-4o-mini Treasure Hunt Agent",
+        "type": "Treasure Hunt Agent",
+        "description": "GPT-4o-Mini playing Treasure Hunt",
+        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 5,
+            "provider": "openai",
+            "model_name": "gpt-4o-mini" 
+        },
+        "compatible_environments": ["treasure_hunt"]
+    },
+    {
+        "id": "treasure_hunt_mistral_nemo",
+        "name": "Mistral Nemo Treasure Hunt Agent",
+        "type": "Treasure Hunt Agent",
+        "description": "Mistral Nemo playing Treasure Hunt",
+        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 5,
+            "provider": "ollama",
+            "model_name": "mistral-nemo" 
+        },
+        "compatible_environments": ["treasure_hunt"]
+    },
+    {
+        "id": "treasure_hunt_gemma2_27b",
+        "name": "Gemma2 27b Treasure Hunt Agent",
+        "type": "Treasure Hunt Agent",
+        "description": "Gemma2 27b playing Treasure Hunt",
+        "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
+        "agent_params": {
+            "size": 5,
+            "provider": "ollama",
+            "model_name": "gemma2:27b" 
+        },
+        "compatible_environments": ["treasure_hunt"]
+    },{
+        "id": "treasure_hunt_cot_gpt_4o_mini",
+        "name": "GPT-4o-mini Treasure Hunt CoT Agent",
+        "type": "Treasure Hunt CoT Agent",
+        "description": "GPT-4o-Mini CoT agent playing Treasure Hunt",
+        "agent": "agents.treasure_hunt.llm_agent_cot.LLMAgent",
+        "agent_params": {
+            "size": 5,
+            "provider": "openai",
+            "model_name": "gpt-4o-mini" 
+        },
+        "compatible_environments": ["treasure_hunt"]
     }
 ]

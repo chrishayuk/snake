@@ -12,15 +12,14 @@ You are an AI controlling a snake in a classic Snake game. The game is played on
 Grid Information:
 
 Size: 10 x 10
-Grid System: [x, y]
 Zero-based coordinate system
 Top-left coordinate: [0, 0]
 Bottom-right coordinate: [9, 9]
-Coordinates format: [column_number, row_number] (zero-based, x, y format where x is the column and y is the row)
-Moving UP decreases Y by 1.
-Moving DOWN increases Y by 1.
-Moving LEFT decreases X by 1.
-Moving RIGHT increases X by 1.
+Coordinates format: [row_number, column_number]
+Moving UP decreases column_number by 1.
+Moving DOWN increases column_number by 1.
+Moving LEFT decreases row_number by 1.
+Moving RIGHT increases row_number by 1.
 Grid Symbols:
 
 H: Head of the snake (current position)

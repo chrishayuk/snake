@@ -2,10 +2,9 @@
 import time
 import numpy as np
 from typing import Tuple
-from agents.agent_logging import AgentLogger
 from agents.agent_type import AgentType
 from agents.base_agent import BaseAgent
-from agents.snake.agent_action import AgentAction
+from agents.snake.snake_action import SnakeAction
 
 
 class ClassicAgent(BaseAgent):
@@ -14,7 +13,7 @@ class ClassicAgent(BaseAgent):
         super().__init__(id, name, description)
 
         # set the default direction
-        self.current_direction = AgentAction.RIGHT
+        self.current_direction = SnakeAction.RIGHT
     
     @property
     def agent_type(self) -> AgentType:

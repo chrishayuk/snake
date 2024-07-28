@@ -1,8 +1,8 @@
 # File: agents/snake/llm_agent.py
-import time
+from agents.agent_tag_utils import extract_final_output, extract_thought_process, extract_time_completed
 from agents.provider_type import ProviderType
 from agents.base_llm_agent import BaseLLMAgent
-from agents.snake.agent_action import AgentAction
+from agents.snake.snake_action import SnakeAction
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
@@ -13,15 +13,14 @@ You are an AI controlling a snake in a classic Snake game. The game is played on
 
 Grid Information:
 Size: 10 x 10
-Grid System: [x, y]
 Zero-based coordinate system
 Top-left coordinate: [0, 0]
 Bottom-right coordinate: [9, 9]
-Coordinates format: [column_number, row_number] (zero-based, x, y format where x is the column and y is the row)
-Moving UP decreases Y by 1.
-Moving DOWN increases Y by 1.
-Moving LEFT decreases X by 1.
-Moving RIGHT increases X by 1.
+Coordinates format: [row_number, column_number]
+Moving UP decreases column_number by 1.
+Moving DOWN increases column_number by 1.
+Moving LEFT decreases row_number by 1.
+Moving RIGHT increases row_number by 1.
 Grid Symbols:
 H: Head of the snake (current position)
 O: Body of the snake
@@ -72,30 +71,37 @@ Provide your answer as a single word (UP, DOWN, LEFT, or RIGHT) with no addition
         self.prompt_template = prompt_template
 
         # set the prompt template
-        self.prompt = PromptTemplate(input_variables=["state","size","visited"], template=prompt_template)
+        self.prompt = PromptTemplate(input_variables=["state"], template=prompt_template)
         
         # setup the chain with the prompt and llm
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
     
-    def get_action(self, step:int, state: str):
+    def get_action(self, step: int, state: str):
         # call the llm
         response = self.chain.run(state=state)
 
         # extract the thought process and final output
-        thought_process = self.extract_tag_content(response, "agentThinking")
-        final_output = self.extract_tag_content(response, "finalOutput")
-        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
+        thought_process = extract_thought_process(response)
+        final_output = extract_final_output(response)
+        time_completed = extract_time_completed(response)
 
         # log the state, thought process, and decision
         self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed)
 
         # map the action
         action_map = {
-            "UP": AgentAction.UP,
-            "DOWN": AgentAction.DOWN,
-            "LEFT": AgentAction.LEFT,
-            "RIGHT": AgentAction.RIGHT
+            "UP": SnakeAction(SnakeAction.UP),
+            "DOWN": SnakeAction(SnakeAction.DOWN),
+            "LEFT": SnakeAction(SnakeAction.LEFT),
+            "RIGHT": SnakeAction(SnakeAction.RIGHT)
         }
 
-        # return the action
-        return action_map.get(final_output.strip().upper(), AgentAction.RIGHT)
+        # ensure the final output is in uppercase and stripped of extra whitespace
+        final_output_cleaned = final_output.strip().upper()
+        print(f"Final Output Cleaned: {final_output_cleaned}")
+
+        # return the action, default to SnakeAction.RIGHT if invalid
+        action = action_map.get(final_output_cleaned, SnakeAction(SnakeAction.RIGHT))
+        print(f"Chosen Action: {action}")
+
+        return action

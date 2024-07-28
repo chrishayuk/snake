@@ -1,9 +1,9 @@
-# File: snake_environment.py
+# File: environments/snake/snake_environment.py
 import numpy as np
 import os
 import random
 import uuid
-from agents.snake.agent_action import AgentAction
+from agents.snake.snake_action import SnakeAction
 from environments.environment_base import Environment
 from environments.snake.action_history import ActionHistory
 from environments.snake.reward_functions import simple_reward as reward_function
@@ -18,10 +18,10 @@ class SnakeEnv(Environment):
 
         # set the direction dictionary
         self.direction_dict = {
-            AgentAction.UP: (-1, 0),
-            AgentAction.RIGHT: (0, 1),
-            AgentAction.DOWN: (1, 0),
-            AgentAction.LEFT: (0, -1)
+            SnakeAction.UP: (-1, 0),
+            SnakeAction.RIGHT: (0, 1),
+            SnakeAction.DOWN: (1, 0),
+            SnakeAction.LEFT: (0, -1)
         }
 
         # set the reward function
@@ -62,8 +62,8 @@ class SnakeEnv(Environment):
         self.place_food()
 
         # Choose a random initial direction
-        initial_action = random.choice([AgentAction.UP, AgentAction.RIGHT, AgentAction.DOWN, AgentAction.LEFT])
-        self.direction = self.direction_dict[initial_action]
+        initial_action = random.choice([SnakeAction(SnakeAction.UP), SnakeAction(SnakeAction.RIGHT), SnakeAction(SnakeAction.DOWN), SnakeAction(SnakeAction.LEFT)])
+        self.direction = self.direction_dict[initial_action.action]
 
         # set steps since last food
         self.steps = 0
@@ -80,16 +80,15 @@ class SnakeEnv(Environment):
         return (self.snake[-1][0] + self.direction[0], 
                 self.snake[-1][1] + self.direction[1])
 
-    
-    def is_valid_direction_change(self, action):
+    def is_valid_direction_change(self, action: SnakeAction):
         """
         Check if the direction change is valid (not a 180-degree turn).
         """
         current_direction = next(key for key, value in self.direction_dict.items() if value == self.direction)
-        if (current_direction == AgentAction.UP and action == AgentAction.DOWN) or \
-           (current_direction == AgentAction.DOWN and action == AgentAction.UP) or \
-           (current_direction == AgentAction.LEFT and action == AgentAction.RIGHT) or \
-           (current_direction == AgentAction.RIGHT and action == AgentAction.LEFT):
+        if (current_direction == SnakeAction.UP and action.action == SnakeAction.DOWN) or \
+           (current_direction == SnakeAction.DOWN and action.action == SnakeAction.UP) or \
+           (current_direction == SnakeAction.LEFT and action.action == SnakeAction.RIGHT) or \
+           (current_direction == SnakeAction.RIGHT and action.action == SnakeAction.LEFT):
             return False
         return True
     
@@ -123,7 +122,11 @@ class SnakeEnv(Environment):
         # return the state
         return state
     
-    def step(self, action: AgentAction = AgentAction.NONE):
+    def step(self, action: SnakeAction = SnakeAction(SnakeAction.NONE)):
+        # Ensure action is an instance of SnakeAction
+        if not isinstance(action, SnakeAction):
+            action = SnakeAction(action)
+
         # Determine the previous direction before applying the new action
         prev_direction = next(key for key, value in self.direction_dict.items() if value == self.direction)
         
@@ -137,8 +140,8 @@ class SnakeEnv(Environment):
         )
 
         # Update direction only if a new direction is specified
-        if action != AgentAction.NONE and self.is_valid_direction_change(action):
-            self.direction = self.direction_dict[action]
+        if action.action != SnakeAction.NONE and self.is_valid_direction_change(action):
+            self.direction = self.direction_dict[action.action]
 
         # get the next position
         new_head = self.get_next_head()
@@ -190,7 +193,6 @@ class SnakeEnv(Environment):
         # return the state, reward and game over
         return self.get_state(), reward, self.game_over
 
-
     def get_render(self):
         # Set the grid as .'s
         grid = [['.' for _ in range(self.size)] for _ in range(self.size)]
@@ -211,7 +213,8 @@ class SnakeEnv(Environment):
         grid_str = '\n'.join([' '.join(row) for row in grid])
 
         # Get the current direction as a string
-        direction_str = next(key for key, value in self.direction_dict.items() if value == self.direction)
+        current_direction_action = next(key for key, value in self.direction_dict.items() if value == self.direction)
+        direction_str = str(SnakeAction(current_direction_action))
 
         # Prepare additional information
         legend = [
@@ -222,7 +225,7 @@ class SnakeEnv(Environment):
             " . - Empty space",
             ""
         ]
-        
+
         game_state = [
             "Game State:",
             f" Score: {len(self.snake) - 1}",
@@ -239,17 +242,18 @@ class SnakeEnv(Environment):
         # Prepare action history
         action_history_str = ["\nAction History:"]
         for record in self.action_history.get_history():
+            direction = str(SnakeAction(record['snake_direction']))
+            action = str(SnakeAction(record['action'].action))
             action_history_str.append(
                 f" Step: {record['step']}, Current Position: {record['snake_head_position']}, "
-                f"Current Direction: {record['snake_direction']}, Snake Length: {record['snake_length']}, "
-                f"Agent Chosen Action: {record['action']}"
+                f"Current Direction: {direction}, Snake Length: {record['snake_length']}, "
+                f"Agent Chosen Action: {action}"
             )
 
         # Combine grid, legend, game state information, and action history
         render_str = "\n".join(legend) + "\n" + grid_str + "\n\n" + "\n".join(game_state) + "\n".join(action_history_str)
 
         return render_str
-
 
     def render(self):
         # Clear the console
