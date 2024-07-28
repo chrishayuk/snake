@@ -2,7 +2,7 @@ import os
 import uuid
 import numpy as np
 import random
-from agents.treasure_hunt.llm_agent import TreasureHuntAction
+from agents.treasure_hunt.treasure_hunt_action import TreasureHuntAction
 from environments.environment_base import Environment
 
 class TreasureHuntEnv(Environment):

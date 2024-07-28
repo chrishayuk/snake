@@ -1,7 +1,8 @@
 # llm_agent_enhanced_si.py
 import time
+from agents.agent_tag_utils import extract_final_output, extract_thought_process, extract_time_completed
 from agents.provider_type import ProviderType
-from agents.snake.base_llm_snake_agent import BaseSnakeLLMAgent
+from agents.snake.base_llm_agent import BaseSnakeLLMAgent
 from agents.snake.prompt_templates.reflection_prompt_template import reflection_prompt_template
 from agents.snake.snake_action import SnakeAction
 from agents.snake.prompt_templates.cot_si_prompt_template import cot_si_prompt_template
@@ -17,14 +18,18 @@ class LLMAgent(BaseSnakeLLMAgent):
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
 
     def get_action(self, step:int, state: str):
+        # get the response
         response = self.chain.run(state=state, strategy=self.strategy, strategyImprovementNotes=self.self_improvement_notes)
 
-        thought_process = self.extract_tag_content(response, "agentThinking")
-        final_output = self.extract_tag_content(response, "finalOutput")
-        time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
+        # extract the thought process and final output
+        thought_process = extract_thought_process(response)
+        final_output = extract_final_output(response)
+        time_completed = extract_time_completed(response)
 
+        # log the decision
         self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed)
 
+        # get the map
         action_map = {
             "UP": SnakeAction.UP,
             "DOWN": SnakeAction.DOWN,
@@ -32,6 +37,7 @@ class LLMAgent(BaseSnakeLLMAgent):
             "RIGHT": SnakeAction.RIGHT
         }
 
+        # return the mapping
         return action_map.get(final_output.strip().upper(), SnakeAction.RIGHT)
 
     def game_over(self, step: int, state: str):

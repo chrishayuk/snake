@@ -1,6 +1,6 @@
 # llm_agent_enhanced.py
 from agents.provider_type import ProviderType
-from agents.snake.base_llm_snake_agent import BaseSnakeLLMAgent
+from agents.snake.base_llm_agent import BaseSnakeLLMAgent
 from agents.snake.prompt_templates.cot_prompt_template import cot_prompt_template
 
 class LLMAgent(BaseSnakeLLMAgent):

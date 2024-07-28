@@ -1,7 +1,7 @@
 # llm_agent.py
 
 from agents.provider_type import ProviderType
-from agents.snake.base_llm_snake_agent import BaseSnakeLLMAgent
+from agents.snake.base_llm_agent import BaseSnakeLLMAgent
 from agents.snake.prompt_templates.basic_prompt_template import basic_prompt_template
 
 class LLMAgent(BaseSnakeLLMAgent):
