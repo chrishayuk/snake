@@ -38,7 +38,7 @@ def train_dqn(episodes=10000, batch_size=32, render=False):
                 # 150 millisecond delate
                 time.sleep(0.15)
             
-            action = agent.get_action(state.flatten())
+            action = agent.get_action(steps, state.flatten())
             next_state, reward, done = env.step(action)
             
             agent.remember(state.flatten(), action, reward, next_state.flatten(), done)
