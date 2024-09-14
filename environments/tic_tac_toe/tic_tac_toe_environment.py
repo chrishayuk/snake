@@ -64,6 +64,17 @@ class TicTacToeEnv(Environment):
         # return the state
         return self.get_state()
     
+    def set_agents(self, agents):
+        """Set agent names and types for Player X and Player O based on the passed list."""
+        if len(agents) >= 2:
+            # Assuming agents have a config attribute containing the type
+            self.player_x_id = agents[0].name  # Agent name for Player X
+            self.player_x_type = agents[0].agent_type if hasattr(agents[0], 'agent_type') else "Unknown"  # Agent type for Player X
+            self.player_o_id = agents[1].name  # Agent name for Player O
+            self.player_o_type = agents[1].agent_type if hasattr(agents[1], 'agent_type') else "Unknown"  # Agent type for Player O
+
+
+        
     def get_state(self):
         # Return the current board state
         return np.copy(self.board)
@@ -138,6 +149,13 @@ class TicTacToeEnv(Environment):
             np.all(np.diag(np.fliplr(self.board)) == player)  # Check anti-diagonal
         )
 
+    def render(self):
+        # Clear the console
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+        # Get and print the render string
+        print(self.get_render())
+
     def get_render(self):
         render_str = "\n"
         symbols = {0: '.', 1: 'X', 2: 'O'}
@@ -181,12 +199,12 @@ class TicTacToeEnv(Environment):
             "-" * 35,
         ]
         
-        # Player information
+        # Player information with agent types (assumed agent_type is accessible)
         player_info = [
             "Players:",
             "-" * 35,
-            f" Player X ID : {self.player_x_id} (Type: {self.player_x_type})",
-            f" Player O ID : {self.player_o_id} (Type: {self.player_o_type})",
+            f" Player X (ID: {self.player_x_id}) Type: {self.player_x_type}",
+            f" Player O (ID: {self.player_o_id}) Type: {self.player_o_type}",
             "-" * 35,
         ]
         
@@ -214,16 +232,6 @@ class TicTacToeEnv(Environment):
         render_str += "\n".join(instructions) + "\n\n" + "\n".join(game_state) + "\n\n" + "\n".join(player_info) + "\n\n" + "\n".join(legend) + "\n" + action_history_str
         
         return render_str
-
-
-
-
-    def render(self):
-        # Clear the console
-        os.system('cls' if os.name == 'nt' else 'clear')
-
-        # Get and print the render string
-        print(self.get_render())
 
     def get_action_history(self):
         """

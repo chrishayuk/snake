@@ -26,6 +26,8 @@ def get_agents(game_id, env_config, selected_agents, providers=None, models=None
 
     # Initialize agents
     agents = []
+
+    # loop through the agents
     for i, agent_id in enumerate(selected_agents):
         agent_params = {}
         if providers and i < len(providers) and models and i < len(models):
@@ -40,15 +42,19 @@ def get_agents(game_id, env_config, selected_agents, providers=None, models=None
         agent.game_id = game_id
         agents.append(agent)
 
-    # return the agents
+    # Return agents and their types
     return agents
 
 def play(selected_env_id, selected_agents, providers=None, models=None, episodes=1000):
     # Create environment using the loader
     env, env_config = get_environment(selected_env_id)
 
-    # get the agents
+    # Get the agents and their types
     agents = get_agents(env.game_id, env_config, selected_agents, providers, models)
+
+    # Pass agent types to environment
+    if hasattr(env, 'set_agents'):
+        env.set_agents(agents)  # Pass agent types to the environment
 
     # 1 second delay before starting
     time.sleep(1)
@@ -104,6 +110,7 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
 
             # 150 millisecond delay between actions
             time.sleep(0.15)
+
 
 def list_available_environments():
     # get the list of environments
