@@ -1,0 +1,44 @@
+{
+    "game": {
+      "name": "Space Colony Management",
+      "description": "Manage a colony on Mars and ensure its survival and growth by efficiently managing resources."
+    },
+    "resources": [
+      {"name": "Oxygen", "description": "Essential for colonists to breathe.", "initial_amount": 100, "unit": "liters"},
+      {"name": "Water", "description": "Needed for drinking, growing food, and sanitation.", "initial_amount": 200, "unit": "liters"},
+      {"name": "Food", "description": "Grown in hydroponic farms or imported from Earth.", "initial_amount": 150, "unit": "kilograms"},
+      {"name": "Energy", "description": "Generated from solar panels or nuclear reactors.", "initial_amount": 500, "unit": "kilowatt-hours"},
+      {"name": "Building Materials", "description": "Used to construct new habitats and facilities.", "initial_amount": 300, "unit": "units"}
+    ],
+    "actions": [
+      {"name": "Gather Resources", "options": [
+        {"name": "Collect Water", "description": "Collect water from underground reservoirs.", "resource_changes": {"Water": 50}},
+        {"name": "Expand Solar Farm", "description": "Increase energy production by expanding the solar farm.", "resource_changes": {"Energy": 100, "Building Materials": -50}}
+      ]},
+      {"name": "Build Structures", "options": [
+        {"name": "Construct Living Quarters", "description": "Build new living quarters for colonists.", "resource_changes": {"Building Materials": -100}},
+        {"name": "Set Up Hydroponic Farm", "description": "Set up a farm to grow food.", "resource_changes": {"Building Materials": -50, "Food": 50}}
+      ]},
+      {"name": "Manage Population", "options": [
+        {"name": "Assign Colonists to Farming", "description": "Assign colonists to work in the hydroponic farm.", "effect": "Increases food production."},
+        {"name": "Train Engineers", "description": "Train colonists as engineers for maintenance.", "effect": "Increases efficiency of resource usage."}
+      ]},
+      {"name": "Research and Development", "options": [
+        {"name": "Develop Energy Efficiency", "description": "Research new technology for energy efficiency.", "resource_changes": {"Energy": -50}, "effect": "Decreases future energy consumption."},
+        {"name": "Improve Crop Yield", "description": "Research crop improvements for higher yield.", "resource_changes": {"Food": -50}, "effect": "Increases future food production."}
+      ]},
+      {"name": "Trade and Diplomacy", "options": [
+        {"name": "Trade with Earth", "description": "Trade with Earth for additional supplies.", "resource_changes": {"Building Materials": 100, "Food": -50}},
+        {"name": "Negotiate with Other Colonies", "description": "Negotiate with other colonies for mutual aid.", "effect": "Improves relations and resource sharing."}
+      ]}
+    ],
+    "events": [
+      {"name": "Dust Storm", "description": "A severe dust storm hits the colony.", "effects": {"Energy": -100, "Oxygen": -50}},
+      {"name": "Resource Discovery", "description": "A new underground water source is discovered.", "effects": {"Water": 100}},
+      {"name": "Colonist Illness", "description": "A sickness spreads among the colonists.", "effects": {"Food": -50, "Water": -50}}
+    ],
+    "goals": {
+      "short_term": ["Ensure all colonists have enough food, water, and oxygen."],
+      "long_term": ["Develop a self-sustaining colony.", "Expand to new areas of the planet.", "Establish a thriving community."]
+    }
+  }  

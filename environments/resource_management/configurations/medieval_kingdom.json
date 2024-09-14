@@ -1,0 +1,45 @@
+{
+    "game": {
+      "name": "Medieval Kingdom Management",
+      "description": "Rule a medieval kingdom by managing resources, expanding your territory, and ensuring the well-being of your subjects."
+    },
+    "resources": [
+      {"name": "Food", "description": "Essential for feeding the population and soldiers.", "initial_amount": 500, "unit": "units"},
+      {"name": "Gold", "description": "Used for trade, construction, and paying soldiers.", "initial_amount": 300, "unit": "coins"},
+      {"name": "Wood", "description": "Required for building and maintaining structures.", "initial_amount": 400, "unit": "logs"},
+      {"name": "Stone", "description": "Used for constructing durable buildings and fortifications.", "initial_amount": 200, "unit": "blocks"},
+      {"name": "Soldiers", "description": "Defend the kingdom and expand your territory.", "initial_amount": 50, "unit": "soldiers"}
+    ],
+    "actions": [
+      {"name": "Gather Resources", "options": [
+        {"name": "Hunt for Food", "description": "Send villagers to hunt and gather food.", "resource_changes": {"Food": 50}},
+        {"name": "Cut Timber", "description": "Send villagers to cut down trees for wood.", "resource_changes": {"Wood": 100}}
+      ]},
+      {"name": "Build Structures", "options": [
+        {"name": "Construct Houses", "description": "Build new houses to accommodate the growing population.", "resource_changes": {"Wood": -50, "Stone": -20}},
+        {"name": "Build Barracks", "description": "Construct barracks to train more soldiers.", "resource_changes": {"Wood": -100, "Stone": -50, "Soldiers": 20}}
+      ]},
+      {"name": "Manage Population", "options": [
+        {"name": "Assign Villagers to Farming", "description": "Increase food production by assigning more villagers to farming.", "effect": "Increases food production."},
+        {"name": "Train Militia", "description": "Train villagers as militia to defend the kingdom.", "effect": "Increases defense capability."}
+      ]},
+      {"name": "Research and Development", "options": [
+        {"name": "Improve Farming Techniques", "description": "Research new farming techniques to increase food yield.", "resource_changes": {"Food": -50}},
+        {"name": "Fortification Techniques", "description": "Develop better fortification techniques for improved defense.", "resource_changes": {"Stone": -50}}
+      ]},
+      {"name": "Trade and Diplomacy", "options": [
+        {"name": "Trade with Neighboring Kingdoms", "description": "Trade resources with neighboring kingdoms.", "resource_changes": {"Gold": 100, "Food": -50}},
+        {"name": "Form Alliances", "description": "Negotiate alliances with other kingdoms for mutual benefit.", "effect": "Improves diplomatic relations and resource sharing."}
+      ]}
+    ],
+    "events": [
+      {"name": "Plague Outbreak", "description": "A plague spreads through the kingdom, reducing the population.", "effects": {"Food": -50, "Gold": -50}},
+      {"name": "Bountiful Harvest", "description": "A particularly good harvest season increases food supplies.", "effects": {"Food": 100}},
+      {"name": "Bandit Raid", "description": "Bandits raid a village, stealing resources and causing damage.", "effects": {"Food": -50, "Wood": -50, "Gold": -50}}
+    ],
+    "goals": {
+      "short_term": ["Ensure all subjects have enough food and shelter."],
+      "long_term": ["Expand the kingdom's territory.", "Build a thriving, self-sustaining kingdom.", "Establish a powerful army and defend against invasions."]
+    }
+  }
+  

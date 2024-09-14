@@ -1,0 +1,46 @@
+{
+    "game": {
+      "name": "Pirate Island Survival",
+      "description": "Survive on a deserted island by managing resources, building shelters, and defending against threats."
+    },
+    "resources": [
+      {"name": "Food", "description": "Essential for survival.", "initial_amount": 100, "unit": "units"},
+      {"name": "Water", "description": "Necessary for drinking and cooking.", "initial_amount": 50, "unit": "liters"},
+      {"name": "Wood", "description": "Used for building and maintaining shelters.", "initial_amount": 200, "unit": "logs"},
+      {"name": "Medicine", "description": "Used for treating injuries and illnesses.", "initial_amount": 30, "unit": "units"},
+      {"name": "Weapons", "description": "Needed for hunting and defense.", "initial_amount": 10, "unit": "units"}
+    ],
+    "actions": [
+      {"name": "Gather Resources", "options": [
+        {"name": "Hunt for Food", "description": "Search the island for food.", "resource_changes": {"Food": 20}},
+        {"name": "Collect Water", "description": "Collect water from natural sources.", "resource_changes": {"Water": 15}},
+        {"name": "Gather Wood", "description": "Collect wood from the forest.", "resource_changes": {"Wood": 30}}
+      ]},
+      {"name": "Build Shelters", "options": [
+        {"name": "Construct Hut", "description": "Build a small hut for shelter.", "resource_changes": {"Wood": -50}},
+        {"name": "Build Raft", "description": "Build a raft to explore nearby islands.", "resource_changes": {"Wood": -100, "Weapons": -2}}
+      ]},
+      {"name": "Manage Health", "options": [
+        {"name": "Treat Wounds", "description": "Use medicine to treat injuries.", "resource_changes": {"Medicine": -10}},
+        {"name": "Purify Water", "description": "Use resources to purify water.", "resource_changes": {"Water": 20, "Medicine": -5}}
+      ]},
+      {"name": "Research and Development", "options": [
+        {"name": "Improve Hunting Tools", "description": "Develop better tools for hunting.", "resource_changes": {"Weapons": 5}},
+        {"name": "Develop Medicine", "description": "Research new ways to create medicine.", "resource_changes": {"Medicine": 10}}
+      ]},
+      {"name": "Trade and Diplomacy", "options": [
+        {"name": "Trade with Natives", "description": "Trade resources with native inhabitants.", "resource_changes": {"Food": -10, "Medicine": 10}},
+        {"name": "Form Alliances", "description": "Form alliances for mutual protection and resource sharing.", "effect": "Improves defense capability."}
+      ]}
+    ],
+    "events": [
+      {"name": "Storm", "description": "A violent storm hits the island.", "effects": {"Wood": -50, "Food": -20}},
+      {"name": "Wild Animal Attack", "description": "Wild animals attack your camp.", "effects": {"Food": -10, "Weapons": -2}},
+      {"name": "Disease Outbreak", "description": "A disease spreads among the survivors.", "effects": {"Medicine": -15, "Water": -10}}
+    ],
+    "goals": {
+      "short_term": ["Ensure everyone has enough food and water."],
+      "long_term": ["Build a sustainable shelter.", "Explore nearby islands.", "Establish safe and healthy living conditions."]
+    }
+  }
+  

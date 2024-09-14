@@ -1,0 +1,41 @@
+{
+    "game": {
+      "name": "YouTuber Management Game",
+      "description": "Manage a YouTube channel by creating content, engaging with your audience, and growing your subscriber base."
+    },
+    "resources": [
+      {"name": "Subscribers", "description": "Number of channel subscribers.", "initial_amount": 1000, "unit": "subscribers"},
+      {"name": "Views", "description": "Total number of video views.", "initial_amount": 5000, "unit": "views"},
+      {"name": "Revenue", "description": "Total revenue earned from the channel.", "initial_amount": 100, "unit": "dollars"},
+      {"name": "Content Quality", "description": "Quality level of your content.", "initial_amount": 50, "unit": "percentage"},
+      {"name": "Engagement", "description": "Level of audience engagement.", "initial_amount": 60, "unit": "percentage"}
+    ],
+    "actions": [
+      {"name": "Create Content", "options": [
+        {"name": "Upload New Video", "description": "Upload a new video to your channel.", "resource_changes": {"Views": 500, "Content Quality": 5, "Revenue": 10}},
+        {"name": "Live Stream", "description": "Host a live stream for your audience.", "resource_changes": {"Views": 300, "Engagement": 10, "Revenue": 5}}
+      ]},
+      {"name": "Engage with Audience", "options": [
+        {"name": "Reply to Comments", "description": "Reply to comments on your videos.", "resource_changes": {"Engagement": 10}},
+        {"name": "Social Media Promotion", "description": "Promote your channel on social media.", "resource_changes": {"Subscribers": 50, "Engagement": 5}}
+      ]},
+      {"name": "Improve Content Quality", "options": [
+        {"name": "Upgrade Equipment", "description": "Invest in better equipment for higher quality videos.", "resource_changes": {"Content Quality": 10, "Revenue": -50}},
+        {"name": "Take a Course", "description": "Take an online course to improve your content creation skills.", "resource_changes": {"Content Quality": 15, "Revenue": -30}}
+      ]},
+      {"name": "Channel Growth", "options": [
+        {"name": "Collaborate with Other YouTubers", "description": "Collaborate with other YouTubers to grow your audience.", "resource_changes": {"Subscribers": 200, "Engagement": 20}},
+        {"name": "Advertise Channel", "description": "Invest in advertising to attract new subscribers.", "resource_changes": {"Subscribers": 100, "Revenue": -20}}
+      ]}
+    ],
+    "events": [
+      {"name": "Viral Video", "description": "One of your videos goes viral.", "effects": {"Views": 10000, "Subscribers": 500, "Revenue": 200}},
+      {"name": "Negative Feedback", "description": "A video receives a lot of negative feedback.", "effects": {"Engagement": -20, "Content Quality": -10}},
+      {"name": "Platform Update", "description": "YouTube introduces a new feature that benefits your channel.", "effects": {"Engagement": 15, "Subscribers": 100}}
+    ],
+    "goals": {
+      "short_term": ["Increase your views.", "Gain more subscribers."],
+      "long_term": ["Reach 1 million subscribers.", "Achieve a high engagement rate.", "Maximize revenue from your channel."]
+    }
+  }
+  

@@ -1,0 +1,39 @@
+{
+    "game": {
+      "name": "Stock Market Management",
+      "description": "Manage your portfolio by buying and selling stocks, analyzing market trends, and maximizing profits."
+    },
+    "resources": [
+      {"name": "Cash", "description": "Available cash for investments.", "initial_amount": 100000, "unit": "dollars"},
+      {"name": "Stocks", "description": "Total value of owned stocks.", "initial_amount": 0, "unit": "dollars"},
+      {"name": "Portfolio Value", "description": "Total value of cash and stocks.", "initial_amount": 100000, "unit": "dollars"}
+    ],
+    "actions": [
+      {"name": "Trade Stocks", "options": [
+        {"name": "Buy Stock", "description": "Buy stocks to increase your portfolio.", "resource_changes": {"Cash": -1000, "Stocks": 1000}},
+        {"name": "Sell Stock", "description": "Sell stocks to increase your cash.", "resource_changes": {"Cash": 1000, "Stocks": -1000}}
+      ]},
+      {"name": "Analyze Market", "options": [
+        {"name": "Research Company", "description": "Conduct research on a company before investing.", "resource_changes": {"Cash": -500}},
+        {"name": "Monitor Trends", "description": "Monitor market trends to make informed decisions.", "resource_changes": {"Cash": -300}}
+      ]},
+      {"name": "Diversify Portfolio", "options": [
+        {"name": "Invest in Real Estate", "description": "Invest in real estate for portfolio diversification.", "resource_changes": {"Cash": -2000, "Stocks": 2000}},
+        {"name": "Invest in Bonds", "description": "Invest in bonds for stable returns.", "resource_changes": {"Cash": -1500, "Stocks": 1500}}
+      ]},
+      {"name": "Financial Management", "options": [
+        {"name": "Save Cash", "description": "Save cash to increase liquidity.", "resource_changes": {"Cash": 500}},
+        {"name": "Rebalance Portfolio", "description": "Rebalance your portfolio to optimize returns.", "resource_changes": {"Cash": -1000, "Stocks": 1000}}
+      ]}
+    ],
+    "events": [
+      {"name": "Market Boom", "description": "The stock market experiences a boom.", "effects": {"Stocks": 5000}},
+      {"name": "Market Crash", "description": "The stock market experiences a crash.", "effects": {"Stocks": -5000}},
+      {"name": "Company Scandal", "description": "A major company is involved in a scandal.", "effects": {"Stocks": -2000}}
+    ],
+    "goals": {
+      "short_term": ["Increase your cash reserves.", "Make a profitable trade."],
+      "long_term": ["Grow your portfolio value.", "Achieve a balanced and diversified portfolio.", "Maximize returns while managing risks."]
+    }
+  }
+  

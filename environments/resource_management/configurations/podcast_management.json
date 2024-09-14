@@ -1,0 +1,41 @@
+{
+    "game": {
+      "name": "Podcast Management Game",
+      "description": "Manage a podcast by creating episodes, engaging with listeners, and growing your subscriber base."
+    },
+    "resources": [
+      {"name": "Listeners", "description": "Number of podcast listeners.", "initial_amount": 1000, "unit": "listeners"},
+      {"name": "Episodes", "description": "Total number of podcast episodes.", "initial_amount": 10, "unit": "episodes"},
+      {"name": "Revenue", "description": "Total revenue earned from the podcast.", "initial_amount": 500, "unit": "dollars"},
+      {"name": "Content Quality", "description": "Quality level of your podcast content.", "initial_amount": 60, "unit": "percentage"},
+      {"name": "Engagement", "description": "Level of listener engagement.", "initial_amount": 70, "unit": "percentage"}
+    ],
+    "actions": [
+      {"name": "Create Content", "options": [
+        {"name": "Record New Episode", "description": "Record a new podcast episode.", "resource_changes": {"Episodes": 1, "Content Quality": 5, "Revenue": 50}},
+        {"name": "Live Q&A", "description": "Host a live Q&A session with listeners.", "resource_changes": {"Engagement": 10, "Revenue": 30}}
+      ]},
+      {"name": "Engage with Audience", "options": [
+        {"name": "Reply to Comments", "description": "Reply to comments on your podcast episodes.", "resource_changes": {"Engagement": 10}},
+        {"name": "Social Media Promotion", "description": "Promote your podcast on social media.", "resource_changes": {"Listeners": 50, "Engagement": 5}}
+      ]},
+      {"name": "Improve Content Quality", "options": [
+        {"name": "Upgrade Equipment", "description": "Invest in better equipment for higher quality episodes.", "resource_changes": {"Content Quality": 10, "Revenue": -100}},
+        {"name": "Take a Course", "description": "Take an online course to improve your podcasting skills.", "resource_changes": {"Content Quality": 15, "Revenue": -50}}
+      ]},
+      {"name": "Channel Growth", "options": [
+        {"name": "Collaborate with Other Podcasters", "description": "Collaborate with other podcasters to grow your audience.", "resource_changes": {"Listeners": 200, "Engagement": 20}},
+        {"name": "Advertise Podcast", "description": "Invest in advertising to attract new listeners.", "resource_changes": {"Listeners": 100, "Revenue": -50}}
+      ]}
+    ],
+    "events": [
+      {"name": "Viral Episode", "description": "One of your episodes goes viral.", "effects": {"Listeners": 500, "Revenue": 200}},
+      {"name": "Negative Review", "description": "A new episode receives a lot of negative reviews.", "effects": {"Engagement": -20, "Content Quality": -10}},
+      {"name": "Platform Feature", "description": "Your podcast gets featured on a major platform.", "effects": {"Listeners": 300, "Engagement": 15}}
+    ],
+    "goals": {
+      "short_term": ["Increase your listener count.", "Produce more episodes."],
+      "long_term": ["Reach 10,000 listeners.", "Achieve a high engagement rate.", "Maximize revenue from your podcast."]
+    }
+  }
+  

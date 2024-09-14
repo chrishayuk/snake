@@ -1,0 +1,45 @@
+{
+    "game": {
+      "name": "Football Management Game",
+      "description": "Manage a football team by training players, developing tactics, and winning matches."
+    },
+    "resources": [
+      {"name": "Players", "description": "Number of players available for matches.", "initial_amount": 22, "unit": "players"},
+      {"name": "Fitness", "description": "Overall fitness level of the team.", "initial_amount": 100, "unit": "percentage"},
+      {"name": "Morale", "description": "Team morale affecting performance.", "initial_amount": 75, "unit": "percentage"},
+      {"name": "Funds", "description": "Money available for transfers and expenses.", "initial_amount": 50, "unit": "million dollars"},
+      {"name": "Fan Support", "description": "Support from the fans.", "initial_amount": 70, "unit": "percentage"}
+    ],
+    "actions": [
+      {"name": "Training", "options": [
+        {"name": "Fitness Training", "description": "Improve the team's fitness.", "resource_changes": {"Fitness": 10, "Morale": -5}},
+        {"name": "Skill Training", "description": "Enhance the players' skills.", "resource_changes": {"Fitness": -5, "Morale": 5}}
+      ]},
+      {"name": "Tactics", "options": [
+        {"name": "Offensive Tactics", "description": "Focus on attacking strategies.", "resource_changes": {"Morale": 5, "Fan Support": 5}},
+        {"name": "Defensive Tactics", "description": "Focus on defensive strategies.", "resource_changes": {"Morale": -5, "Fitness": 5}}
+      ]},
+      {"name": "Transfers", "options": [
+        {"name": "Buy a Star Player", "description": "Sign a high-profile player.", "resource_changes": {"Funds": -20, "Players": 1, "Fan Support": 10}},
+        {"name": "Sell a Player", "description": "Sell a player to another team.", "resource_changes": {"Funds": 15, "Players": -1, "Fan Support": -5}}
+      ]},
+      {"name": "Team Management", "options": [
+        {"name": "Team Meeting", "description": "Boost team morale with a meeting.", "resource_changes": {"Morale": 10}},
+        {"name": "Rest Day", "description": "Give players a rest day to recover fitness.", "resource_changes": {"Fitness": 15, "Morale": -5}}
+      ]},
+      {"name": "Marketing", "options": [
+        {"name": "Merchandising", "description": "Increase funds through merchandising.", "resource_changes": {"Funds": 5, "Fan Support": 5}},
+        {"name": "Fan Events", "description": "Organize events to boost fan support.", "resource_changes": {"Fan Support": 15, "Funds": -5}}
+      ]}
+    ],
+    "events": [
+      {"name": "Injury", "description": "A key player gets injured.", "effects": {"Players": -1, "Fitness": -10}},
+      {"name": "Match Victory", "description": "Your team wins an important match.", "effects": {"Morale": 20, "Fan Support": 10}},
+      {"name": "Match Loss", "description": "Your team loses a match.", "effects": {"Morale": -20, "Fan Support": -10}}
+    ],
+    "goals": {
+      "short_term": ["Ensure team fitness is above 70%.", "Win the next match."],
+      "long_term": ["Win the league.", "Maintain high fan support.", "Manage finances effectively."]
+    }
+  }
+  
