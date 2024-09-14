@@ -108,5 +108,21 @@
             "size": 5
         },
         "compatible_environments": ["treasure_hunt"]
+    },
+    {
+        "id": "tic_tac_toe_smart",
+        "name": "Smart Tic Tac Toe Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A smart classic agent for playing Tic Tac Toe",
+        "agent": "agents.tic_tac_toe.smart_agent.SmartTicTacToeAgent",
+        "compatible_environments": ["tic_tac_toe"]
+    },
+    {
+        "id": "tic_tac_toe_random",
+        "name": "Random Tic Tac Toe Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A random classic agent for playing Tic Tac Toe that makes random moves",
+        "agent": "agents.tic_tac_toe.random_agent.RandomTicTacToeAgent",
+        "compatible_environments": ["tic_tac_toe"]
     }
 ]

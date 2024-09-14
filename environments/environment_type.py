@@ -8,3 +8,5 @@ class EnvironmentType(BaseModel):
     description: str
     environment: str
     env_params: Dict[str, Any] = {}
+    min_players: int
+    max_players: int

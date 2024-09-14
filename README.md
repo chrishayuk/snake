@@ -12,6 +12,7 @@ if you wish to look at the supported environments, this can be supported in the 
 ```bash
 python main_simple.py list-environments
 ```
+
 ### Snake
 The following will allow you to watch a very simple agent play the game of snake.
 To run the game, you can just enter the following command in the command line

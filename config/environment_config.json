@@ -6,7 +6,9 @@
         "environment": "environments.snake.snake_environment.SnakeEnv",
         "env_params": {
             "size": 10
-        }
+        },
+        "min_players": 1,
+        "max_players": 1
     },
     {
         "id": "minesweeper",
@@ -16,7 +18,9 @@
         "env_params": {
             "size": 10,
             "num_mines": 10
-        }
+        },
+        "min_players": 1,
+        "max_players": 1
     },
     {
         "id": "treasure_hunt",
@@ -25,6 +29,16 @@
         "environment": "environments.treasure_hunt.treasure_hunt_environment.TreasureHuntEnv",
         "env_params": {
             "size": 5
-        }
+        },
+        "min_players": 1,
+        "max_players": 1
+    },
+    {
+        "id": "tic_tac_toe",
+        "name": "Tic Tac Toe Environment",
+        "description": "A simple tic tac toe environment for testing agents.",
+        "environment": "environments.tic_tac_toe.tic_tac_toe_environment.TicTacToeEnv",
+        "min_players": 2,
+        "max_players": 2
     }
 ]
