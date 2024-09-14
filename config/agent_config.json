@@ -124,5 +124,13 @@
         "description": "A random classic agent for playing Tic Tac Toe that makes random moves",
         "agent": "agents.tic_tac_toe.random_agent.RandomTicTacToeAgent",
         "compatible_environments": ["tic_tac_toe"]
+    },
+    {
+        "id": "tic_tac_toe_mcts",
+        "name": "Monte Carlo Tree Search Tic Tac Toe Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A monte carlo tree search classic agent for playing Tic Tac Toe",
+        "agent": "agents.tic_tac_toe.mcts_agent.MonteCarloTreeSearchTicTacToeAgent",
+        "compatible_environments": ["tic_tac_toe"]
     }
 ]
