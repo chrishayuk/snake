@@ -29,6 +29,9 @@ class TicTacToeEnv(Environment):
 
         # Initialize action history
         self.action_history = []
+
+        # Alternating player flag
+        self.alternate_player = False
         
         # Reset the environment at initialization
         self.reset()
@@ -41,16 +44,26 @@ class TicTacToeEnv(Environment):
 
         # Reset the board and game status
         self.board = np.zeros((3, 3), dtype=int)
-        self.current_player = 1
         self.game_over = False
         self.steps = 0
         self.result_message = "Game is ongoing."
         self.action_history = []
-        self.game_end_time = None
 
-        # get the state
+        # Alternate players after each game
+        if self.alternate_player:
+            # Swap the players' roles
+            self.player_x_id, self.player_o_id = self.player_o_id, self.player_x_id
+            self.player_x_type, self.player_o_type = self.player_o_type, self.player_x_type
+
+            # Switch starting player
+            self.current_player = 2  # Set 'O' as the first player in the next game
+        else:
+            self.current_player = 1  # Set 'X' as the first player
+        self.alternate_player = not self.alternate_player
+
+        # return the state
         return self.get_state()
-
+    
     def get_state(self):
         # Return the current board state
         return np.copy(self.board)

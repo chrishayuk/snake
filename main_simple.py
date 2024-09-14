@@ -9,16 +9,16 @@ from environments.environment_loader import get_environment, list_environments
 def get_app_root():
     return os.path.dirname(os.path.abspath(__file__))
 
-def play(selected_env_id, selected_agents, providers=None, models=None, episodes=1000):
+# get the agent list
+def get_agents(game_id, env_config, selected_agents, providers=None, models=None):
     # Convert single agent string to a list if only one agent is provided
     if isinstance(selected_agents, str):
         selected_agents = [selected_agents]
 
-    # Create environment using the loader
-    env, env_config = get_environment(selected_env_id)
-
     # Check if the environment supports the number of agents provided
     num_agents = len(selected_agents)
+
+    # check the game supports the number of players
     if env_config.max_players and num_agents > env_config.max_players:
         raise ValueError(f"Too many agents provided! Environment {env_config.name} supports a maximum of {env_config.max_players} players.")
     elif env_config.min_players and num_agents < env_config.min_players:
@@ -37,8 +37,18 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
             raise ValueError(f"Agent {agent_config.name} is not compatible with environment {env_config.name}")
 
         # Set the game id for the agent and append to the agent list
-        agent.game_id = env.game_id
+        agent.game_id = game_id
         agents.append(agent)
+
+    # return the agents
+    return agents
+
+def play(selected_env_id, selected_agents, providers=None, models=None, episodes=1000):
+    # Create environment using the loader
+    env, env_config = get_environment(selected_env_id)
+
+    # get the agents
+    agents = get_agents(env.game_id, env_config, selected_agents, providers, models)
 
     # 1 second delay before starting
     time.sleep(1)
@@ -58,8 +68,10 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
         for agent in agents:
             # Perform action based on agent type (LLM or classic)
             if agent.agent_type == AgentType.LLM:
+                # get the action to perform from the llm agent using the render function
                 action = agent.get_action(env.steps + 1, env.get_render())
             else:
+                # get the action to perform the classic agent, using the state
                 action = agent.get_action(env.steps + 1, state)
 
             # Now perform a step in the environment
@@ -94,18 +106,27 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
             time.sleep(0.15)
 
 def list_available_environments():
+    # get the list of environments
     environments = list_environments()
+
+    # print the available environments
     print("Available Environments:")
     for env in environments:
+        # print the id and description
         print(f"{env.id} - {env.description}")
 
 def list_available_agents():
+    # get the list of agents
     agents = list_agents()
+
+    # print the agents
     print("Available Agents:")
     for agent in agents:
+       # agent id and description
        print(f"{agent.id} - {agent.description}")
 
 if __name__ == "__main__":
+    # setup the parser
     parser = argparse.ArgumentParser(description="Run the environment-agent simulation.")
     subparsers = parser.add_subparsers(dest="command")
 
@@ -123,14 +144,19 @@ if __name__ == "__main__":
     # Subparser for listing agents
     list_agent_parser = subparsers.add_parser("list-agents", help="List available agents")
 
+    # parse arguments
     args = parser.parse_args()
 
     if args.command == "play":
+        # play
         play(args.env, args.agents, args.providers, args.models, args.episodes)
     elif args.command == "list-environments":
+        # list available environments
         list_available_environments()
     elif args.command == "list-agents":
+        # list available agents
         list_available_agents()
     else:
+        # print help
         parser.print_help()
 
