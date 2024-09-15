@@ -126,6 +126,14 @@
         "compatible_environments": ["tic_tac_toe"]
     },
     {
+        "id": "tic_tac_toe_minimax",
+        "name": "MiniMax Tic Tac Toe Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A minimax classic agent for playing Tic Tac Toe",
+        "agent": "agents.tic_tac_toe.minimax_agent.MiniMaxTicTacToeAgent",
+        "compatible_environments": ["tic_tac_toe"]
+    },
+    {
         "id": "tic_tac_toe_random",
         "name": "Random Tic Tac Toe Agent",
         "type": "Tic Tac Toe Agent",
