@@ -38,9 +38,9 @@ class MiniMaxTicTacToeAgent(BaseTicTacToeAgent):
             game_id=self.game_id,          # The agent's ID (or game ID if applicable)
             step=step,                     # Current step in the game
             state=state,                   # Current board state
-            thought_process="Minimax decision",  # Description of the decision-making process
+            thought_process=f"best score was {best_score} for the best move {best_move}",  # Description of the decision-making process
             final_output=best_move,        # The best move chosen by the Minimax algorithm
-            response=best_score,           # The calculated score for the best move
+            response=best_move,            # The best move chosen by the Minimax algorithm
             time_completed=time_of_action  # Timestamp of when the action was completed
         )
 

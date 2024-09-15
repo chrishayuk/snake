@@ -1,3 +1,4 @@
+import time
 from agents.agent_type import AgentType
 from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
 
@@ -40,12 +41,12 @@ class SmartTicTacToeAgent(BaseTicTacToeAgent):
         # Log the decision with the logger
         time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
         self.logger.log_decision(
-            game_id=self.id,                 # The agent's ID (or game ID if applicable)
+            game_id=self.game_id,                 # The agent's ID (or game ID if applicable)
             step=step,                       # Current step in the game
             state=state,                     # Current board state
             thought_process=thought_process, # Description of the decision-making process
             final_output=best_move,          # The chosen move
-            response=None,                   # No additional response needed
+            response=best_move,              # The chosen move
             time_completed=time_of_action    # Timestamp of when the action was completed
         )
 

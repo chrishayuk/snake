@@ -39,9 +39,9 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeAgent):
             game_id=self.game_id,              # The agent's ID, but you can adjust if using a game ID elsewhere
             step=step,                    # Current step in the game
             state=state,                  # Current board state
-            thought_process="MCTS decision",  # Description of the decision-making process
-            final_output=best_move,       # The best move chosen by MCTS
-            response=best_score,          # The calculated win rate for the best move
+            thought_process=f"best score was {best_score} for the best move {best_move}",  # Description of the decision-making process
+            final_output=best_move,        # The best move chosen by the Minimax algorithm
+            response=best_move,            # The best move chosen by the Minimax algorithm
             time_completed=time_of_action # Timestamp of when the action was completed
         )
 

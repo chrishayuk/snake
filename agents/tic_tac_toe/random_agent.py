@@ -22,12 +22,12 @@ class RandomTicTacToeAgent(BaseTicTacToeAgent):
         # Log the decision with the logger
         time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
         self.logger.log_decision(
-            game_id=self.id,                # The agent's ID (or game ID if applicable)
+            game_id=self.game_id,                # The agent's ID (or game ID if applicable)
             step=step,                      # Current step in the game
             state=state,                    # Current board state
             thought_process="Random choice", # Description of the decision-making process
             final_output=random_move,       # The randomly selected move
-            response=None,                  # No specific response (optional for random agent)
+            response=random_move,           # No specific response (optional for random agent)
             time_completed=time_of_action   # Timestamp of when the action was completed
         )
 

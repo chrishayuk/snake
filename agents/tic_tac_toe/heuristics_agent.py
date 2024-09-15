@@ -57,6 +57,6 @@ class HeuristicsTicTacToeAgent(BaseTicTacToeAgent):
 
         # Log the decision with the logger
         time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
-        self.logger.log_decision(self.game_id, step, state, description, best_move, None, time_of_action)
+        self.logger.log_decision(self.game_id, step, state, description, best_move, best_move, time_of_action)
 
         return best_move

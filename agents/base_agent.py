@@ -34,4 +34,4 @@ class BaseAgent(ABC):
         time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
         # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, step, state, "", "", "", time_completed)
+        self.logger.log_decision(self.game_id, step, state, "Game Over", "Game Over", "Game Over", time_completed)
