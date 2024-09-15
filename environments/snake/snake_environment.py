@@ -1,4 +1,3 @@
-# File: environments/snake/snake_environment.py
 import numpy as np
 import os
 import random
@@ -6,7 +5,7 @@ import uuid
 from agents.snake.snake_action import SnakeAction
 from environments.environment_base import Environment
 from environments.snake.action_history import ActionHistory
-from environments.snake.reward_functions import simple_reward as reward_function
+from environments.snake.reward_functions import improved_reward  # Updated to use improved_reward
 
 class SnakeEnv(Environment):
     def __init__(self, size=10, agents=None):
@@ -27,9 +26,6 @@ class SnakeEnv(Environment):
         # Initialize agents (if provided)
         self.agents = agents if agents else []  # Store agents
         
-        # set the reward function
-        self.reward_function = reward_function
-
         # set the steps, and steps since last food
         self.steps = 0
         self.steps_since_last_food = 0
@@ -131,6 +127,28 @@ class SnakeEnv(Environment):
         # return the state
         return state
     
+    def get_valid_actions(self):
+        """
+        Returns a list of valid actions based on the snake's current direction.
+        Prevents the snake from turning into its own body (180-degree turn).
+        
+        Returns:
+            valid_actions (list): List of valid SnakeAction objects.
+        """
+        valid_actions = [SnakeAction.UP, SnakeAction.RIGHT, SnakeAction.DOWN, SnakeAction.LEFT]
+        current_direction = next(key for key, value in self.direction_dict.items() if value == self.direction)
+        
+        if current_direction == SnakeAction.UP:
+            valid_actions.remove(SnakeAction.DOWN)  # Remove invalid downward action
+        elif current_direction == SnakeAction.DOWN:
+            valid_actions.remove(SnakeAction.UP)    # Remove invalid upward action
+        elif current_direction == SnakeAction.LEFT:
+            valid_actions.remove(SnakeAction.RIGHT) # Remove invalid right action
+        elif current_direction == SnakeAction.RIGHT:
+            valid_actions.remove(SnakeAction.LEFT)  # Remove invalid left action
+        
+        return valid_actions
+    
     def step(self, action: SnakeAction = SnakeAction.NONE, agent=None):
         # Ensure action is an instance of SnakeAction
         if not isinstance(action, SnakeAction):
@@ -161,7 +179,7 @@ class SnakeEnv(Environment):
             self.game_over = True
 
             # Assign the reward for game over and update the agent's reward
-            reward = self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food)
+            reward = improved_reward(eaten=False, dead=True, steps=self.steps_since_last_food, repeated_action=(action == prev_direction), snake_head=self.snake[-1], food_position=self.food)
             if agent:
                 agent.add_reward(reward)
 
@@ -173,7 +191,7 @@ class SnakeEnv(Environment):
             self.game_over = True
 
             # Assign the reward for game over and update the agent's reward
-            reward = self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food)
+            reward = improved_reward(eaten=False, dead=True, steps=self.steps_since_last_food, repeated_action=(action == prev_direction), snake_head=self.snake[-1], food_position=self.food)
             if agent:
                 agent.add_reward(reward)
 
@@ -190,7 +208,7 @@ class SnakeEnv(Environment):
             self.place_food()
 
             # set the reward for eating and update the agent's reward
-            reward = self.reward_function(eaten=True, dead=False, steps=self.steps_since_last_food)
+            reward = improved_reward(eaten=True, dead=False, steps=self.steps_since_last_food, repeated_action=False, snake_head=self.snake[-1], food_position=self.food)
             if agent:
                 agent.add_reward(reward)
             
@@ -201,7 +219,7 @@ class SnakeEnv(Environment):
             self.snake.pop(0)
 
             # set the reward for moving and update the agent's reward
-            reward = self.reward_function(eaten=False, dead=False, steps=self.steps_since_last_food)
+            reward = improved_reward(eaten=False, dead=False, steps=self.steps_since_last_food, repeated_action=(action == prev_direction), snake_head=self.snake[-1], food_position=self.food)
             if agent:
                 agent.add_reward(reward)
 
