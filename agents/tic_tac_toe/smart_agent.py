@@ -1,3 +1,4 @@
+from agents.agent_type import AgentType
 from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
 
 class SmartTicTacToeAgent(BaseTicTacToeAgent):
@@ -6,9 +7,9 @@ class SmartTicTacToeAgent(BaseTicTacToeAgent):
         super().__init__(id, name, description, player)
 
     @property
-    def agent_type(self) -> str:
+    def agent_type(self) -> AgentType:
         """Return the type of the agent."""
-        return "Smart Tic-Tac-Toe"
+        return AgentType.CLASSIC
     
     def find_winning_move(self, state, player) -> int:
         """

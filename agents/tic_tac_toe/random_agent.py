@@ -1,3 +1,4 @@
+from agents.agent_type import AgentType
 from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
 
 class RandomTicTacToeAgent(BaseTicTacToeAgent):
@@ -6,9 +7,9 @@ class RandomTicTacToeAgent(BaseTicTacToeAgent):
         super().__init__(id, name, description, player)
 
     @property
-    def agent_type(self) -> str:
+    def agent_type(self) -> AgentType:
         """Return the type of the agent."""
-        return "Random Tic-Tac-Toe"
+        return AgentType.CLASSIC
 
     def get_action(self, step: int, state) -> int:
         """ Get a random valid action for the agent. """

@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import math
+from agents.agent_type import AgentType
 from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
 from collections import defaultdict
 
@@ -14,9 +15,9 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeAgent):
         self.state_children = {}  # Store the possible actions (children) for each state
 
     @property
-    def agent_type(self) -> str:
+    def agent_type(self) -> AgentType:
         """Return the type of the agent."""
-        return "Monte Carlo Tree Search Tic-Tac-Toe"
+        return AgentType.CLASSIC
 
     def get_action(self, step: int, state) -> int:
         """
