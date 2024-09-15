@@ -1,4 +1,3 @@
-# File: environments/tic_tac_toe/tic_tac_toe_environment.py
 import os
 import uuid
 import numpy as np
@@ -91,11 +90,9 @@ class TicTacToeEnv(Environment):
             # Swap the agents
             swapped_agents = [self.original_agents[1], self.original_agents[0]]
             self.agents = swapped_agents
-            logger.info("Swapped Player X and Player O.")
         else:
             # Keep the original order
             self.agents = self.original_agents.copy()
-            logger.info("Set agents without swapping.")
 
         # Update player IDs and types based on the current agent order
         if len(self.agents) >= 2:
@@ -113,7 +110,7 @@ class TicTacToeEnv(Environment):
         # Return the state
         return self.get_state()
 
-    def step(self, action):
+    def step(self, action, agent=None):
         """
         Take a step in the environment. The action is expected to be a number from 1 to 9,
         representing the position where the current player wants to place their mark.
@@ -156,8 +153,10 @@ class TicTacToeEnv(Environment):
             self.result_message = f"Player {'X' if self.current_player == 1 else 'O'} wins!"
             self.game_end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-            # Assign reward based on the win
+            # Assign reward based on the win and update agent reward
             reward = self.reward_function(won=True, draw=False, ongoing=False)
+            if agent:
+                agent.add_reward(reward)
 
             # Return the state, reward, and game over status
             return self.get_state(), reward, self.game_over
@@ -168,14 +167,18 @@ class TicTacToeEnv(Environment):
             self.result_message = "The game is a draw."
             self.game_end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-            # Assign reward based on the draw
+            # Assign reward based on the draw and update agent reward
             reward = self.reward_function(won=False, draw=True, ongoing=False)
+            if agent:
+                agent.add_reward(reward)
 
             # Return the state, reward, and game over status
             return self.get_state(), reward, self.game_over
 
-        # If game is ongoing, return neutral reward
+        # If game is ongoing, return neutral reward and update agent reward
         reward = self.reward_function(won=False, draw=False, ongoing=True)
+        if agent:
+            agent.add_reward(reward)
 
         # Render before switching player
         self.render()
@@ -226,7 +229,7 @@ class TicTacToeEnv(Environment):
 
         render_str += "\n"
         
-        # Add Game Instructions for simpler move system
+        # Add Game Instructions
         instructions = [
             "Game Instructions:",
             "-" * 35,
@@ -255,8 +258,8 @@ class TicTacToeEnv(Environment):
             f" Result          : {self.result_message}",
             "-" * 35,
         ]
-        
-        # Player information with agent types
+
+        # Player information
         player_info = [
             "Players:",
             "-" * 35,
@@ -289,6 +292,7 @@ class TicTacToeEnv(Environment):
         render_str += "\n".join(instructions) + "\n\n" + "\n".join(game_state) + "\n\n" + "\n".join(player_info) + "\n\n" + "\n".join(legend) + "\n" + action_history_str
         
         return render_str
+
 
     def get_action_history(self):
         """Return the full action history."""

@@ -52,7 +52,7 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
     # Get the agents and their types
     agents = get_agents(env.game_id, env_config, selected_agents, providers, models)
 
-    # Set agents in the environment (environment now handles swapping)
+    # Set agents in the environment (for both SnakeEnv and TicTacToeEnv)
     if hasattr(env, 'set_agents'):
         env.set_agents(agents)
 
@@ -65,7 +65,7 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
         # Reset the environment (this will handle player swapping)
         state = env.reset()
 
-        # Render the environment
+        # Render the environment initially
         env.render()
 
         # 150 millisecond delay
@@ -79,11 +79,14 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
                     # Get the action to perform from the LLM agent using the render function
                     action = agent.get_action(env.steps + 1, env.get_render())
                 else:
-                    # Get the action to perform the classic agent, using the state
+                    # Get the action to perform from the classic agent, using the state
                     action = agent.get_action(env.steps + 1, state)
 
                 # Now perform a step in the environment
                 state, reward, game_over = env.step(action)
+
+                # **Render after every step** to reflect the current state
+                env.render()
 
                 # Break if the game is over
                 if game_over:
@@ -96,7 +99,7 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
             if env.game_over:
                 break
 
-        # Render the environment
+        # Render the environment at the end of the episode as well
         env.render()
 
         # 2 second delay
@@ -110,6 +113,7 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
                 agent.game_over(env.steps + 1, state)
 
         # Continue to the next episode (game)
+
 
 def list_available_environments():
     # Get the list of environments

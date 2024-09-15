@@ -9,7 +9,7 @@ from environments.snake.action_history import ActionHistory
 from environments.snake.reward_functions import simple_reward as reward_function
 
 class SnakeEnv(Environment):
-    def __init__(self, size=10):
+    def __init__(self, size=10, agents=None):
         # set the game_id
         self.game_id = str(uuid.uuid4())
         
@@ -24,6 +24,9 @@ class SnakeEnv(Environment):
             SnakeAction.LEFT: (0, -1)
         }
 
+        # Initialize agents (if provided)
+        self.agents = agents if agents else []  # Store agents
+        
         # set the reward function
         self.reward_function = reward_function
 
@@ -36,6 +39,12 @@ class SnakeEnv(Environment):
         
         # reset the environment
         self.reset()
+
+    def set_agents(self, agents):
+        """
+        Set agent names and types for the environment.
+        """
+        self.agents = agents
 
     def place_food(self):
         # loop
@@ -122,7 +131,7 @@ class SnakeEnv(Environment):
         # return the state
         return state
     
-    def step(self, action: SnakeAction = SnakeAction(SnakeAction.NONE)):
+    def step(self, action: SnakeAction = SnakeAction.NONE, agent=None):
         # Ensure action is an instance of SnakeAction
         if not isinstance(action, SnakeAction):
             action = SnakeAction(action)
@@ -151,16 +160,24 @@ class SnakeEnv(Environment):
             # game over
             self.game_over = True
 
-            # return game state, reward, and game over
-            return self.get_state(), self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food), self.game_over
+            # Assign the reward for game over and update the agent's reward
+            reward = self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food)
+            if agent:
+                agent.add_reward(reward)
+
+            return self.get_state(), reward, self.game_over
         
         # Check if we took too many steps
         if self.steps_since_last_food > 100:
             # game over
             self.game_over = True
 
-            # return game state, reward, and game over
-            return self.get_state(), self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food), self.game_over
+            # Assign the reward for game over and update the agent's reward
+            reward = self.reward_function(eaten=False, dead=True, steps=self.steps_since_last_food)
+            if agent:
+                agent.add_reward(reward)
+
+            return self.get_state(), reward, self.game_over
 
         # add the new head to the snake
         self.snake.append(new_head)
@@ -172,8 +189,10 @@ class SnakeEnv(Environment):
             # Place new food
             self.place_food()
 
-            # set the reward
+            # set the reward for eating and update the agent's reward
             reward = self.reward_function(eaten=True, dead=False, steps=self.steps_since_last_food)
+            if agent:
+                agent.add_reward(reward)
             
             # Reset steps since last food eaten
             self.steps_since_last_food = 0
@@ -181,8 +200,10 @@ class SnakeEnv(Environment):
             # Remove the tail if food wasn't eaten
             self.snake.pop(0)
 
-            # set the reward
+            # set the reward for moving and update the agent's reward
             reward = self.reward_function(eaten=False, dead=False, steps=self.steps_since_last_food)
+            if agent:
+                agent.add_reward(reward)
 
             # increase steps since last food
             self.steps_since_last_food += 1
@@ -194,7 +215,7 @@ class SnakeEnv(Environment):
         return self.get_state(), reward, self.game_over
 
     def get_render(self):
-        # Set the grid as .'s
+        render_str = "\n"
         grid = [['.' for _ in range(self.size)] for _ in range(self.size)]
 
         # Set the snake body position in the grid
@@ -209,51 +230,69 @@ class SnakeEnv(Environment):
         food_x, food_y = self.food
         grid[food_x][food_y] = 'F'
 
+        # Game Board Header
+        render_str += "Game Board:\n"
+        
         # Convert grid to a string
         grid_str = '\n'.join([' '.join(row) for row in grid])
+        render_str += grid_str + "\n\n"
 
-        # Get the current direction as a string
-        current_direction_action = next(key for key, value in self.direction_dict.items() if value == self.direction)
-        direction_str = str(SnakeAction(current_direction_action))
+        # Game Instructions
+        instructions = [
+            "Game Instructions:",
+            "-" * 35,
+            "1. Control the snake to eat the food (F).",
+            "2. Use actions to move the snake (UP, DOWN, LEFT, RIGHT).",
+            "3. Avoid hitting the walls or the snake’s own body.",
+            "4. The game ends when the snake dies or reaches a length limit.",
+            "-" * 35,
+        ]
+        
+        # Game details
+        game_state = [
+            "Game Information:",
+            "-" * 35,
+            f" Game ID             : {self.game_id}",
+            f" Steps Taken         : {self.steps}",
+            f" Steps Since Last Food: {self.steps_since_last_food}",
+            f" Snake Length        : {len(self.snake)}",
+            f" Snake Head Position : {self.snake[-1]}",
+            f" Food Position       : {self.food}",
+            f" Game Over           : {self.game_over}",
+            "-" * 35,
+        ]
 
-        # Prepare additional information
+        # Legend
         legend = [
             "Legend:",
+            "-" * 35,
             " H - Head of the snake",
             " O - Body of the snake",
             " F - Food",
             " . - Empty space",
-            ""
+            "-" * 35,
         ]
-
-        game_state = [
-            "Game State:",
-            f" Score: {len(self.snake) - 1}",
-            f" Current Direction: {direction_str}",
-            f" Steps since last food: {self.steps_since_last_food}",
-            f" Total steps: {self.steps}",
-            f" Game over: {self.game_over}",
-            f" Snake Length: {len(self.snake)}",
-            f" Snake Head Position: {self.snake[-1]}",
-            f" Snake Body Positions: {self.snake[:-1]}",
-            f" Food Position: {self.food}"
-        ]
-
-        # Prepare action history
-        action_history_str = ["\nAction History:"]
-        for record in self.action_history.get_history():
-            direction = str(SnakeAction(record['snake_direction']))
-            action = str(SnakeAction(record['action'].action))
-            action_history_str.append(
-                f" Step: {record['step']}, Current Position: {record['snake_head_position']}, "
-                f"Current Direction: {direction}, Snake Length: {record['snake_length']}, "
-                f"Agent Chosen Action: {action}"
-            )
-
-        # Combine grid, legend, game state information, and action history
-        render_str = "\n".join(legend) + "\n" + grid_str + "\n\n" + "\n".join(game_state) + "\n".join(action_history_str)
+        
+        # Action History
+        action_history_str = "\nAction History:\n" + "-" * 35 + "\n"
+        if self.action_history.get_history():
+            for record in self.action_history.get_history():
+                direction = str(SnakeAction(record['snake_direction']))
+                action = str(SnakeAction(record['action'].action))
+                action_history_str += (
+                    f" Step: {record['step']}, Position: {record['snake_head_position']}, "
+                    f"Direction: {direction}, Length: {record['snake_length']}, Action: {action}\n"
+                )
+        else:
+            action_history_str += " No actions have been made yet."
+        
+        action_history_str += "-" * 35
+        
+        # Combine all parts for the final render string
+        render_str += "\n".join(instructions) + "\n\n" + "\n".join(game_state) + "\n\n" + "\n".join(legend) + "\n\n" + action_history_str
 
         return render_str
+
 
     def render(self):
         # Clear the console
