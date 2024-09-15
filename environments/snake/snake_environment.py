@@ -69,8 +69,8 @@ class SnakeEnv(Environment):
         self.steps = 0
         self.steps_since_last_food = 0
 
-        # reset action history
-        self.action_history = ActionHistory()
+        # Reset the action history
+        self.action_history.clear()
 
         # return the state
         return self.get_state()

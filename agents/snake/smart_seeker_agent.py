@@ -1,5 +1,6 @@
 # File: agents/snake/smart_seeker_agent.py
 import time
+from agents.agent_action import AgentAction
 from agents.snake.snake_action import SnakeAction
 from agents.snake.classic_agent import ClassicAgent
 

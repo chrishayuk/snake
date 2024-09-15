@@ -132,5 +132,14 @@
         "description": "A monte carlo tree search classic agent for playing Tic Tac Toe",
         "agent": "agents.tic_tac_toe.mcts_agent.MonteCarloTreeSearchTicTacToeAgent",
         "compatible_environments": ["tic_tac_toe"]
+    },
+    {
+        "id": "tic_tac_toe_llm",
+        "name": "Generic LLM Tic Tac Toe Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A generic LLM agent for playing Tic Tac Toe",
+        "agent": "agents.tic_tac_toe.llm_agent.LLMAgent",
+        "agent_params": {},
+        "compatible_environments": ["tic_tac_toe"]
     }
 ]

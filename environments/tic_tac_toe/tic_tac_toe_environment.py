@@ -1,11 +1,19 @@
+# File: environments/tic_tac_toe/tic_tac_toe_environment.py
 import os
 import uuid
 import numpy as np
+import logging
 from datetime import datetime
 from environments.environment_base import Environment
+from environments.tic_tac_toe.action_history import ActionHistory
+from environments.tic_tac_toe.reward_functions import simple_reward
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class TicTacToeEnv(Environment):
-    def __init__(self, player_x_id="PlayerX", player_o_id="PlayerO", player_x_type="AI", player_o_type="AI"):
+    def __init__(self, player_x_id="PlayerX", player_o_id="PlayerO", player_x_type="AI", player_o_type="AI", reward_function=simple_reward):
         # Player information
         self.player_x_id = player_x_id
         self.player_o_id = player_o_id
@@ -17,6 +25,9 @@ class TicTacToeEnv(Environment):
         
         # Current player (1 for 'X', 2 for 'O')
         self.current_player = 1
+
+        # Reward function
+        self.reward_function = reward_function
         
         # Track if the game is over
         self.game_over = False
@@ -27,16 +38,40 @@ class TicTacToeEnv(Environment):
         # Steps taken in the game
         self.steps = 0
 
-        # Initialize action history
-        self.action_history = []
+        # Action history (newly added)
+        self.action_history = ActionHistory()
 
-        # Alternating player flag
-        self.alternate_player = False
+        # Swap players flag
+        self.swap_players = False  # Initialize swapping flag
         
+        # Agents list
+        self.original_agents = []  # Preserve original agent order
+        self.agents = []  # Current agent order
+
         # Reset the environment at initialization
         self.reset()
 
+    def set_agents(self, agents):
+        """
+        Set agent names and types for Player X and Player O based on the passed list.
+        Preserves the original agent order.
+        """
+        self.original_agents = agents.copy()  # Preserve original order
+        self.agents = agents.copy()  # Set current agents
+
+        if len(self.agents) >= 2:
+            self.player_x_id = self.agents[0].name  # Agent name for Player X
+            self.player_x_type = getattr(self.agents[0], 'agent_type', "Unknown")  # Agent type for Player X
+            self.player_o_id = self.agents[1].name  # Agent name for Player O
+            self.player_o_type = getattr(self.agents[1], 'agent_type', "Unknown")  # Agent type for Player O
+            logger.info(f"Agents set: Player X -> {self.player_x_id}, Player O -> {self.player_o_id}")
+        else:
+            logger.warning("Insufficient agents to set Player X and Player O.")
+
     def reset(self):
+        """
+        Reset the environment for a new episode. Handles player swapping based on the swap_players flag.
+        """
         # Set the game_id and start time
         self.game_id = str(uuid.uuid4())
         self.game_start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -47,45 +82,49 @@ class TicTacToeEnv(Environment):
         self.game_over = False
         self.steps = 0
         self.result_message = "Game is ongoing."
-        self.action_history = []
 
-        # Alternate players after each game
-        if self.alternate_player:
-            # Swap the players' roles
-            self.player_x_id, self.player_o_id = self.player_o_id, self.player_x_id
-            self.player_x_type, self.player_o_type = self.player_o_type, self.player_x_type
+        # Reset the action history
+        self.action_history.clear()
 
-            # Switch starting player
-            self.current_player = 2  # Set 'O' as the first player in the next game
+        # Determine agent order based on swap_players flag
+        if self.swap_players and len(self.original_agents) >= 2:
+            # Swap the agents
+            swapped_agents = [self.original_agents[1], self.original_agents[0]]
+            self.agents = swapped_agents
+            logger.info("Swapped Player X and Player O.")
         else:
-            self.current_player = 1  # Set 'X' as the first player
-        self.alternate_player = not self.alternate_player
+            # Keep the original order
+            self.agents = self.original_agents.copy()
+            logger.info("Set agents without swapping.")
 
-        # return the state
+        # Update player IDs and types based on the current agent order
+        if len(self.agents) >= 2:
+            self.player_x_id = self.agents[0].name
+            self.player_x_type = getattr(self.agents[0], 'agent_type', "Unknown")
+            self.player_o_id = self.agents[1].name
+            self.player_o_type = getattr(self.agents[1], 'agent_type', "Unknown")
+
+        # Toggle the swap_players flag for the next game
+        self.swap_players = not self.swap_players
+
+        # Set the current player to always start with Player X
+        self.current_player = 1  # Player X goes first
+
+        # Return the state
         return self.get_state()
-    
-    def set_agents(self, agents):
-        """Set agent names and types for Player X and Player O based on the passed list."""
-        if len(agents) >= 2:
-            # Assuming agents have a config attribute containing the type
-            self.player_x_id = agents[0].name  # Agent name for Player X
-            self.player_x_type = agents[0].agent_type if hasattr(agents[0], 'agent_type') else "Unknown"  # Agent type for Player X
-            self.player_o_id = agents[1].name  # Agent name for Player O
-            self.player_o_type = agents[1].agent_type if hasattr(agents[1], 'agent_type') else "Unknown"  # Agent type for Player O
-
-
-        
-    def get_state(self):
-        # Return the current board state
-        return np.copy(self.board)
 
     def step(self, action):
         """
         Take a step in the environment. The action is expected to be a number from 1 to 9,
         representing the position where the current player wants to place their mark.
         """
+        # Check if the game is over
         if self.game_over:
             raise ValueError("Game is over. Please reset the environment.")
+        
+        # Check the move is valid
+        if action not in range(1, 10):
+            raise ValueError(f"Invalid move: {action}. Must be between 1 and 9.")
 
         # Convert the action (1-9) into row, col coordinates
         action_map = {
@@ -94,38 +133,49 @@ class TicTacToeEnv(Environment):
             7: (2, 0), 8: (2, 1), 9: (2, 2)
         }
 
-        if action not in action_map:
-            raise ValueError(f"Invalid action: {action} is not a valid move (1-9).")
-
+        # Check the move is valid
         row, col = action_map[action]
-
+        
         if self.board[row, col] != 0:
             raise ValueError(f"Invalid action: Cell ({row}, {col}) is already occupied.")
-
-        # Log the action to the action history
-        self.action_history.append({
-            "step": self.steps + 1,
-            "player": 'X' if self.current_player == 1 else 'O',
-            "action": action  # Log the number instead of tuple
-        })
 
         # Place the player's mark
         self.board[row, col] = self.current_player
         self.steps += 1
+
+        # Add action to action history
+        self.action_history.add_record(
+            step=self.steps,
+            player='X' if self.current_player == 1 else 'O',
+            action=action
+        )
 
         # Check if the current player wins
         if self.check_win(self.current_player):
             self.game_over = True
             self.result_message = f"Player {'X' if self.current_player == 1 else 'O'} wins!"
             self.game_end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            return self.get_state(), 1 if self.current_player == 1 else -1, self.game_over
+
+            # Assign reward based on the win
+            reward = self.reward_function(won=True, draw=False, ongoing=False)
+
+            # Return the state, reward, and game over status
+            return self.get_state(), reward, self.game_over
 
         # Check for draw
         if self.steps == 9:
             self.game_over = True
             self.result_message = "The game is a draw."
             self.game_end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            return self.get_state(), 0, self.game_over  # Draw
+
+            # Assign reward based on the draw
+            reward = self.reward_function(won=False, draw=True, ongoing=False)
+
+            # Return the state, reward, and game over status
+            return self.get_state(), reward, self.game_over
+
+        # If game is ongoing, return neutral reward
+        reward = self.reward_function(won=False, draw=False, ongoing=True)
 
         # Render before switching player
         self.render()
@@ -133,9 +183,16 @@ class TicTacToeEnv(Environment):
         # Switch to the next player
         self.current_player = 2 if self.current_player == 1 else 1
 
-        # No win or draw, return neutral reward
-        return self.get_state(), 0, self.game_over
-
+        # Return state, reward, and game_over flag
+        return self.get_state(), reward, self.game_over
+    
+    def get_state(self):
+        # Return the current board state
+        return np.copy(self.board)
+    
+    def get_valid_moves(self):
+        """Return a list of valid moves (empty cells) from the current board state."""
+        return [i+1 for i, cell in enumerate(self.board.flatten()) if cell == 0]
 
     def check_win(self, player):
         """
@@ -199,7 +256,7 @@ class TicTacToeEnv(Environment):
             "-" * 35,
         ]
         
-        # Player information with agent types (assumed agent_type is accessible)
+        # Player information with agent types
         player_info = [
             "Players:",
             "-" * 35,
@@ -221,7 +278,7 @@ class TicTacToeEnv(Environment):
         # Action history
         action_history_str = "\nAction History:\n" + "-" * 35 + "\n"
         if self.action_history:
-            for record in self.action_history:
+            for record in self.get_action_history():
                 action_history_str += f" Step {record['step']} : {record['player']} placed mark at {record['action']}\n"
         else:
             action_history_str += " No actions have been made yet."
@@ -234,7 +291,5 @@ class TicTacToeEnv(Environment):
         return render_str
 
     def get_action_history(self):
-        """
-        Returns the action history as a list of dictionaries.
-        """
-        return self.action_history
+        """Return the full action history."""
+        return self.action_history.get_history()

@@ -9,7 +9,7 @@ from environments.environment_loader import get_environment, list_environments
 def get_app_root():
     return os.path.dirname(os.path.abspath(__file__))
 
-# get the agent list
+# Get the agent list
 def get_agents(game_id, env_config, selected_agents, providers=None, models=None):
     # Convert single agent string to a list if only one agent is provided
     if isinstance(selected_agents, str):
@@ -18,7 +18,7 @@ def get_agents(game_id, env_config, selected_agents, providers=None, models=None
     # Check if the environment supports the number of agents provided
     num_agents = len(selected_agents)
 
-    # check the game supports the number of players
+    # Check if the game supports the number of players
     if env_config.max_players and num_agents > env_config.max_players:
         raise ValueError(f"Too many agents provided! Environment {env_config.name} supports a maximum of {env_config.max_players} players.")
     elif env_config.min_players and num_agents < env_config.min_players:
@@ -27,7 +27,7 @@ def get_agents(game_id, env_config, selected_agents, providers=None, models=None
     # Initialize agents
     agents = []
 
-    # loop through the agents
+    # Loop through the agents
     for i, agent_id in enumerate(selected_agents):
         agent_params = {}
         if providers and i < len(providers) and models and i < len(models):
@@ -52,88 +52,87 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
     # Get the agents and their types
     agents = get_agents(env.game_id, env_config, selected_agents, providers, models)
 
-    # Pass agent types to environment
+    # Set agents in the environment (environment now handles swapping)
     if hasattr(env, 'set_agents'):
-        env.set_agents(agents)  # Pass agent types to the environment
+        env.set_agents(agents)
 
     # 1 second delay before starting
     time.sleep(1)
 
-    # Initialize state
-    state = env.reset()
-
     # Loop for the specified number of episodes
-    for episode in range(episodes):
+    for episode in range(1, episodes + 1):
+        print(f"\n=== Episode {episode} ===\n")
+        # Reset the environment (this will handle player swapping)
+        state = env.reset()
+
         # Render the environment
         env.render()
 
         # 150 millisecond delay
         time.sleep(0.15)
 
-        # Loop through agents in turns
-        for agent in agents:
-            # Perform action based on agent type (LLM or classic)
-            if agent.agent_type == AgentType.LLM:
-                # get the action to perform from the llm agent using the render function
-                action = agent.get_action(env.steps + 1, env.get_render())
-            else:
-                # get the action to perform the classic agent, using the state
-                action = agent.get_action(env.steps + 1, state)
+        # Loop until the game is over
+        while not env.game_over:
+            for agent in env.agents:
+                # Perform action based on agent type (LLM or classic)
+                if agent.agent_type == AgentType.LLM:
+                    # Get the action to perform from the LLM agent using the render function
+                    action = agent.get_action(env.steps + 1, env.get_render())
+                else:
+                    # Get the action to perform the classic agent, using the state
+                    action = agent.get_action(env.steps + 1, state)
 
-            # Now perform a step in the environment
-            state, reward, game_over = env.step(action)
+                # Now perform a step in the environment
+                state, reward, game_over = env.step(action)
 
-            # Break if the game is over
-            if game_over:
-                # Render the environment
-                env.render()
+                # Break if the game is over
+                if game_over:
+                    break
 
-                # 2 second delay
-                time.sleep(2)
+                # 150 millisecond delay between actions
+                time.sleep(0.15)
 
-                # Perform game over actions for all agents
-                for agent in agents:
-                    if agent.agent_type == AgentType.LLM:
-                        agent.game_over(env.steps + 1, env.get_render())
-                    else:
-                        agent.game_over(env.steps + 1, state)
-
-                # Reset the environment
-                state = env.reset()
-
-                # Set the game id for all agents
-                for agent in agents:
-                    agent.game_id = env.game_id
-
-                # Break out of the inner loop to reset the episode
+            # Break the outer loop if the game is over
+            if env.game_over:
                 break
 
-            # 150 millisecond delay between actions
-            time.sleep(0.15)
+        # Render the environment
+        env.render()
 
+        # 2 second delay
+        time.sleep(2)
+
+        # Perform game over actions for all agents
+        for agent in env.agents:
+            if agent.agent_type == AgentType.LLM:
+                agent.game_over(env.steps + 1, env.get_render())
+            else:
+                agent.game_over(env.steps + 1, state)
+
+        # Continue to the next episode (game)
 
 def list_available_environments():
-    # get the list of environments
+    # Get the list of environments
     environments = list_environments()
 
-    # print the available environments
+    # Print the available environments
     print("Available Environments:")
     for env in environments:
-        # print the id and description
+        # Print the id and description
         print(f"{env.id} - {env.description}")
 
 def list_available_agents():
-    # get the list of agents
+    # Get the list of agents
     agents = list_agents()
 
-    # print the agents
+    # Print the agents
     print("Available Agents:")
     for agent in agents:
-       # agent id and description
+       # Agent id and description
        print(f"{agent.id} - {agent.description}")
 
 if __name__ == "__main__":
-    # setup the parser
+    # Setup the parser
     parser = argparse.ArgumentParser(description="Run the environment-agent simulation.")
     subparsers = parser.add_subparsers(dest="command")
 
@@ -151,19 +150,18 @@ if __name__ == "__main__":
     # Subparser for listing agents
     list_agent_parser = subparsers.add_parser("list-agents", help="List available agents")
 
-    # parse arguments
+    # Parse arguments
     args = parser.parse_args()
 
     if args.command == "play":
-        # play
+        # Play
         play(args.env, args.agents, args.providers, args.models, args.episodes)
     elif args.command == "list-environments":
-        # list available environments
+        # List available environments
         list_available_environments()
     elif args.command == "list-agents":
-        # list available agents
+        # List available agents
         list_available_agents()
     else:
-        # print help
+        # Print help
         parser.print_help()
-

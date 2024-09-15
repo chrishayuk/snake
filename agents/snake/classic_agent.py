@@ -1,5 +1,4 @@
 # File: agents/snake/classic_agent.py
-import time
 import numpy as np
 from typing import Tuple
 from agents.agent_type import AgentType

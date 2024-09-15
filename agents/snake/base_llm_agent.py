@@ -29,7 +29,7 @@ class BaseSnakeLLMAgent(BaseLLMAgent):
         thought_process = extract_thought_process(response)
         final_output = extract_final_output(response)
         time_completed = extract_time_completed(response)
-
+        
         # log the decision
         self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed)
 

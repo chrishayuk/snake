@@ -1,13 +1,12 @@
 import random
 import numpy as np
 import math
-from agents.base_agent import BaseAgent
+from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
 from collections import defaultdict
 
-class MonteCarloTreeSearchTicTacToeAgent(BaseAgent):
+class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeAgent):
     def __init__(self, id: str, name: str, description: str, player=2, simulations=10000, exploration_weight=1):
-        super().__init__(id, name, description)
-        self.player = player  # The agent's player (1 for 'X' or 2 for 'O')
+        super().__init__(id, name, description, player)
         self.simulations = simulations  # Number of simulations for MCTS
         self.exploration_weight = exploration_weight  # Exploration constant for UCT
         self.state_visits = defaultdict(int)  # Store visit counts for each state
@@ -128,43 +127,3 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseAgent):
                 best_action = action
         
         return best_action
-
-    def get_available_actions(self, state) -> list:
-        """Return the list of available actions (1-9) based on the current board state."""
-        action_map = {
-            (0, 0): 1, (0, 1): 2, (0, 2): 3,
-            (1, 0): 4, (1, 1): 5, (1, 2): 6,
-            (2, 0): 7, (2, 1): 8, (2, 2): 9
-        }
-        empty_positions = [(r, c) for r in range(3) for c in range(3) if state[r, c] == 0]
-        return [action_map[(r, c)] for (r, c) in empty_positions]
-
-    def apply_action(self, state, action, player):
-        """Apply an action to the board and return the resulting state."""
-        action_map = {
-            1: (0, 0), 2: (0, 1), 3: (0, 2),
-            4: (1, 0), 5: (1, 1), 6: (1, 2),
-            7: (2, 0), 8: (2, 1), 9: (2, 2)
-        }
-        row, col = action_map[action]
-        new_state = np.copy(state)
-        new_state[row, col] = player
-        return new_state
-
-    def is_terminal(self, state) -> bool:
-        """Check if the game has reached a terminal state (win or draw)."""
-        return self.get_winner(state) is not None or not np.any(state == 0)
-
-    def get_winner(self, state):
-        """Check for a winner. Return 1 for X, 2 for O, or 0 for draw."""
-        for player in [1, 2]:
-            if (
-                any(np.all(state[row, :] == player) for row in range(3)) or
-                any(np.all(state[:, col] == player) for col in range(3)) or
-                np.all(np.diag(state) == player) or
-                np.all(np.diag(np.fliplr(state)) == player)
-            ):
-                return player
-        if not np.any(state == 0):
-            return 0  # Draw
-        return None

@@ -3,6 +3,7 @@ from agents.snake.snake_action import SnakeAction
 
 class ActionHistory:
     def __init__(self):
+        # Initialize the history list
         self.history = []
 
     def add_record(self, step, snake_head_position, snake_direction, snake_length, action):
@@ -14,6 +15,7 @@ class ActionHistory:
         else:
             snake_direction_value = snake_direction
 
+        # get the record
         record = {
             "step": step,
             "snake_head_position": snake_head_position,
@@ -21,7 +23,15 @@ class ActionHistory:
             "snake_length": snake_length,
             "action": action
         }
-        self.history.append(record)
 
+        # add the record to the history
+        self.history.append(record)
+    
     def get_history(self):
+        """Return the full action history."""
         return self.history
+
+    def clear(self):
+        """Clear the action history."""
+        self.history = []
+

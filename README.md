@@ -36,7 +36,7 @@ python main_simple.py play --env snake --agent snake_llm --provider ollama --mod
 The only model any good at playing snake is gpt-4o
 
 ```bash
-python main_simple.py play --env snake --agent snake_gpt4o --provider openai --model gpt-4o
+python main_simple.py play --env snake --agent snake_llm --provider openai --model gpt-4o
 ```
 
 ### Minesweeper
@@ -55,5 +55,5 @@ Snake currently supports a whole bunch of LLM's but pretty much all of them are 
 Mistral Large is actually pretty decent at playing Minesweeper
 
 ```bash
-python main_simple.py play --env snake --agent snake_gpt4o --provider ollama --model mistral-large
+python main_simple.py play --env snake --agent snake_llm --provider ollama --model mistral-large
 ```
