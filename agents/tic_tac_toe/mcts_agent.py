@@ -1,4 +1,5 @@
 import random
+import time
 import numpy as np
 import math
 from agents.agent_type import AgentType
@@ -21,13 +22,32 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeAgent):
 
     def get_action(self, step: int, state) -> int:
         """
-        Perform MCTS to choose the best action.
+        Perform MCTS to choose the best action and log the decision.
         """
         for _ in range(self.simulations):
             self.run_simulation(state)
-        
-        # Select the move with the highest win rate
-        return self.best_action(state)
+
+        # Get the best move
+        best_move = self.best_action(state)
+
+        # Calculate the best score (win rate) for logging
+        best_score = self.state_wins[(state.tostring(), best_move)] / max(self.state_visits[(state.tostring(), best_move)], 1)
+
+        # Log the decision with the logger
+        time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
+        self.logger.log_decision(
+            game_id=self.game_id,              # The agent's ID, but you can adjust if using a game ID elsewhere
+            step=step,                    # Current step in the game
+            state=state,                  # Current board state
+            thought_process="MCTS decision",  # Description of the decision-making process
+            final_output=best_move,       # The best move chosen by MCTS
+            response=best_score,          # The calculated win rate for the best move
+            time_completed=time_of_action # Timestamp of when the action was completed
+        )
+
+        # Return the best move
+        return best_move
+
 
     def run_simulation(self, state):
         """

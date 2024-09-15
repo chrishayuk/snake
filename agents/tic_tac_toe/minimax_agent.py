@@ -1,3 +1,4 @@
+import time
 from agents.agent_type import AgentType
 from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
 
@@ -12,25 +13,40 @@ class MiniMaxTicTacToeAgent(BaseTicTacToeAgent):
         return AgentType.CLASSIC
     
     def get_action(self, step: int, state) -> int:
-        """ Use the Minimax algorithm to decide on the best action. """
+        """ 
+        Use the Minimax algorithm to decide on the best action and log the decision.
+        """
         best_score = -float('inf')
         best_move = None
 
-        # loop through available actions
+        # Loop through available actions
         for action in self.get_available_actions(state):
-            # apply the action
+            # Apply the action
             new_state = self.apply_action(state, action, self.player)
 
-             # Start minimizing for the opponent
+            # Start minimizing for the opponent
             score = self._minimax(new_state, 0, False) 
 
-            # check if the score is the best action
+            # Check if this is the best score and action
             if score > best_score:
-                # it's the the best score, and best acttion
                 best_score = score
                 best_move = action
 
+        # Log the decision with the logger
+        time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
+        self.logger.log_decision(
+            game_id=self.game_id,          # The agent's ID (or game ID if applicable)
+            step=step,                     # Current step in the game
+            state=state,                   # Current board state
+            thought_process="Minimax decision",  # Description of the decision-making process
+            final_output=best_move,        # The best move chosen by the Minimax algorithm
+            response=best_score,           # The calculated score for the best move
+            time_completed=time_of_action  # Timestamp of when the action was completed
+        )
+
+        # Return the best move
         return best_move
+
     
     def _minimax(self, state, depth, is_maximizing_player) -> int:
         """ The Minimax algorithm to calculate the best move. """
