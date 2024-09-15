@@ -22,7 +22,7 @@ class BaseTicTacToeAgent(BaseAgent):
         """Return the type of the agent (to be implemented by child classes)."""
         raise NotImplementedError("This should be implemented by child classes.")
 
-    def is_winning_move(self, state, player):
+    def find_winning_move(self, state, player):
         """ Check if placing a mark results in a win for the given player. """
         # Check rows, columns, and diagonals for a win
         return (
@@ -60,7 +60,7 @@ class BaseTicTacToeAgent(BaseAgent):
         # for each player
         for player in [1, 2]:
             # check if the current play is a winning move
-            if self.is_winning_move(state, player):
+            if self.find_winning_move(state, player):
                 # return the winning player
                 return player
         

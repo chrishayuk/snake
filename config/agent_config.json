@@ -118,6 +118,14 @@
         "compatible_environments": ["tic_tac_toe"]
     },
     {
+        "id": "tic_tac_toe_heuristics",
+        "name": "Heuristics Tic Tac Toe Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A heuristics classic agent for playing Tic Tac Toe",
+        "agent": "agents.tic_tac_toe.heuristics_agent.HeuristicsTicTacToeAgent",
+        "compatible_environments": ["tic_tac_toe"]
+    },
+    {
         "id": "tic_tac_toe_random",
         "name": "Random Tic Tac Toe Agent",
         "type": "Tic Tac Toe Agent",

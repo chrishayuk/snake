@@ -10,23 +10,6 @@ class SmartTicTacToeAgent(BaseTicTacToeAgent):
     def agent_type(self) -> AgentType:
         """Return the type of the agent."""
         return AgentType.CLASSIC
-    
-    def find_winning_move(self, state, player) -> int:
-        """
-        Find a winning move for the given player.
-        - player: The current player (1 or 2).
-        - Returns an action (number between 1 and 9) if a win is found, otherwise None.
-        """
-        for row in range(3):
-            for col in range(3):
-                if state[row, col] == 0:  # Check if the cell is empty
-                    # Simulate placing the player's mark
-                    state[row, col] = player
-                    if self.is_winning_move(state, player):
-                        state[row, col] = 0  # Reset the simulated move
-                        return self.action_map[(row, col)]  # Return the corresponding action (1-9)
-                    state[row, col] = 0  # Reset the simulated move
-        return None
 
     def get_action(self, step: int, state) -> int:
         """
