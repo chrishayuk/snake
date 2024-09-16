@@ -1,7 +1,9 @@
 import os
 import time
 import argparse
-from agents.agent_loader import get_agent, list_agents
+from agents import agent_loader
+from agents.agent_loader import get_agent, list_agents, agent_loader 
+
 from agents.agent_type import AgentType
 from environments.environment_loader import get_environment, list_environments
 
@@ -11,39 +13,58 @@ def get_app_root():
 
 # Get the agent list
 def get_agents(game_id, env_config, selected_agents, providers=None, models=None):
-    # Convert single agent string to a list if only one agent is provided
     if isinstance(selected_agents, str):
         selected_agents = [selected_agents]
 
-    # Check if the environment supports the number of agents provided
-    num_agents = len(selected_agents)
-
-    # Check if the game supports the number of players
-    if env_config.max_players and num_agents > env_config.max_players:
-        raise ValueError(f"Too many agents provided! Environment {env_config.name} supports a maximum of {env_config.max_players} players.")
-    elif env_config.min_players and num_agents < env_config.min_players:
-        raise ValueError(f"Not enough agents provided! Environment {env_config.name} requires at least {env_config.min_players} players.")
-
-    # Initialize agents
     agents = []
+    llm_index = 0  # Keep track of the index for LLM agents only
 
-    # Loop through the agents
-    for i, agent_id in enumerate(selected_agents):
+    for agent_id in selected_agents:
         agent_params = {}
-        if providers and i < len(providers) and models and i < len(models):
-            agent_params = {"provider": providers[i], "model_name": models[i]}
-        agent, agent_config = get_agent(agent_id, **agent_params)
 
-        # Ensure that the environment is compatible with the agent
+        # Get the agent config to determine if it's an LLM agent
+        agent_config = agent_loader.get_agent_config(agent_id)
+
+        if agent_config.agent_type == "LLM Agent":
+            if providers and models:
+                try:
+                    # Use the llm_index to assign provider and model only to LLM agents
+                    provider = providers[llm_index] if llm_index < len(providers) else None
+                    model = models[llm_index] if llm_index < len(models) else None
+
+                    if provider is None or model is None:
+                        raise ValueError(f"Insufficient providers or models for LLM agent {agent_id}")
+
+                    agent_params["provider"] = provider
+                    agent_params["model_name"] = model
+
+                    print(f"Assigning provider {provider} and model {model} to agent {agent_id}")
+                    llm_index += 1  # Increment LLM index after successful assignment
+                except IndexError as e:
+                    print(f"Error: Not enough providers or models for LLM agent {agent_id}: {e}")
+                    continue  # Skip this agent if provider or model is missing
+        else:
+            # Skip provider/model assignment for classic agents
+            print(f"Skipping provider and model assignment for classic agent {agent_id}")
+
+        print(f"Final agent_params being passed: {agent_params}")
+
+        try:
+            agent, agent_config = get_agent(agent_id, **agent_params)
+            print(f"Agent {agent_id} instantiated successfully.")
+        except TypeError as e:
+            print(f"Failed to load agent {agent_id} with error: {e}")
+            raise
+
         if env_config.id not in agent_config.compatible_environments:
             raise ValueError(f"Agent {agent_config.name} is not compatible with environment {env_config.name}")
 
-        # Set the game id for the agent and append to the agent list
         agent.game_id = game_id
         agents.append(agent)
 
-    # Return agents and their types
     return agents
+
+
 
 def play(selected_env_id, selected_agents, providers=None, models=None, episodes=1000):
     # Create environment using the loader

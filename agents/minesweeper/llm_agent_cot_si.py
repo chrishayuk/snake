@@ -137,7 +137,7 @@ Now analyze the current game state provided above and make a decision based on t
         time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
         # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, step, state, "", "", "", time_completed)
+        self.logger.log_decision(self.game_id, step, state, "", "", "", time_completed, self.llm_provider, self.model_name)
 
         # create a game summary (this should include key events and outcomes of the game)
         summary = f"Game ended at step {step}. Strategy:\n{self.strategy}\nFinal state:\n{state}\nPrevious Strategy-Improvement Notes:\n{self.self_improvement_notes}"

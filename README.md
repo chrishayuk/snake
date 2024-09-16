@@ -30,14 +30,29 @@ Snake currently supports a whole bunch of LLM's but pretty much all of them are 
 This following will run a basic llm agent 
 
 ```bash
-python main_simple.py play --env snake --agent snake_llm --provider ollama --model gemma2:9b
+python main_simple.py play --env snake --agents snake_llm --provider ollama --model gemma2:9b
 ```
 
 The only model any good at playing snake is gpt-4o
 
 ```bash
-python main_simple.py play --env snake --agent snake_llm --provider openai --model gpt-4o
+python main_simple.py play --env snake --agents snake_llm --provider openai --model gpt-4o
 ```
+
+### TicTacToe
+The following will allow you to watch a very simple agent play the game of tic tac toe.
+To run the game, you can just enter the following command in the command line
+
+```bash
+python main_simple.py play --env tic_tac_toe --agents tic_tac_toe_smart tic_tac_toe_mcts
+```
+
+If you wish to use an llm, you can use the following command
+
+```bash
+python main_simple.py play --env tic_tac_toe --agents tic_tac_toe_smart tic_tac_toe_llm --provider ollama --model gemma2:9b
+```
+
 
 ### Minesweeper
 The following will allow you to watch a very simple agent play the game of minesweeper.

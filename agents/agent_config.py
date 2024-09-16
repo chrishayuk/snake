@@ -8,5 +8,6 @@ class AgentConfig(BaseModel):
     type: str
     description: str
     agent: str
+    agent_type: str
     agent_params: Dict[str, Any] = {}
     compatible_environments: List[str]

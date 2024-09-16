@@ -73,4 +73,4 @@ class BaseLLMAgent(ABC):
         time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
         # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, step, state, "", "", "", time_completed)
+        self.logger.log_decision(self.game_id, step, state, "", "", "", time_completed, self.llm_provider, self.model_name)

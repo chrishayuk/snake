@@ -5,6 +5,7 @@
         "type": "Snake Agent",
         "description": "An agent that uses a smart strategy to seek food in the snake environment.",
         "agent": "agents.snake.smart_seeker_agent.SmartSeekerAgent",
+        "agent_type": "Classic Agent",
         "agent_params": {},
         "compatible_environments": ["snake"]
     },
@@ -14,6 +15,7 @@
         "type": "Snake Agent",
         "description": "An agent that uses a basic food seeking strategy in the snake environment.",
         "agent": "agents.snake.food_seeker_agent.FoodSeekerAgent",
+        "agent_type": "Classic Agent",
         "agent_params": {},
         "compatible_environments": ["snake"]
     },
@@ -23,6 +25,7 @@
         "type": "Snake Agent",
         "description": "A generic LLM agent for playing Snake",
         "agent": "agents.snake.llm_agent.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {},
         "compatible_environments": ["snake"]
     },
@@ -32,6 +35,7 @@
         "type": "Snake Agent",
         "description": "A Chain of Thought LLM agent for playing Snake",
         "agent": "agents.snake.llm_agent_cot.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {},
         "compatible_environments": ["snake"]
     },{
@@ -40,6 +44,7 @@
         "type": "Snake Agent",
         "description": "A Chain of Thought LLM agent for playing Snake that self improves",
         "agent": "agents.snake.llm_agent_cot_si.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {},
         "compatible_environments": ["snake"]
     },
@@ -49,6 +54,7 @@
         "type": "Minesweeper Agent",
         "description": "a basic test agent for playing minesweeper",
         "agent": "agents.minesweeper.test_agent.TestAgent",
+        "agent_type": "Classic Agent",
         "agent_params": {
             "size": 10
         },
@@ -60,6 +66,7 @@
         "type": "Minesweeper Agent",
         "description": "A generic LLM agent for playing Minesweeper",
         "agent": "agents.minesweeper.llm_agent.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {
             "size": 10
         },
@@ -71,6 +78,7 @@
         "type": "Minesweeper Agent",
         "description": "A Chain of Thought LLM agent for playing Minesweeper",
         "agent": "agents.minesweeper.llm_agent_cot.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {
             "size": 10
         },
@@ -82,6 +90,7 @@
         "type": "Minesweeper Agent",
         "description": "A Chain of Thought LLM agent for playing Minesweeper that self improves",
         "agent": "agents.minesweeper.llm_agent_cot_si.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {
             "size": 10
         },
@@ -93,6 +102,7 @@
         "type": "Treasure Hunt Agent",
         "description": "A generic LLM agent for playing Treasure Hunt",
         "agent": "agents.treasure_hunt.llm_agent.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {
             "size": 5
         },
@@ -104,6 +114,7 @@
         "type": "Treasure Hunt Agent",
         "description": "A generic LLM agent for playing Treasure Hunt",
         "agent": "agents.treasure_hunt.llm_agent_cot.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {
             "size": 5
         },
@@ -115,6 +126,7 @@
         "type": "Tic Tac Toe Agent",
         "description": "A smart classic agent for playing Tic Tac Toe",
         "agent": "agents.tic_tac_toe.smart_agent.SmartTicTacToeAgent",
+        "agent_type": "Classic Agent",
         "compatible_environments": ["tic_tac_toe"]
     },
     {
@@ -123,6 +135,7 @@
         "type": "Tic Tac Toe Agent",
         "description": "A heuristics classic agent for playing Tic Tac Toe",
         "agent": "agents.tic_tac_toe.heuristics_agent.HeuristicsTicTacToeAgent",
+        "agent_type": "Classic Agent",
         "compatible_environments": ["tic_tac_toe"]
     },
     {
@@ -131,6 +144,7 @@
         "type": "Tic Tac Toe Agent",
         "description": "A minimax classic agent for playing Tic Tac Toe",
         "agent": "agents.tic_tac_toe.minimax_agent.MiniMaxTicTacToeAgent",
+        "agent_type": "Classic Agent",
         "compatible_environments": ["tic_tac_toe"]
     },
     {
@@ -139,6 +153,7 @@
         "type": "Tic Tac Toe Agent",
         "description": "A random classic agent for playing Tic Tac Toe that makes random moves",
         "agent": "agents.tic_tac_toe.random_agent.RandomTicTacToeAgent",
+        "agent_type": "Classic Agent",
         "compatible_environments": ["tic_tac_toe"]
     },
     {
@@ -147,6 +162,7 @@
         "type": "Tic Tac Toe Agent",
         "description": "A monte carlo tree search classic agent for playing Tic Tac Toe",
         "agent": "agents.tic_tac_toe.mcts_agent.MonteCarloTreeSearchTicTacToeAgent",
+        "agent_type": "Classic Agent",
         "compatible_environments": ["tic_tac_toe"]
     },
     {
@@ -155,6 +171,17 @@
         "type": "Tic Tac Toe Agent",
         "description": "A generic LLM agent for playing Tic Tac Toe",
         "agent": "agents.tic_tac_toe.llm_agent.LLMAgent",
+        "agent_type": "LLM Agent",
+        "agent_params": {},
+        "compatible_environments": ["tic_tac_toe"]
+    },
+    {
+        "id": "tic_tac_toe_llm_cot",
+        "name": "CoT LLM Tic Tac Toe Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A CoT LLM agent for playing Tic Tac Toe",
+        "agent": "agents.tic_tac_toe.llm_agent_cot.LLMAgent",
+        "agent_type": "LLM Agent",
         "agent_params": {},
         "compatible_environments": ["tic_tac_toe"]
     }

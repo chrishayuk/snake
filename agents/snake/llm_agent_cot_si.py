@@ -27,7 +27,7 @@ class LLMAgent(BaseSnakeLLMAgent):
         time_completed = extract_time_completed(response)
 
         # log the decision
-        self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed)
+        self.logger.log_decision(self.game_id, step, state, thought_process, final_output, response, time_completed, self.llm_provider, self.model_name)
 
         # get the map
         action_map = {

@@ -109,7 +109,9 @@ Make a decision that aligns with the strategy to minimize risk and progress the 
                     thought_process,
                     str(action),  # Use the string representation of the action for logging
                     response,
-                    time_completed
+                    time_completed,
+                    self.llm_provider, 
+                    self.model_name
                 )
                 
                 return action
@@ -134,7 +136,9 @@ Make a decision that aligns with the strategy to minimize risk and progress the 
                             thought_process,
                             str(fallback_action),  # Use the string representation of the fallback action for logging
                             str(fallback_action),  # Use the string representation of the fallback action for logging
-                            time_completed
+                            time_completed,
+                            self.llm_provider,
+                            self.model_name
                         )
                         
                         return fallback_action

@@ -64,7 +64,9 @@ class BaseTreasureHuntLLMAgent(BaseLLMAgent):
                     thought_process,
                     str(action),  # Use the string representation of the action for logging
                     response,
-                    time_completed
+                    time_completed,
+                    self.llm_provider, 
+                    self.model_name
                 )
 
                 return action

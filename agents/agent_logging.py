@@ -15,7 +15,7 @@ class AgentLogger:
         """Convert numpy array state to a serializable list."""
         return state.tolist()
 
-    def log_decision(self, game_id: str, step, state, thought_process: str, final_output: str, response: str, time_completed: str):
+    def log_decision(self, game_id: str, step, state, thought_process: str, final_output: str, response: str, time_completed: str, provider="", model=""):
         # Check if the state needs serialization
         if isinstance(state, np.ndarray):
             state = self.serialize_state(state)
@@ -31,6 +31,8 @@ class AgentLogger:
         # log the entry
         log_entry = {
             "agent_id": self.agent_id,
+            "provider": provider,
+            "model": model,
             "game_id": game_id,
             "time_initiated": self.time_initiated,
             "step": step,
