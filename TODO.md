@@ -1,4 +1,6 @@
 # TODO
+1) Fix up game_id in agent logs
+2) Fix up player number in agent logs
 0) Tidy up implementation of LLM's
 3) Need to look at how we can use judge models to dynamically improve strategy prompt
 4) Need to look at how to build STaR type fine tune data
