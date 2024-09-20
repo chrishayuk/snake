@@ -1,8 +1,8 @@
 import time
 from agents.agent_type import AgentType
-from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
+from agents.tic_tac_toe.base_tic_tac_toe_classic_agent import BaseTicTacToeClassicAgent
 
-class RandomTicTacToeAgent(BaseTicTacToeAgent):
+class RandomTicTacToeAgent(BaseTicTacToeClassicAgent):
     def __init__(self, id: str, name: str, description: str, player=1):
         # Call the parent constructor
         super().__init__(id, name, description, player)

@@ -58,13 +58,20 @@ class TicTacToeEnv(Environment):
         self.original_agents = agents.copy()  # Preserve original order
         self.agents = agents.copy()  # Set current agents
 
-        if len(self.agents) >= 2:
-            self.player_x_id = self.agents[0].name  # Agent name for Player X
-            self.player_x_type = getattr(self.agents[0], 'agent_type', "Unknown")  # Agent type for Player X
-            self.player_o_id = self.agents[1].name  # Agent name for Player O
-            self.player_o_type = getattr(self.agents[1], 'agent_type', "Unknown")  # Agent type for Player O
+        # this is a 2 player game
+        if len(self.agents) == 2:
+            # set the id and type for player x, as the first agent
+            self.player_x_id = self.agents[0].name  
+            self.player_x_type = getattr(self.agents[0], 'agent_type', "Unknown")
+
+            # set the id and type for player x, as the second agent
+            self.player_o_id = self.agents[1].name
+            self.player_o_type = getattr(self.agents[1], 'agent_type', "Unknown")
+
+            # log the setting of the agents
             logger.info(f"Agents set: Player X -> {self.player_x_id}, Player O -> {self.player_o_id}")
         else:
+            # not enough agents
             logger.warning("Insufficient agents to set Player X and Player O.")
 
     def reset(self):
@@ -118,7 +125,9 @@ class TicTacToeEnv(Environment):
         # Check if the game is over
         if self.game_over:
             raise ValueError("Game is over. Please reset the environment.")
-        
+
+        # TODO: ensure the correct player is making the action
+ 
         # Check the move is valid
         if action not in range(1, 10):
             raise ValueError(f"Invalid move: {action}. Must be between 1 and 9.")

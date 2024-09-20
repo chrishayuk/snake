@@ -2,11 +2,12 @@ import random
 import time
 import numpy as np
 import math
-from agents.agent_type import AgentType
-from agents.tic_tac_toe.base_tic_tac_toe_agent import BaseTicTacToeAgent
 from collections import defaultdict
+from agents.agent_type import AgentType
+from agents.tic_tac_toe.base_tic_tac_toe_classic_agent import BaseTicTacToeClassicAgent
 
-class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeAgent):
+
+class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
     def __init__(self, id: str, name: str, description: str, player=2, simulations=10000, exploration_weight=1):
         super().__init__(id, name, description, player)
         self.simulations = simulations  # Number of simulations for MCTS
