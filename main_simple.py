@@ -83,8 +83,13 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
     # Loop for the specified number of episodes
     for episode in range(1, episodes + 1):
         print(f"\n=== Episode {episode} ===\n")
+
         # Reset the environment (this will handle player swapping)
         state = env.reset()
+
+        # Make sure each agent has the correct game_id
+        for agent in env.agents:
+            agent.game_id = env.game_id
 
         # Render the environment initially
         env.render()
@@ -97,11 +102,12 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
             for agent in env.agents:
                 # Perform action based on agent type (LLM or classic)
                 if agent.agent_type == AgentType.LLM:
-                    # Get the action to perform from the LLM agent using the render function
-                    action = agent.get_action(env.steps + 1, env.get_render())
+                    # Pass both the state and the rendered state
+                    action = agent.get_action(env.steps + 1, state, env.get_render(), env.current_player)
                 else:
-                    # Get the action to perform from the classic agent, using the state
-                    action = agent.get_action(env.steps + 1, state)
+                    # Pass both the state and the rendered state
+                    action = agent.get_action(env.steps + 1, state, env.get_render(), env.current_player)
+
 
                 # Now perform a step in the environment
                 state, reward, game_over = env.step(action)
@@ -128,10 +134,8 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
 
         # Perform game over actions for all agents
         for agent in env.agents:
-            if agent.agent_type == AgentType.LLM:
-                agent.game_over(env.steps + 1, env.get_render())
-            else:
-                agent.game_over(env.steps + 1, state)
+            # game over
+            agent.game_over(env.steps + 1, state, env.get_render())
 
         # Continue to the next episode (game)
 

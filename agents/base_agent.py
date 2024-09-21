@@ -31,9 +31,19 @@ class BaseAgent(ABC):
         """Return the type of the agent."""
         pass
 
-    def game_over(self, step:int, state: str):
-        # set the time completed
+    def game_over(self, step: int, state: str, rendered_state: str):
+        # Set the time completed
         time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
-        # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, step, state, "Game Over", "Game Over", "Game Over", time_completed)
+        # Log the final "Game Over" state
+        self.logger.log_decision(
+            game_id=self.game_id,
+            step=step,
+            state=state,  # This should be the final state (2D NumPy array or string)
+            rendered_state=rendered_state,  # This is the rendered (visual) state of the board
+            thought_process="Game Over",
+            final_output="Game Over",
+            response="Game Over",
+            time_completed=time_completed,
+            player=''  # No specific player for the Game Over state
+        )

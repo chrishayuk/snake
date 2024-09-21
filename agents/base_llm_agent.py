@@ -52,7 +52,7 @@ class BaseLLMAgent(ABC):
             raise ValueError(f"Unsupported provider: {provider}")
 
     @abstractmethod
-    def get_action(self, state: str):
+    def get_action(self, state: str, current_player: int):
         pass
 
     def reset(self):
@@ -70,9 +70,21 @@ class BaseLLMAgent(ABC):
         """Return the type of the agent."""
         return AgentType.LLM
 
-    def game_over(self, step:int, state: str):
-        # set the time completed
+    def game_over(self, step:int, state: str, rendered_state: str):
+        # Set the time completed
         time_completed = time.strftime('%Y-%m-%d %H:%M:%S')
 
-        # log the state, thought process, and decision
-        self.logger.log_decision(self.game_id, step, state, "Game Over", "Game Over", "Game Over", time_completed, self.llm_provider, self.model_name)
+        # Log the final "Game Over" state
+        self.logger.log_decision(
+            game_id=self.game_id,
+            step=step,
+            state=state,  # This should be the final state (2D NumPy array or string)
+            rendered_state=rendered_state,  # This is the rendered (visual) state of the board
+            thought_process="Game Over",
+            final_output="Game Over",
+            response="Game Over",
+            time_completed=time_completed,
+            provider=self.llm_provider, 
+            model=self.model_name, 
+            player=''  # No specific player for the Game Over state
+        )

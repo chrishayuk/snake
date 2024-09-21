@@ -17,28 +17,33 @@ class AgentLogger:
 
     
 
-    def log_decision(self, game_id: str, step, state, thought_process: str, final_output: str, response: str, time_completed: str, provider="", model="", player=""):
+    def log_decision(self, game_id: str, step, state, rendered_state: str, thought_process: str, final_output: str, response: str, time_completed: str, provider="", model="", player=""):
+        # check if we need to serialize
         if isinstance(state, np.ndarray):
             state = self.serialize_state(state)
 
+        # create the log entry
         log_entry = {
             "agent_id": self.agent_id,        # agent id
-            "unique_agent_id": self.unique_agent_id,  # unqiue agent  ID
+            "unique_agent_id": self.unique_agent_id,  # unique agent ID
             "provider": provider,
             "model": model,
             "game_id": game_id,
             "player": player,              # Player X or O
             "time_initiated": self.time_initiated,
             "step": step,
-            "state": state,
+            "state": state,                 # Serialized numerical state
+            "rendered_state": rendered_state,  # Visual state
             "model_response": response,
             "agent_thinking": thought_process,
             "final_decision": final_output,
             "time_completed": time_completed
         }
 
+        # Write log entry to file
         with open(self.log_filename, 'a') as log_file:
             log_file.write(json.dumps(log_entry) + '\n')
+
 
     def log_self_improvement_notes(self, game_id: str, step: int, self_improvement_notes: str):
         # log the self-improvement notes

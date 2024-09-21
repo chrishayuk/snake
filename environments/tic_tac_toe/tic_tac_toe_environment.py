@@ -79,7 +79,7 @@ class TicTacToeEnv(Environment):
         Reset the environment for a new episode. Handles player swapping based on the swap_players flag.
         """
         # Set the game_id and start time
-        self.game_id = str(uuid.uuid4())
+        self.game_id = str(uuid.uuid4())  # Ensure game_id is regenerated every reset
         self.game_start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.game_end_time = None
 
@@ -110,6 +110,10 @@ class TicTacToeEnv(Environment):
 
         # Toggle the swap_players flag for the next game
         self.swap_players = not self.swap_players
+
+        # Assign new game_id to each agent
+        for agent in self.agents:
+            agent.game_id = self.game_id  # Ensure agents get the correct game_id
 
         # Set the current player to always start with Player X
         self.current_player = 1  # Player X goes first
