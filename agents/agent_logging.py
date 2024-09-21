@@ -5,9 +5,9 @@ import numpy as np
 from agents.agent_action import AgentAction
 
 class AgentLogger:
-    def __init__(self, agent_id: str):
-        # set some standard attributes
-        self.agent_id = agent_id
+    def __init__(self, agent_id: str, unique_agent_id: str):
+        self.agent_id = agent_id  
+        self.unique_agent_id = unique_agent_id  # Unique agent instance ID
         self.log_filename = f"logs/{self.agent_id}.jsonl"
         self.time_initiated = time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -15,25 +15,19 @@ class AgentLogger:
         """Convert numpy array state to a serializable list."""
         return state.tolist()
 
-    def log_decision(self, game_id: str, step, state, thought_process: str, final_output: str, response: str, time_completed: str, provider="", model=""):
-        # Check if the state needs serialization
+    
+
+    def log_decision(self, game_id: str, step, state, thought_process: str, final_output: str, response: str, time_completed: str, provider="", model="", player=""):
         if isinstance(state, np.ndarray):
             state = self.serialize_state(state)
 
-        # Convert AgentAction to string for JSON serialization
-        if isinstance(final_output, AgentAction):
-            final_output = final_output.name
-        
-        # check the response to see if it's agent action
-        if isinstance(response, AgentAction):
-            response = response.name
-        
-        # log the entry
         log_entry = {
-            "agent_id": self.agent_id,
+            "agent_id": self.agent_id,        # agent id
+            "unique_agent_id": self.unique_agent_id,  # unqiue agent  ID
             "provider": provider,
             "model": model,
             "game_id": game_id,
+            "player": player,              # Player X or O
             "time_initiated": self.time_initiated,
             "step": step,
             "state": state,
@@ -43,9 +37,7 @@ class AgentLogger:
             "time_completed": time_completed
         }
 
-        # Append to the log file
         with open(self.log_filename, 'a') as log_file:
-            # Add the row
             log_file.write(json.dumps(log_entry) + '\n')
 
     def log_self_improvement_notes(self, game_id: str, step: int, self_improvement_notes: str):

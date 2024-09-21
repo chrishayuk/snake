@@ -62,23 +62,16 @@ class SmartTicTacToeAgent(BaseTicTacToeClassicAgent):
             blocking_move = self.find_winning_move(state, opponent)
 
             if blocking_move:
-                # Get the row and column from the blocking move
+                # Explain why the move is a blocking move
                 row, col = self.reverse_action_map[blocking_move]
-                
-                # Temporarily apply the opponent's move to the board
-                temp_state = np.copy(state)
-                temp_state[row, col] = opponent
-                
-                # Check if it blocks the opponent from completing a row, column, or diagonal
-                if np.all(temp_state[row, :] == opponent):
+                if np.all(state[row, :] == opponent):
                     thought_process += f"Opponent is trying to complete row {row}, blocking with move {blocking_move}.\n"
-                elif np.all(temp_state[:, col] == opponent):
+                elif np.all(state[:, col] == opponent):
                     thought_process += f"Opponent is trying to complete column {col}, blocking with move {blocking_move}.\n"
-                elif row == col and np.all(np.diag(temp_state) == opponent):
+                elif row == col and np.all(np.diag(state) == opponent):
                     thought_process += f"Opponent is trying to complete diagonal, blocking with move {blocking_move}.\n"
-                elif row + col == 2 and np.all(np.diag(np.fliplr(temp_state)) == opponent):
+                elif row + col == 2 and np.all(np.diag(np.fliplr(state)) == opponent):
                     thought_process += f"Opponent is trying to complete anti-diagonal, blocking with move {blocking_move}.\n"
-                
                 best_move = blocking_move
             else:
                 thought_process += "No blocking move found.\n"
@@ -91,6 +84,8 @@ class SmartTicTacToeAgent(BaseTicTacToeClassicAgent):
 
         # Log the decision with the logger
         time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        # log the decision
         self.logger.log_decision(
             game_id=self.game_id,                 # The agent's ID (or game ID if applicable)
             step=step,                            # Current step in the game
@@ -98,7 +93,8 @@ class SmartTicTacToeAgent(BaseTicTacToeClassicAgent):
             thought_process=thought_process,      # Detailed thought process
             final_output=best_move,               # The chosen move
             response=best_move,                   # The chosen move
-            time_completed=time_of_action         # Timestamp of when the action was completed
+            time_completed=time_of_action,        # Timestamp of when the action was completed
+            player='X' if self.player == 1 else 'O'         # log the player role
         )
 
         # Return the best move

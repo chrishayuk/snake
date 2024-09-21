@@ -126,8 +126,6 @@ class TicTacToeEnv(Environment):
         if self.game_over:
             raise ValueError("Game is over. Please reset the environment.")
 
-        # TODO: ensure the correct player is making the action
- 
         # Check the move is valid
         if action not in range(1, 10):
             raise ValueError(f"Invalid move: {action}. Must be between 1 and 9.")
@@ -141,7 +139,6 @@ class TicTacToeEnv(Environment):
 
         # Check the move is valid
         row, col = action_map[action]
-        
         if self.board[row, col] != 0:
             raise ValueError(f"Invalid action: Cell ({row}, {col}) is already occupied.")
 
@@ -149,17 +146,20 @@ class TicTacToeEnv(Environment):
         self.board[row, col] = self.current_player
         self.steps += 1
 
+        # Determine the current player role ('X' or 'O')
+        player_role = 'X' if self.current_player == 1 else 'O'
+
         # Add action to action history
         self.action_history.add_record(
             step=self.steps,
-            player='X' if self.current_player == 1 else 'O',
+            player=player_role,
             action=action
         )
 
         # Check if the current player wins
         if self.check_win(self.current_player):
             self.game_over = True
-            self.result_message = f"Player {'X' if self.current_player == 1 else 'O'} wins!"
+            self.result_message = f"Player {player_role} wins!"
             self.game_end_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             # Assign reward based on the win and update agent reward
@@ -186,6 +186,8 @@ class TicTacToeEnv(Environment):
 
         # If game is ongoing, return neutral reward and update agent reward
         reward = self.reward_function(won=False, draw=False, ongoing=True)
+
+        # add the reward
         if agent:
             agent.add_reward(reward)
 
@@ -197,7 +199,8 @@ class TicTacToeEnv(Environment):
 
         # Return state, reward, and game_over flag
         return self.get_state(), reward, self.game_over
-    
+
+
     def get_state(self):
         # Return the current board state
         return np.copy(self.board)

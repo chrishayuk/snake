@@ -1,10 +1,15 @@
 # TODO
 1) Fix up game_id in agent logs
 2) Fix up player number in agent logs
-3) Fix up player unique id in agent logs
-4) Fix up provider / model name in agent logs
+3) Ensure game turn logic
+4) Final check smart agent CoT
+5) Apply Smart Agent logging to all other tic tac toe classic agents
+6) Improve gameboard render to easily see who won and who's who
+7) Apply changes to snake environment and agents
+8) Apply chnages to treasure hunt environment and agents
+9) Apply changes to minesweeper environment and agents
 
-0) Tidy up implementation of LLM's
+# other thoughts
 3) Need to look at how we can use judge models to dynamically improve strategy prompt
 4) Need to look at how to build STaR type fine tune data
 5) Is it possible to have an in-memory context STaR for snake since it's markov state
