@@ -92,6 +92,7 @@ class BaseTicTacToeClassicAgent(BaseAgent, BaseTicTacToeAgent):
 
         return thought_process
 
+
     def log_decision_with_thoughts(self, step: int, state, rendered_state: str, current_player: int, best_move: int, rationale: str, winning_move: int = None, blocking_move: int = None):
         """
         Logs the decision along with the generated thought process and rationale.
@@ -120,6 +121,7 @@ class BaseTicTacToeClassicAgent(BaseAgent, BaseTicTacToeAgent):
             time_completed=time_of_action,
             player='X' if current_player == 1 else 'O'
         )
+
 
     def get_action(self, step: int, state, rendered_state: str, current_player: int) -> int:
         """

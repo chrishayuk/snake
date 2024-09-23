@@ -36,6 +36,9 @@ class BaseLLMAgent(ABC):
         # setup the chain with the prompt and llm
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
 
+        # initalize reward
+        self.reward = 0
+
     def _get_llm(self, provider: str, model_name: str):
         # check for openai
         if provider == "openai":
@@ -50,6 +53,14 @@ class BaseLLMAgent(ABC):
         else:
             # unsupported
             raise ValueError(f"Unsupported provider: {provider}")
+
+    def add_reward(self, reward):
+        """Increase the agent's total reward by the given amount."""
+        self.reward += reward
+
+    def reset_reward(self):
+        """Reset the agent's reward at the start of a new game."""
+        self.reward = 0
 
     @abstractmethod
     def get_action(self, state: str, current_player: int):

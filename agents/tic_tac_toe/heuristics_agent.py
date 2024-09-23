@@ -16,15 +16,19 @@ class HeuristicsTicTacToeAgent(BaseTicTacToeClassicAgent):
         """
         Check if a move sets up a two-way win for the player (i.e., a situation where 
         two winning moves are possible in the next turn).
+        
+        Returns the move that sets up the two-way win if found, otherwise None.
         """
-        win_count = 0
         for action in self.get_available_actions(state):
             new_state = self.apply_action(state, action, self.player)
-            if self.find_winning_move(new_state, self.player):
-                win_count += 1
-            if win_count >= 2:
-                return True  # The player has two potential ways to win in the next turn.
-        return False  # No two-way win possible.
+            win_count = 0
+            for next_action in self.get_available_actions(new_state):
+                next_state = self.apply_action(new_state, next_action, self.player)
+                if self.find_winning_move(next_state, self.player):
+                    win_count += 1
+                if win_count >= 2:
+                    return action  # Return the move that creates two winning options
+        return None  # No two-way win found
 
     
     def get_action(self, step: int, state, rendered_state: str, current_player: int) -> int:
@@ -55,13 +59,10 @@ class HeuristicsTicTacToeAgent(BaseTicTacToeClassicAgent):
         # 3. Set up a two-way win
         if not best_move:
             rationale += "Checking if a two-way win can be set up...\n"
-            for action in self.get_available_actions(state):
-                new_state = self.apply_action(state, action, self.player)
-                if self.check_two_way_win(new_state):
-                    best_move = action
-                    rationale += f"Setting up a two-way win with move at position {best_move}.\n"
-                    break
-
+            two_way_win_move = self.check_two_way_win(state)
+            if two_way_win_move:
+                best_move = two_way_win_move
+                rationale += f"Setting up a two-way win with move at position {best_move}.\n"
 
         # If no best move is found, fallback to a random move from available options
         if best_move is None:
@@ -73,4 +74,3 @@ class HeuristicsTicTacToeAgent(BaseTicTacToeClassicAgent):
 
         # Return the best move (or the fallback move if none found)
         return best_move
-
