@@ -58,21 +58,26 @@ class TicTacToeEnv(Environment):
         self.original_agents = agents.copy()  # Preserve original order
         self.agents = agents.copy()  # Set current agents
 
-        # this is a 2 player game
+        # Ensure this is a 2-player game
         if len(self.agents) == 2:
-            # set the id and type for player x, as the first agent
+            # Assign Player X (agent[0]) and Player O (agent[1])
+            self.agents[0].player = 1  # Player X
+            self.agents[1].player = 2  # Player O
+
+            # Set the id and type for Player X, as the first agent
             self.player_x_id = self.agents[0].name  
             self.player_x_type = getattr(self.agents[0], 'agent_type', "Unknown")
 
-            # set the id and type for player x, as the second agent
+            # Set the id and type for Player O, as the second agent
             self.player_o_id = self.agents[1].name
             self.player_o_type = getattr(self.agents[1], 'agent_type', "Unknown")
 
-            # log the setting of the agents
+            # Log the setting of the agents
             logger.info(f"Agents set: Player X -> {self.player_x_id}, Player O -> {self.player_o_id}")
         else:
-            # not enough agents
+            # Not enough agents
             logger.warning("Insufficient agents to set Player X and Player O.")
+
 
     def reset(self):
         """
@@ -92,34 +97,36 @@ class TicTacToeEnv(Environment):
         # Reset the action history
         self.action_history.clear()
 
-        # Determine agent order based on swap_players flag
+        # Swap players if flag is set, otherwise keep original order
         if self.swap_players and len(self.original_agents) >= 2:
-            # Swap the agents
-            swapped_agents = [self.original_agents[1], self.original_agents[0]]
-            self.agents = swapped_agents
+            self.agents = [self.original_agents[1], self.original_agents[0]]  # Swap agents
         else:
-            # Keep the original order
             self.agents = self.original_agents.copy()
 
-        # Update player IDs and types based on the current agent order
+        # Update player IDs and types for Player X and Player O
         if len(self.agents) >= 2:
+            self.agents[0].player = 1  # Player X
+            self.agents[1].player = 2  # Player O
             self.player_x_id = self.agents[0].name
             self.player_x_type = getattr(self.agents[0], 'agent_type', "Unknown")
+            self.player_x_unique_agent_id = self.agents[0].unique_agent_id
             self.player_o_id = self.agents[1].name
             self.player_o_type = getattr(self.agents[1], 'agent_type', "Unknown")
+            self.player_o_unique_agent_id = self.agents[1].unique_agent_id
 
         # Toggle the swap_players flag for the next game
         self.swap_players = not self.swap_players
 
-        # Assign new game_id to each agent
+        # Assign the new game_id to each agent
         for agent in self.agents:
-            agent.game_id = self.game_id  # Ensure agents get the correct game_id
+            agent.game_id = self.game_id
 
-        # Set the current player to always start with Player X
-        self.current_player = 1  # Player X goes first
+        # Set the current player to Player X
+        self.current_player = 1  # Player X always starts
 
-        # Return the state
+        # Return the current state of the board
         return self.get_state()
+
 
     def step(self, action, agent=None):
         """
@@ -129,6 +136,15 @@ class TicTacToeEnv(Environment):
         # Check if the game is over
         if self.game_over:
             raise ValueError("Game is over. Please reset the environment.")
+
+        # Validate that the correct agent is taking their turn
+        if agent:
+            if agent.player != self.current_player:
+                raise ValueError(f"It is not agent {agent.name}'s turn to play. It is player {self.current_player}'s turn.")
+
+                # Log the invalid turn attempt
+                logger.warning(f"Agent {agent.name} tried to make a move when it is Player {self.current_player}'s turn.")
+
 
         # Check the move is valid
         if action not in range(1, 10):

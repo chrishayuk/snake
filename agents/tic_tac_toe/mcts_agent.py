@@ -6,9 +6,8 @@ from collections import defaultdict
 from agents.agent_type import AgentType
 from agents.tic_tac_toe.base_tic_tac_toe_classic_agent import BaseTicTacToeClassicAgent
 
-
 class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
-    def __init__(self, id: str, name: str, description: str, player=2, simulations=10000, exploration_weight=1):
+    def __init__(self, id: str, name: str, description: str, player=2, simulations=10000, exploration_weight=0.5):
         super().__init__(id, name, description, player)
         self.simulations = simulations  # Number of simulations for MCTS
         self.exploration_weight = exploration_weight  # Exploration constant for UCT
@@ -21,32 +20,29 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
         """Return the type of the agent."""
         return AgentType.CLASSIC
 
-    def get_action(self, step: int, state) -> int:
-        """
-        Perform MCTS to choose the best action and log the decision.
-        """
+    def get_action(self, step: int, state, rendered_state: str, current_player: int) -> int:
+        # set the rationale
+        rationale = "Using Monte Carlo Tree Search to evaluate moves.\n"
+        
+        # Run simulations and select the best action
         for _ in range(self.simulations):
             self.run_simulation(state)
 
-        # Get the best move
+        # get the best move
         best_move = self.best_action(state)
 
-        # Calculate the best score (win rate) for logging
-        best_score = self.state_wins[(state.tostring(), best_move)] / max(self.state_visits[(state.tostring(), best_move)], 1)
+        # set the rational
+        rationale += f"Best move selected by MCTS is at position {best_move}.\n"
 
-        # Log the decision with the logger
-        time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
-        self.logger.log_decision(
-            game_id=self.game_id,              # The agent's ID, but you can adjust if using a game ID elsewhere
-            step=step,                    # Current step in the game
-            state=state,                  # Current board state
-            thought_process=f"best score was {best_score} for the best move {best_move}",  # Description of the decision-making process
-            final_output=best_move,        # The best move chosen by the Minimax algorithm
-            response=best_move,            # The best move chosen by the Minimax algorithm
-            time_completed=time_of_action # Timestamp of when the action was completed
-        )
+        # If no best move is found, fallback to a random move from available options
+        if best_move is None:
+            rationale += "No best move found. Using fallback to select a random move.\n"
+            best_move = self.get_random_move(state)
+        
+        # Log decision
+        self.log_decision_with_thoughts(step, state, rendered_state, current_player, best_move, rationale)
 
-        # Return the best move
+        # return the move
         return best_move
 
 
@@ -93,10 +89,8 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
             wins = self.state_wins[(state.tostring(), action)]
             
             if visits == 0:
-                # Assign a large UCB value to encourage exploration
-                ucb = float('inf')
+                ucb = float('inf')  # Encourage exploration of unvisited actions
             else:
-                # Calculate UCB normally
                 ucb = (wins / visits) + self.exploration_weight * math.sqrt(math.log(total_visits) / visits)
 
             if ucb > best_ucb:
@@ -105,7 +99,6 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
                 best_state = state_after_action
 
         return best_action, best_state
-
 
     def expand(self, state, current_player):
         """Add unexplored actions to the tree."""
@@ -123,7 +116,6 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
             state = self.apply_action(state, action, current_player)
             current_player = 2 if current_player == 1 else 1
         
-        # Return the winner (1 for X, 2 for O, 0 for draw)
         return self.get_winner(state)
 
     def backpropagate(self, path, winner):
@@ -139,7 +131,6 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
         best_win_rate = -float('inf')
 
         for action in self.get_available_actions(state):
-            state_after_action = self.apply_action(state, action, self.player)
             visits = self.state_visits[(state.tostring(), action)]
             wins = self.state_wins[(state.tostring(), action)]
             win_rate = wins / visits if visits > 0 else 0

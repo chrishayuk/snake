@@ -1,4 +1,5 @@
 import time
+import numpy as np
 from agents.agent_type import AgentType
 from agents.tic_tac_toe.base_tic_tac_toe_classic_agent import BaseTicTacToeClassicAgent
 
@@ -12,24 +13,23 @@ class RandomTicTacToeAgent(BaseTicTacToeClassicAgent):
         """Return the type of the agent."""
         return AgentType.CLASSIC
 
-    def get_action(self, step: int, state) -> int:
-        """
-        Get a random valid action for the agent and log the decision.
-        """
-        # Get a random move
-        random_move = self.get_random_move(state)
+    def get_action(self, step: int, state, rendered_state: str, current_player: int) -> int:
+        # set the rationale
+        rationale = "Choosing a random move as no specific strategy is applied for this agent.\n"
 
-        # Log the decision with the logger
-        time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
-        self.logger.log_decision(
-            game_id=self.game_id,                # The agent's ID (or game ID if applicable)
-            step=step,                      # Current step in the game
-            state=state,                    # Current board state
-            thought_process="Random choice", # Description of the decision-making process
-            final_output=random_move,       # The randomly selected move
-            response=random_move,           # No specific response (optional for random agent)
-            time_completed=time_of_action   # Timestamp of when the action was completed
-        )
+        # get the best move
+        best_move = self.get_random_move(state)
 
-        # Return the random move
-        return random_move
+        if best_move is not None:
+            # set the rationale
+            rationale += f"Randomly selected move at position {best_move}.\n"
+        else:
+            # set the rationale
+            rationale += "No available moves to select randomly.\n"
+
+        # Log decision
+        self.log_decision_with_thoughts(step, state, rendered_state, current_player, best_move, rationale)
+
+        # return the move
+        return best_move
+

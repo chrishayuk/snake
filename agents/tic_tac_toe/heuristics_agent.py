@@ -11,52 +11,55 @@ class HeuristicsTicTacToeAgent(BaseTicTacToeClassicAgent):
     def agent_type(self) -> AgentType:
         """Return the type of the agent."""
         return AgentType.CLASSIC
+
+    def check_potential_two_way_win(self, state):
+        """
+        Check if a move sets up a two-way win for the player (i.e., a situation where 
+        two winning moves are possible in the next turn).
+        """
+        win_count = 0
+        for action in self.get_available_actions(state):
+            new_state = self.apply_action(state, action, self.player)
+            if self.find_winning_move(new_state, self.player):
+                win_count += 1
+            if win_count >= 2:
+                return True  # The player has two potential ways to win in the next turn.
+        return False  # No two-way win possible.
+
     
-    def get_action(self, step: int, state) -> int:
-        """
-        Decide on an action using a series of heuristics, and log the decision.
-        """
+    def get_action(self, step: int, state, rendered_state: str, current_player: int) -> int:
+        # set the rationale
+        rationale = "Checking for a winning move, blocking opponent, and strategic placements.\n"
+
+        # initialize
         best_move = None
-        description = ""
-        
+
         # 1. Winning move
         for action in self.get_available_actions(state):
             new_state = self.apply_action(state, action, self.player)
             if self.find_winning_move(new_state, self.player):
                 best_move = action
-                description = "Winning move"
+                rationale += f"Found a winning move at position {best_move}.\n"
                 break
-        
-        # 2. Blocking opponent's winning move
+
+        # 2. Block opponent’s winning move
         if not best_move:
             opponent = 1 if self.player == 2 else 2
             for action in self.get_available_actions(state):
                 new_state = self.apply_action(state, action, opponent)
                 if self.find_winning_move(new_state, opponent):
                     best_move = action
-                    description = "Blocking opponent's winning move"
+                    rationale += f"Blocking opponent's winning move at position {best_move}.\n"
                     break
 
-        # 3. Take the center
-        if not best_move and 5 in self.get_available_actions(state):
-            best_move = 5
-            description = "Taking the center"
-
-        # 4. Take a corner (1, 3, 7, 9)
-        if not best_move:
-            for corner in [1, 3, 7, 9]:
-                if corner in self.get_available_actions(state):
-                    best_move = corner
-                    description = "Taking a corner"
-                    break
-
-        # 5. Take any other random move
-        if not best_move:
+        # If no best move is found, fallback to a random move from available options
+        if best_move is None:
+            rationale += "No better options found. Using fallback to select a random move.\n"
             best_move = self.get_random_move(state)
-            description = "Taking a random move"
 
-        # Log the decision with the logger
-        time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
-        self.logger.log_decision(self.game_id, step, state, description, best_move, best_move, time_of_action)
+        # Log the decision with the final best move and rationale
+        self.log_decision_with_thoughts(step, state, rendered_state, current_player, best_move, rationale)
 
+        # Return the best move (or the fallback move if none found)
         return best_move
+

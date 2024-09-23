@@ -100,31 +100,39 @@ def play(selected_env_id, selected_agents, providers=None, models=None, episodes
         # Loop until the game is over
         while not env.game_over:
             for agent in env.agents:
-                # Perform action based on agent type (LLM or classic)
-                if agent.agent_type == AgentType.LLM:
-                    # Pass both the state and the rendered state
-                    action = agent.get_action(env.steps + 1, state, env.get_render(), env.current_player)
+                # Ensure only the current player takes their turn
+                if agent.player == env.current_player:
+                    # Perform action based on agent type (LLM or classic)
+                    if agent.agent_type == AgentType.LLM:
+                        # Pass both the state and the rendered state
+                        action = agent.get_action(env.steps + 1, state, env.get_render(), env.current_player)
+                    else:
+                        # Pass both the state and the rendered state
+                        action = agent.get_action(env.steps + 1, state, env.get_render(), env.current_player)
+
+                    # Now perform a step in the environment
+                    state, reward, game_over = env.step(action, agent)
+
+                    # **Render after every step** to reflect the current state
+                    env.render()
+
+                    # Break if the game is over
+                    if game_over:
+                        break
+
+                    # 150 millisecond delay between actions
+                    time.sleep(0.15)
                 else:
-                    # Pass both the state and the rendered state
-                    action = agent.get_action(env.steps + 1, state, env.get_render(), env.current_player)
+                    # error
+                    print(f"Skipping agent {agent.unique_agent_id}, it's not their turn.")
 
-
-                # Now perform a step in the environment
-                state, reward, game_over = env.step(action)
-
-                # **Render after every step** to reflect the current state
-                env.render()
-
-                # Break if the game is over
-                if game_over:
-                    break
-
-                # 150 millisecond delay between actions
-                time.sleep(0.15)
+                    # 150 millisecond delay between actions
+                    time.sleep(0.15)
 
             # Break the outer loop if the game is over
             if env.game_over:
                 break
+
 
         # Render the environment at the end of the episode as well
         env.render()
