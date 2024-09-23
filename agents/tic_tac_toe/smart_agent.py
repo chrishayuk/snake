@@ -39,7 +39,7 @@ class SmartTicTacToeAgent(BaseTicTacToeClassicAgent):
 
         # If no best move is found, fallback to a random move from available options
         if best_move is None:
-            rationale += "No winning or blocking move found. Using fallback to select a random move.\n"
+            rationale += "No immediate winning or blocking move was available based on the current state, so a random valid move was selected.\n"
             best_move = self.get_random_move(state)
 
         # Log the decision with the final best move and rationale

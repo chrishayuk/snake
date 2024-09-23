@@ -1,6 +1,4 @@
 # TODO
-3) Ensure game turn logic
-5) Apply Smart Agent logging to all other tic tac toe classic agents
 6) Improve gameboard render to easily see who won and who's who
 7) Apply changes to snake environment and agents
 8) Apply chnages to treasure hunt environment and agents

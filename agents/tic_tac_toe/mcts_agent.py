@@ -17,58 +17,54 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
 
     @property
     def agent_type(self) -> AgentType:
-        """Return the type of the agent."""
         return AgentType.CLASSIC
 
     def get_action(self, step: int, state, rendered_state: str, current_player: int) -> int:
-        # set the rationale
+        # Set the rationale
         rationale = "Using Monte Carlo Tree Search to evaluate moves.\n"
-        
+
         # Run simulations and select the best action
         for _ in range(self.simulations):
             self.run_simulation(state)
 
-        # get the best move
+        # Get the best move
         best_move = self.best_action(state)
 
-        # set the rational
-        rationale += f"Best move selected by MCTS is at position {best_move}.\n"
+        # Set the rationale
+        rationale += f"Ran {self.simulations} simulations. Best move selected with the highest win rate is at position {best_move}.\n"
 
-        # If no best move is found, fallback to a random move from available options
+        # If no best move is found, fallback to a random move
         if best_move is None:
             rationale += "No best move found. Using fallback to select a random move.\n"
             best_move = self.get_random_move(state)
-        
+
         # Log decision
         self.log_decision_with_thoughts(step, state, rendered_state, current_player, best_move, rationale)
 
-        # return the move
+        # Return the move
         return best_move
 
-
     def run_simulation(self, state):
-        """
-        Run a single MCTS simulation: Selection, Expansion, Simulation, and Backpropagation.
-        """
+        """Run a single MCTS simulation: Selection, Expansion, Simulation, and Backpropagation."""
         path = []
         current_player = self.player
         state_copy = np.copy(state)
-        
+
         # Selection: Traverse the tree based on UCB until we reach an unexplored state
         while self.is_fully_expanded(state_copy) and state_copy.tostring() in self.state_children:
             action, state_copy = self.select(state_copy)
             path.append((state_copy.tostring(), action))
             current_player = 2 if current_player == 1 else 1  # Switch player
-        
+
         # Expansion: Add new child states to the tree if we encounter an unexplored state
         if not self.is_terminal(state_copy):
             action = self.expand(state_copy, current_player)
             state_copy = self.apply_action(state_copy, action, current_player)
             path.append((state_copy.tostring(), action))
-        
+
         # Simulation: Play out the game randomly from the new state
         winner = self.simulate_game(state_copy, current_player)
-        
+
         # Backpropagation: Update the nodes in the path with the result of the simulation
         self.backpropagate(path, winner)
 
@@ -87,7 +83,7 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
             state_after_action = self.apply_action(state, action, self.player)
             visits = self.state_visits[(state.tostring(), action)]
             wins = self.state_wins[(state.tostring(), action)]
-            
+
             if visits == 0:
                 ucb = float('inf')  # Encourage exploration of unvisited actions
             else:
@@ -105,17 +101,17 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
         available_actions = self.get_available_actions(state)
         if state.tostring() not in self.state_children:
             self.state_children[state.tostring()] = available_actions
-        
+
         return random.choice(available_actions)
 
     def simulate_game(self, state, current_player):
-        """Simulate the game randomly from the given state."""
+        """Simulate the game randomly from the given state, terminating early for known outcomes."""
         while not self.is_terminal(state):
             available_actions = self.get_available_actions(state)
             action = random.choice(available_actions)
             state = self.apply_action(state, action, current_player)
             current_player = 2 if current_player == 1 else 1
-        
+
         return self.get_winner(state)
 
     def backpropagate(self, path, winner):
@@ -124,6 +120,8 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
             self.state_visits[(state_str, action)] += 1
             if winner == self.player:
                 self.state_wins[(state_str, action)] += 1
+            elif winner == 0:  # Handle draws with partial reward
+                self.state_wins[(state_str, action)] += 0.5
 
     def best_action(self, state) -> int:
         """Return the action with the highest win rate."""
@@ -134,9 +132,12 @@ class MonteCarloTreeSearchTicTacToeAgent(BaseTicTacToeClassicAgent):
             visits = self.state_visits[(state.tostring(), action)]
             wins = self.state_wins[(state.tostring(), action)]
             win_rate = wins / visits if visits > 0 else 0
-            
+
             if win_rate > best_win_rate:
                 best_win_rate = win_rate
                 best_action = action
-        
+
+        # If no best action is found, fallback to a random move
+        if best_action is None:
+            best_action = self.get_random_move(state)
         return best_action

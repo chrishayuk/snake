@@ -12,7 +12,7 @@ class HeuristicsTicTacToeAgent(BaseTicTacToeClassicAgent):
         """Return the type of the agent."""
         return AgentType.CLASSIC
 
-    def check_potential_two_way_win(self, state):
+    def check_two_way_win(self, state):
         """
         Check if a move sets up a two-way win for the player (i.e., a situation where 
         two winning moves are possible in the next turn).
@@ -52,9 +52,20 @@ class HeuristicsTicTacToeAgent(BaseTicTacToeClassicAgent):
                     rationale += f"Blocking opponent's winning move at position {best_move}.\n"
                     break
 
+        # 3. Set up a two-way win
+        if not best_move:
+            rationale += "Checking if a two-way win can be set up...\n"
+            for action in self.get_available_actions(state):
+                new_state = self.apply_action(state, action, self.player)
+                if self.check_two_way_win(new_state):
+                    best_move = action
+                    rationale += f"Setting up a two-way win with move at position {best_move}.\n"
+                    break
+
+
         # If no best move is found, fallback to a random move from available options
         if best_move is None:
-            rationale += "No better options found. Using fallback to select a random move.\n"
+            rationale += "No immediate winning or blocking move was found. Falling back to a random move based on available options.\n"
             best_move = self.get_random_move(state)
 
         # Log the decision with the final best move and rationale
