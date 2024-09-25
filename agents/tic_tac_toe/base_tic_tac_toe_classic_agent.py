@@ -48,68 +48,52 @@ class BaseTicTacToeClassicAgent(BaseAgent, BaseTicTacToeAgent):
 
     def generate_thought_process(self, step: int, state, current_player: int, winning_move: int = None, blocking_move: int = None) -> str:
         """
-        Generates a standardized thought process that analyzes the current board state retrospectively.
-        This analysis is independent of the selected move.
+        Generates a clear and structured thought process for decision-making.
         """
-        # Analyze the current state of the board
+        # Analyze the current board
         player_1_positions = [(r, c) for r in range(3) for c in range(3) if state[r, c] == 1]
         player_2_positions = [(r, c) for r in range(3) for c in range(3) if state[r, c] == 2]
 
         thought_process = (
             f"Step {step}:\n"
-            f"Analyzing the current state of the board for player {current_player}:\n"
+            f"Board analysis for Player {current_player}:\n"
             f"{state}\n"
             f"Player 1 (X) positions: {player_1_positions}\n"
             f"Player 2 (O) positions: {player_2_positions}\n"
+            f"---\n"
+            f"1. Checking for immediate winning moves...\n"
         )
 
-        # Check for winning moves and blocking opportunities
-        thought_process += "Checking for a potential winning move for both players...\n"
-        winning_move_player_1 = self.find_winning_move(state, 1)
-        winning_move_player_2 = self.find_winning_move(state, 2)
-
-        if winning_move_player_1:
-            thought_process += f"Player 1 (X) has a potential winning move at {winning_move_player_1}.\n"
+        # Winning move analysis
+        if winning_move:
+            thought_process += f"Player {current_player} has a winning move at position {winning_move}.\n"
         else:
-            thought_process += "Player 1 (X) has no immediate winning move.\n"
+            thought_process += "No immediate winning move found.\n"
 
-        if winning_move_player_2:
-            thought_process += f"Player 2 (O) has a potential winning move at {winning_move_player_2}.\n"
-        else:
-            thought_process += "Player 2 (O) has no immediate winning move.\n"
-
-        # Check for blocking move
+        # Blocking move analysis
         if blocking_move:
-            thought_process += f"Player {current_player} may need to block the opponent's winning move at position {blocking_move}.\n"
+            thought_process += f"Player {current_player} needs to block Player {2 if current_player == 1 else 1} at position {blocking_move}.\n"
 
-        # Check for potential two-way wins
-        thought_process += "Checking for advanced strategies like setting up a two-way win...\n"
+        # Two-way win analysis
+        thought_process += "2. Checking for advanced strategies (two-way wins)...\n"
         two_way_win_setup = self.check_potential_two_way_win(state, current_player)
         if two_way_win_setup:
-            thought_process += f"Player {current_player} can set up a two-way win by moving at {two_way_win_setup}.\n"
+            thought_process += f"Player {current_player} can set up a two-way win by moving to position {two_way_win_setup}.\n"
         else:
-            thought_process += "No immediate opportunity for a two-way win setup found.\n"
-
+            thought_process += "No two-way win opportunity found.\n"
+        
         return thought_process
-
 
     def log_decision_with_thoughts(self, step: int, state, rendered_state: str, current_player: int, best_move: int, rationale: str, winning_move: int = None, blocking_move: int = None):
         """
-        Logs the decision along with the generated thought process and rationale.
+        Logs the thought process and decision in a clearer, structured format.
         """
-        # Generate the board analysis (thought process)
         thought_process = self.generate_thought_process(step, state, current_player, winning_move, blocking_move)
+        final_thoughts = f"{thought_process}\nRationale for selecting move {best_move}:\n{rationale}\n"
 
-        # Combine rationale for the selected move
-        final_thoughts = thought_process + f"Rationale for selecting move {best_move}:\n{rationale}\n"
-
-        # If this is a game-winning move, log that explicitly
         if winning_move:
-            final_thoughts += f"Move {best_move} resulted in a win by completing row/column/diagonal.\n"
-
-        # Log the decision with the combined thought process and rationale
-        time_of_action = time.strftime('%Y-%m-%d %H:%M:%S')
-
+            final_thoughts += f"Move {best_move} leads to a win (row/column/diagonal completed).\n"
+        
         self.logger.log_decision(
             game_id=self.game_id,
             step=step,
@@ -118,28 +102,25 @@ class BaseTicTacToeClassicAgent(BaseAgent, BaseTicTacToeAgent):
             thought_process=final_thoughts,
             final_output=best_move,
             response=best_move,
-            time_completed=time_of_action,
+            time_completed=time.strftime('%Y-%m-%d %H:%M:%S'),
             player='X' if current_player == 1 else 'O'
         )
 
-
     def get_action(self, step: int, state, rendered_state: str, current_player: int) -> int:
         """
-        A template for all agents. Each agent will have its own logic for selecting the best move,
-        but will always have this fallback mechanism.
+        Determines the best move by considering winning, blocking, and two-way win setup moves.
+        Fallbacks to random move if no other options are available.
         """
-        rationale = "Evaluating potential moves based on current board state.\n"
+        rationale = "Evaluating potential moves based on the board state.\n"
         best_move = None
-        winning_move = None
-        blocking_move = None
 
-        # Check for a winning move
+        # Step 1: Check for a winning move
         winning_move = self.find_winning_move(state, current_player)
         if winning_move:
             best_move = winning_move
-            rationale += f"Found a winning move at position {winning_move}.\n"
+            rationale += f"Found winning move at position {winning_move}.\n"
 
-        # Check for blocking opponent's winning move
+        # Step 2: Check for blocking opponent's winning move
         if not best_move:
             opponent = 1 if current_player == 2 else 2
             blocking_move = self.find_winning_move(state, opponent)
@@ -147,21 +128,20 @@ class BaseTicTacToeClassicAgent(BaseAgent, BaseTicTacToeAgent):
                 best_move = blocking_move
                 rationale += f"Blocking opponent's winning move at position {blocking_move}.\n"
 
-        # Check for potential two-way win setup
+        # Step 3: Check for potential two-way win setup
         if not best_move:
             rationale += "Checking if a two-way win can be set up...\n"
             two_way_win_setup = self.check_potential_two_way_win(state, current_player)
             if two_way_win_setup:
                 best_move = two_way_win_setup
-                rationale += f"Setting up a two-way win with move at position {best_move}.\n"
+                rationale += f"Setting up a two-way win with move at position {two_way_win_setup}.\n"
 
-        # If no best move is found, fallback to a random move from available options
-        if best_move is None:
-            rationale += "No immediate winning or blocking move was found. Falling back to a random move based on available options.\n"
+        # Step 4: Fallback to a random move
+        if not best_move:
+            rationale += "No optimal move found. Falling back to a random move.\n"
             best_move = self.get_random_move(state)
 
-        # Log the decision with the final best move and rationale
+        # Log and return the decision
         self.log_decision_with_thoughts(step, state, rendered_state, current_player, best_move, rationale, winning_move, blocking_move)
-
-        # Return the best move (or the fallback move if none found)
         return best_move
+

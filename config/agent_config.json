@@ -184,5 +184,15 @@
         "agent_type": "LLM Agent",
         "agent_params": {},
         "compatible_environments": ["tic_tac_toe"]
+    },
+    {
+        "id": "tic_tac_toe_human",
+        "name": "Tic Tac Toe Human Agent",
+        "type": "Tic Tac Toe Agent",
+        "description": "A CoT LLM agent for playing Tic Tac Toe",
+        "agent": "agents.tic_tac_toe.human_agent.HumanAgent",
+        "agent_type": "Human Agent",
+        "agent_params": {},
+        "compatible_environments": ["tic_tac_toe"]
     }
 ]

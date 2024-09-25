@@ -43,6 +43,11 @@ def get_agents(game_id, env_config, selected_agents, providers=None, models=None
                 except IndexError as e:
                     print(f"Error: Not enough providers or models for LLM agent {agent_id}: {e}")
                     continue  # Skip this agent if provider or model is missing
+        elif agent_config.agent_type == "Human":
+            # Instantiate a Human agent
+            agent = HumanTicTacToeAgent(id=agent_id, name=agent_config.name, description=agent_config.description)
+            agent.game_id = game_id
+            agents.append(agent)
         else:
             # Skip provider/model assignment for classic agents
             print(f"Skipping provider and model assignment for classic agent {agent_id}")
