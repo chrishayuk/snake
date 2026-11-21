@@ -37,14 +37,36 @@ class BaseLLMAgent(ABC):
     def _get_llm(self, provider: str, model_name: str):
         # check for openai
         if provider == "openai":
-            # openai
-            return ChatOpenAI(model_name=model_name)
+            # Models that typically don't support temperature customization
+            # Including o1, o3, o4 series and gpt-5
+            no_temp_patterns = ['o1', 'o3', 'o4', 'gpt-5']
+            
+            # Check if the model matches any of the patterns that don't support temperature
+            uses_default_temp = any(model_name.startswith(pattern) for pattern in no_temp_patterns)
+            
+            if uses_default_temp:
+                # Explicitly set temperature to 1.0 (the only supported value)
+                print(f"Note: Using temperature=1.0 for {model_name} (only supported value)")
+                return ChatOpenAI(model_name=model_name, temperature=1.0)
+            else:
+                # For other models, try with temperature but fall back if needed
+                try:
+                    return ChatOpenAI(model_name=model_name, temperature=0.7)
+                except Exception as e:
+                    error_msg = str(e).lower()
+                    if "temperature" in error_msg and ("unsupported" in error_msg or "does not support" in error_msg):
+                        print(f"Note: {model_name} doesn't support custom temperature, using 1.0")
+                        return ChatOpenAI(model_name=model_name, temperature=1.0)
+                    else:
+                        # Re-raise if it's a different error
+                        raise e
+                        
         elif provider == "anthropic":
             # anthropic
-            return ChatAnthropic(model=model_name)
+            return ChatAnthropic(model=model_name, temperature=0.7)
         elif provider == "ollama":
             # ollama
-            return Ollama(model=model_name)
+            return Ollama(model=model_name, temperature=0.7)
         else:
             # unsupported
             raise ValueError(f"Unsupported provider: {provider}")

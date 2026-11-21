@@ -1,5 +1,4 @@
 # File: agents/snake/base_llm_snake_agent.py
-
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from agents.base_llm_agent import BaseLLMAgent
@@ -12,18 +11,25 @@ import time
 
 class BaseSnakeLLMAgent(BaseLLMAgent):
     def __init__(self, id: str, name: str, description: str, provider: ProviderType, model_name: str, prompt_template: str):
-        # Call the parent constructor
+        # Call the parent constructor - this creates self.llm
         super().__init__(id, name, description, provider, model_name, prompt_template)
         self.strategy = common_strategy
         self.self_improvement_notes = ""
 
         # Update the prompt to include strategy and self-improvement notes
         self.prompt = PromptTemplate(input_variables=["state", "strategy"], template=prompt_template)
+        
+        # Recreate the chain with the new prompt and the already-created llm
+        # DO NOT pass any temperature or model parameters here - they're already in self.llm
         self.chain = LLMChain(llm=self.llm, prompt=self.prompt)
 
     def get_action(self, step: int, state: str):
-        # get the response
-        response = self.chain.run(state=state, strategy=self.strategy)
+        # Use invoke instead of run (to avoid deprecation warning)
+        response = self.chain.invoke({"state": state, "strategy": self.strategy})
+        
+        # Extract the response text from the dict if necessary
+        if isinstance(response, dict):
+            response = response.get('text', str(response))
 
         # extract the tags
         thought_process = extract_thought_process(response)
